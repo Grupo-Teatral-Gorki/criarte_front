@@ -1,91 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-*{
-  font-family: 'Poppins', sans-serif;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-}
-
-.App {
-  text-align: center;
-}
-
-main {
-  padding: 20px;
-  background-color: #f3f3f3;
-  margin-top: 100px;
-  margin-right: auto;
-  margin-left: auto;
-  width: 70%;
-  border-radius: 5px;
-  margin-bottom: 100px;
-}
-
-.input-container {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.input-wrapper {
-  width: calc(33.333% - 10px);
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
-  padding: 0 5px;
-}
-
-.input-wrapper label {
-  margin-bottom: 5px;
-  text-align: left;
-}
-
-.input-field {
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  transition: border-color 0.3s;
-}
-
-.input-field:focus {
-  border-color: #007BFF;
-  outline: none;
-}
-
-.contact-inputs{
-  display: flex;
-  margin-top: 10px;
-  flex-wrap: wrap; 
-  justify-content: space-between;
-}
-
-.contact{
-  margin-top: 40px;
-}
-
-h1 {
-  font-size: 24px;
-  margin-bottom: 20px;
-  text-align: left;
-}
-
-.contact-title{
-  text-align: left;
-} 
-
-p {
-  font-size: 18px;
-  margin-top: 20px;
-  color: #555;
-}
-
-
-.divisor{
-  border: none;
-  height: 3px;
-  background-color: #ccc;
-  margin: 20px 0;
-}
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  
+  html, body, #root {
+    background-color: #efefef;
+    height: 100%;
+  }
