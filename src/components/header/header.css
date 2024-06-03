@@ -1,0 +1,25 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #000000;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .logo {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+  }
+  
+  .hamburger-menu {
+    font-size: 30px;
+    cursor: pointer;
+    color: white;
+  }
+
+  .header{
+    border: none;
+  }
+  
