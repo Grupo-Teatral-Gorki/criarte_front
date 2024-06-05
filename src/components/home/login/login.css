@@ -1,3 +1,11 @@
+*{
+    margin: 0px;
+}
+
+body{
+    background-image: url("../../../assets/bg.jpg");
+}
+
 .sob-div{
     background-color: rgba(0, 0, 0, 0.527);
     width: 100%;
@@ -15,6 +23,7 @@ body {
     padding: 0;
     color: #023047
 }
+
 
 .page {
     display: flex;

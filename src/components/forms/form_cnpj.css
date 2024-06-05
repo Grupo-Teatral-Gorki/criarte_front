@@ -20,6 +20,10 @@
   text-align: left;
 }
 
+main{
+  margin: 30px;
+}
+
 .input-field {
   padding: 10px;
   font-size: 16px;

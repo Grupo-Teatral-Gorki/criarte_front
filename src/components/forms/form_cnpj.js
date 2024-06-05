@@ -53,7 +53,7 @@ function FormCNPJ() {
 
   return (
     <main>
-      <div>
+      <div className='xablau'>
         <h1>Cadastro de proponente CNPJ</h1>
         <div className="input-container">
           <div className="input-wrapper">
