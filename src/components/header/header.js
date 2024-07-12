@@ -71,7 +71,7 @@ const Header = () => {
                 <a href="/NovoProponenteForm">Meus Proponentes</a>
               </li>
               <li className="links_menu">
-                <a href="/Profile">Alterar Meus Dados</a>
+                <a href="/profile">Alterar Meus Dados</a>
               </li>
               <li className="links_menu">
                 <a href="#">Minhas Pendências</a>
@@ -128,7 +128,7 @@ const Header = () => {
         </div>
         <a href='/'><img className="logo_criarte" src="https://styxx-public.s3.sa-east-1.amazonaws.com/logo-criarte.png" alt="Logo Criarte" /></a>
         <div>
-          <a href='/Profile/Profile'><img src="https://styxx-public.s3.sa-east-1.amazonaws.com/header/user.png" className='icon-user'></img></a>
+          <a href='/profile'><img src="https://styxx-public.s3.sa-east-1.amazonaws.com/header/user.png" className='icon-user'></img></a>
         </div>
       </div>
   );
