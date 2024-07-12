@@ -1,0 +1,104 @@
+.container_opcoes_banner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4rem;
+    margin: 5rem;
+}
+
+
+.container_meus_projetos,
+.container_editais_vigentes,
+.container_ajuda,
+.container_prestacoes,
+.container_pendencias {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border-radius: 0.625rem;
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+    padding: 1.0rem;
+    margin: 0.7rem auto;
+    max-width: 30rem;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.container_meus_projetos:hover,
+.container_editais_vigentes:hover,
+.container_ajuda:hover,
+.container_prestacoes:hover,
+.container_pendencias:hover {
+    transform:scale(1.02);
+    box-shadow: 0 0.5rem 1rem rgba(19, 19, 19, 0.2);
+}
+.opcao_link {
+    color: #1D4A5D;
+    text-decoration: none;
+}
+
+.container_banner {
+    display: flex;
+    flex-direction: column;
+    width: 30rem;
+    gap: 1rem;
+    padding: 2.2rem;
+    border-top: solid 0.1rem #F49E4C;
+    border-radius: 1rem;
+
+}
+
+.banner_img {
+    margin: 0 auto;
+    width: 75%;
+}
+
+.banner_titulo {
+    text-align: center;
+    color: #1D4A5D;
+    font-size: 2rem;
+}
+
+.banner_paragrafo {
+    text-align: center;
+    font-size: 0.8rem;
+}
+
+.btn-detalhes {
+    background-color: #1D4A5D;
+    color: #fff;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 0.625rem;
+    transition: background-color 0.3s, transform 0.2s ease;
+}
+
+.btn-detalhes:hover {
+    background-color: #F49E4C;
+}
+
+@media (max-width: 768px)  {
+    .container_opcoes_banner{
+        flex-direction: column;
+        gap: 1rem;
+        margin: 0.5rem;
+    }
+    .container_banner {
+        width: fit-content;
+    }
+    .banner_img {
+        width: 70%;
+        margin: 0 auto;
+    }
+    .btn-detalhes {
+        padding: 0.75rem 0.8rem;
+        max-width: 8rem;
+        margin: 0 auto;
+    }
+}
+
+.btn-sair{
+    color: red;
+}

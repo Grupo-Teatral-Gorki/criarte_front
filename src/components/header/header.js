@@ -1,13 +1,137 @@
-import React from 'react';
-import './header.css';
+import React, { useState, useEffect } from 'react';
+import { AuthContext } from '../../context/AuthContext';
+//import './Header.css';
 
-function Header() {
+const Header = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const { logout } = React.useContext(AuthContext);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const handleSubMenuClick = (event) => {
+    event.stopPropagation();
+  };
+
+  const fecharMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
+  useEffect(() => {
+    const overlayMenu = document.getElementById('overlay-menu');
+    if (overlayMenu) {
+      overlayMenu.addEventListener('click', fecharMenu);
+    }
+  }, []);
+
   return (
-    <header className="header">
-      <div className="logo">Logo Criarte</div>
-      <div className="hamburger-menu">&#9776;</div>
-    </header>
+      <div className="menu-mobile-all">
+        <div className="btn-abrir-menu" id="btn-menu" onClick={toggleMobileMenu}>
+          <img className="icon-menu" src="https://styxx-public.s3.sa-east-1.amazonaws.com/header/list.png" alt="Menu" />
+        </div>
+        <div
+            className={`menu-mobile ${isMobileMenuOpen ? 'open' : ''}`}
+            id="menu-mobile"
+        >
+          <div className="btn-fechar-menu">
+            <img className="arrow-menu" src='https://styxx-public.s3.sa-east-1.amazonaws.com/header/left-arrow(1).png' onClick={toggleMobileMenu}></img>
+          </div>
+          <nav>
+            <ul>
+              <li className="links_menu">
+                <a href="#">
+                  <i className="bi bi-folder"></i> Meus Projetos
+                </a>
+                <ul className="submenu">
+                  <li>
+                    <a href="#" onClick={handleSubMenuClick}>
+                      Meus Projetos 2021
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" onClick={handleSubMenuClick}>
+                      Meus Projetos 2022
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" onClick={handleSubMenuClick}>
+                      Meus Projetos 2023
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" onClick={handleSubMenuClick}>
+                      Meus Projetos 2024
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li className="links_menu">
+                <a href="/NovoProponenteForm">Meus Proponentes</a>
+              </li>
+              <li className="links_menu">
+                <a href="/Profile">Alterar Meus Dados</a>
+              </li>
+              <li className="links_menu">
+                <a href="#">Minhas Pendências</a>
+              </li>
+              <li className="links_menu">
+               
+                <ul className="submenu">
+                  <li>
+                    <a href="#" onClick={handleSubMenuClick}>
+                      Entidades
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" onClick={handleSubMenuClick}>
+                      Indicados
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li className="links_menu">
+                <a href="#">
+                  <i className="fas fa-question-circle"></i> Ajuda
+                </a>
+                <ul className="submenu">
+                  <li>
+                    <a href="#" onClick={handleSubMenuClick}>
+                      Perguntas frequentes
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" onClick={handleSubMenuClick}>
+                      Manual do proponente
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" onClick={handleSubMenuClick}>
+                      Política de privacidade
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" onClick={handleSubMenuClick}>
+                      Termos de Uso
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li className="links_menu">
+                <a onClick={logout} href="/">
+                  <i onClick={logout} className="btn-sair"></i> Sair
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <a href='/'><img className="logo_criarte" src="https://styxx-public.s3.sa-east-1.amazonaws.com/logo-criarte.png" alt="Logo Criarte" /></a>
+        <div>
+          <a href='/Profile/Profile'><img src="https://styxx-public.s3.sa-east-1.amazonaws.com/header/user.png" className='icon-user'></img></a>
+        </div>
+      </div>
   );
-}
+};
 
 export default Header;

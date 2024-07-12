@@ -1,25 +1,162 @@
-.header {
+
+
+/* HEADER STYLES */
+.menu-mobile-all {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
-    background-color: #000000;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .logo {
-    font-size: 20px;
-    font-weight: bold;
-    color: white;
-  }
-  
-  .hamburger-menu {
-    font-size: 30px;
-    cursor: pointer;
-    color: white;
-  }
+    background-color: #1D4A5D;
+    padding: 0.5rem 1rem;
+    color: #fff;
+    height: 80px;
+}
 
-  .header{
-    border: none;
-  }
-  
+.icon-menu {
+    width: 30px;
+    height: 30px;
+}
+
+.icon-user{
+     width: 30px;
+     height: 30px;
+}
+
+.arrow-menu{
+    width: 30px;
+    height: 30px;
+}
+
+/* MENU BUTTONS */
+.btn-abrir-menu,
+.btn-fechar-menu,
+.fa-user,
+.fa-cog {
+    cursor: pointer;
+    font-size: 1.25rem;
+    color: #ffffff;;
+}
+
+/* HOVER EFFECTS */
+.fa-user:hover,
+.fa-cog:hover,
+.btn-abrir-menu:hover,
+.btn-fechar-menu:hover,
+nav>ul>li>a:hover {
+    color: #F49E4C;
+}
+
+/* LOGO */
+.logo_criarte {
+    height: 3.5rem;
+}
+
+/* FLEX CONTAINERS */
+.btn-abrir-menu,
+.icones-perfil-config {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* CLOSE BUTTON */
+.btn-fechar-menu {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0.5rem 0;
+}
+
+
+/* ICON ANIMATIONS */
+.fas.fa-cog {
+    transition: transform 0.5s ease;
+}
+
+.fas.fa-cog:hover {
+    transform: rotate(90deg);
+}
+
+/* MOBILE MENU */
+.menu-mobile {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 18rem;
+    height: 100%;
+    background-color: #1D4A5D;
+    transition: left 0.3s ease;
+    z-index: 1000;
+    color: #fff;
+    border-radius: 0 1rem 1rem 0;
+    padding: 1rem;
+}
+
+/* MOBILE MENU ITEMS */
+.menu-mobile ul {
+    list-style: none;
+}
+
+.menu-mobile li a {
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    padding: 0.75rem 1rem;
+    white-space: nowrap; /* Prevent line breaks */
+}
+
+/* MOBILE MENU OPEN STATE */
+.menu-mobile.open {
+    left: 0;
+}
+
+/* SUBMENU */
+.submenu {
+    position: absolute;
+    background-color: #1D4A5D;
+    border: solid 0.0625rem rgb(212, 212, 212);
+    border-radius: 1rem;
+    z-index: 1001;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.submenu.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* SUBMENU ITEMS */
+.submenu li a {
+    color: #fff;
+    padding: 0.2rem 1rem;
+    display: block;
+    text-decoration: none;
+    border-radius: 0.5rem;
+    transition: background-color 0.3s, transform 0.2s ease;
+    margin: 0.5rem;
+}
+
+.submenu li a:hover {
+    background-color: #F49E4C;
+    transform: scale(1.05);
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+    .menu-mobile {
+        width: 100%;
+        height: 100%;
+        left: -100%;
+    }
+
+    .menu-mobile.open {
+        left: 0;
+    }
+
+    .btn-abrir-menu {
+        display: block;
+    }
+}
+
+.btn-sair{
+    color: red;
+}

@@ -1,0 +1,90 @@
+.body-login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f5f5f5;
+  }
+  
+  .logo-login {
+    width: 150px;
+    margin-bottom: 20px;
+  }
+  
+  .login-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+  }
+  
+  .login-container h2 {
+    margin-bottom: 20px;
+  }
+  
+  .login-container form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .login-container label {
+    margin-bottom: 5px;
+    display: flex;
+  }
+  
+  .login-container input {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: flex;
+    max-width: 300px;
+    width: 250px;
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .login-container button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+  }
+  
+  .login-container button[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  .login-container button[type="submit"]:hover {
+    background-color: #0056b3;
+  }
+  
+
+  /* Responsive design for smaller screens */
+  @media (max-width: 480px) {
+    .login-container {
+      padding: 15px;
+    }
+  
+    .login-container h2 {
+      font-size: 18px;
+    }
+  
+    .login-container input, .login-container button {
+      font-size: 14px;
+    }
+  
+    .logo-login {
+      width: 120px;
+    }
+  }
+  
