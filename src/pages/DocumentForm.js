@@ -129,21 +129,10 @@ const DocumentUploadForm = () => {
     }));
   };
 
-  const renderUploadField = (name, label) => (
-      <Box sx={{ mb: 2 }}>
-        <Typography variant="body2" sx={{ mb: 1 }}>{label}</Typography>
-        <input
-            type="file"
-            accept="application/pdf"
-            onChange={(e) => handleFileChange(e, name)}
-        />
-      </Box>
-  );
   const UploadField = ({ name, label }) => (
     <Card sx={{ padding: '20px', borderRadius: '8px', boxShadow: 3, maxWidth: '700px', width: '800px',margin: 'auto' }}>
     <p>*Cronograma de execução do projeto</p>
       <CardContent>
-      <a href=''>Baixar exemplo</a>
         <Typography variant="h6" sx={{ mb: 2 }}>{label}</Typography>
         <UploadBox>
           <Typography variant="body2" sx={{ mb: 1 }}>Selecione o arquivo aqui</Typography>

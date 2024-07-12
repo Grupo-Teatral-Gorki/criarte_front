@@ -1,6 +1,5 @@
 import React from 'react';
 import { AuthProvider } from '../context/AuthContext';
-import Header from '../components/Header/Header';
 import '../styles/Login/Login.css'
 import '../styles/Global/Globals.css'
 

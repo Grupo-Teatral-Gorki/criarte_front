@@ -1,6 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
-import { Box, TextField, CircularProgress, Alert } from '@mui/material';
-import { debounce } from 'lodash';
+import { useState, useEffect } from 'react';
+import { CircularProgress, Alert } from '@mui/material';
 import Link from 'next/link';
 import Header from '../../components/Header/Header';
 
@@ -8,7 +7,6 @@ function PnabHomeForms() {
   const [numeroInscricao, setNumeroInscricao] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [inputText, setInputText] = useState('');
 
   useEffect(() => {
     const fetchProjectInfo = async () => {
@@ -53,10 +51,6 @@ function PnabHomeForms() {
     fetchProjectInfo();
   }, []);
 
-  const handleInputChange = (event) => {
-    const text = event.target.value;
-    setInputText(text);
-  };
 
   const handleSaveChanges = () => {
     alert('Informações enviadas');
