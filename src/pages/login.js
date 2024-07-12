@@ -76,8 +76,11 @@ const Login = () => {
         idCidade: data.user.data.idCidade,
         tipoUsuario: data.user.data.tipoUsuario,
       };
+
       login(data.token, userDetails);
       router.push('/home');
+
+
     } catch (error) {
       console.error('Erro na autenticação:', error.message);
       alert('Falha na autenticação: ' + error.message);
@@ -109,7 +112,7 @@ const Login = () => {
             />
           </div>
           <button className="t1-register-button" type="button" onClick={() => router.push('/register')}>Cadastrar</button>
-          <button type="submit" onClick={() => router.push('/home')}>Login</button>
+          <button type="submit">Login</button>
         </form>
       </div>
     </div>
