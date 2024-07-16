@@ -8,7 +8,7 @@ import InfoAlert from '../components/BasicAlerts/InfoAlert';
 
 const Home = () => {
     const handleButtonClick = () => {
-        window.open("/");
+        window.open("/editais");
     };
 
     return (
@@ -18,10 +18,8 @@ const Home = () => {
             <section className="container_opcoes_banner">
                 <section className="container_opcoes">
                     <div className="container_meus_projetos" id='meus_projetos_off'>
-                        <a href="/" className="opcao_link">
                             <h3><i className="bi bi-folder"></i> Meus Projetos</h3>
                             <p>Lista de projetos inscritos</p>
-                        </a>
                     </div>
                     
                     <div className="container_editais_vigentes">
@@ -32,16 +30,11 @@ const Home = () => {
                     </div>
 
                     <div className="container_ajuda" id='meus_projetos_off'>
-                        <a href="/" className="opcao_link">
                             <h3><i className="bi bi-question-circle"></i> Ajuda</h3>
-                            <p>Manuais de uso, etc.</p>
-                        </a>
                     </div>
                     <div className="container_pendencias" id='meus_projetos_off'>
-                        <a href="/" className="opcao_link">
                             <h3><i className="bi bi-exclamation-circle"></i> Pendências</h3>
                             <p>Suas pendências serão exibidas aqui.</p>
-                        </a>
                     </div>
                 </section>
 

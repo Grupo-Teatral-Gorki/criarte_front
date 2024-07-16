@@ -23,7 +23,6 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Verifica se as senhas são iguais
     if (password !== confirmPassword) {
       alert('As senhas não coincidem. Por favor, digite novamente.');
       return;
@@ -49,7 +48,6 @@ const Register = () => {
         throw new Error(errorResponse);
       }
 
-      // Verifica o texto da resposta para confirmar o cadastro
       const textResponse = await response.text();
       if (textResponse === 'Usuario cadastrado com sucesso.') {
         console.log('Cadastro realizado com sucesso:', textResponse);

@@ -126,7 +126,7 @@ const Header = () => {
             </ul>
           </nav>
         </div>
-        <a href='/'><img className="logo_criarte" src="https://styxx-public.s3.sa-east-1.amazonaws.com/logo-criarte.png" alt="Logo Criarte" /></a>
+        <a href='/home'><img className="logo_criarte" src="https://styxx-public.s3.sa-east-1.amazonaws.com/logo-criarte.png" alt="Logo Criarte" /></a>
         <div>
           <a href='/profile'><img src="https://styxx-public.s3.sa-east-1.amazonaws.com/header/user.png" className='icon-user'></img></a>
         </div>

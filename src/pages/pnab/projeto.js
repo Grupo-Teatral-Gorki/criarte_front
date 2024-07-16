@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { CircularProgress, Alert } from '@mui/material';
 import Link from 'next/link';
+import PrivateRoute from '../../components/PrivateRoute';
 import Header from '../../components/Header/Header';
 
 function PnabHomeForms() {
@@ -11,45 +12,58 @@ function PnabHomeForms() {
   useEffect(() => {
     const fetchProjectInfo = async () => {
       setIsLoading(true);
-
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
+      setError(null);
+      let attempts = 0;
+      const maxAttempts = 3;
       const url = `https://api.grupogorki.com.br/api/projeto/listaProjetos`;
       const token = localStorage.getItem('authToken');
 
-      try {
-        const response = await fetch(url, {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
+      while (attempts < maxAttempts) {
+        try {
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          });
 
-        if (!response.ok) {
-          throw new Error(`Erro na requisição: ${response.status} ${response.statusText}`);
+          if (response.ok) {
+            const data = await response.json();
+            console.log('Dados do projeto:', data);
+
+            localStorage.setItem('numeroInscricao', data.data[0].numeroInscricao);
+
+            if (data.data && data.data.length > 0) {
+              setNumeroInscricao(data.data[0].numeroInscricao);
+              console.log(data.data[0].numeroInscricao);
+            } else {
+              console.error("Número de inscrição não encontrado na resposta da API.");
+              setError("Número de inscrição não encontrado.");
+            }
+            break;
+          } else {
+            throw new Error(`Erro na requisição: ${response.status} ${response.statusText}`);
+          }
+        } catch (error) {
+          console.error('Erro ao obter informações do projeto:', error);
+          setError(error.message);
+          attempts += 1;
+
+          if (attempts >= maxAttempts) {
+            console.error('Número máximo de tentativas alcançado.');
+            setError('Não foi possível obter as informações do projeto após várias tentativas.');
+          }
         }
-
-        const data = await response.json();
-        console.log('Dados do projeto:', data);
-
-        if (data.data && data.data.length > 0) {
-          setNumeroInscricao(data.data[0].numeroInscricao);
-          console.log(data.data[0].numeroInscricao);
-        } else {
-          console.error("Número de inscrição não encontrado na resposta da API.");
-          setError("Número de inscrição não encontrado.");
-        }
-      } catch (error) {
-        console.error('Erro ao obter informações do projeto:', error);
-        setError(error.message);
-      } finally {
-        setIsLoading(false);
       }
+
+      setIsLoading(false);
     };
 
     fetchProjectInfo();
   }, []);
+
 
 
   const handleSaveChanges = () => {
@@ -58,7 +72,8 @@ function PnabHomeForms() {
 
   return (
       <div>
-        <Header/>
+      <PrivateRoute>
+    <Header/>
     <div className="app-container">
       <main className="main-content">
         <div className="project-header">
@@ -95,6 +110,7 @@ function PnabHomeForms() {
         </div>
       </main>
     </div>
+    </PrivateRoute>
       </div>
   );
 }

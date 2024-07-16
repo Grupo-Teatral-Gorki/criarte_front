@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, Box, TextField, Button, Link, Alert } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
+import PrivateRoute from '../components/PrivateRoute';
 
 const ProfileForm = () => {
   const [userEmail, setUserEmail] = useState('');
@@ -28,6 +29,8 @@ const ProfileForm = () => {
 
   return (
     <div>
+      <PrivateRoute />
+
       {showProfile && (
         <Container maxWidth="sm" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '70vh' }}>
           {userType === 5 && (
@@ -36,7 +39,7 @@ const ProfileForm = () => {
             </Alert>
           )}
 
-          <Link href="/" sx={{ alignSelf: 'flex-start', mb: 2 }}>Home</Link>
+          <Link href="/home" sx={{ alignSelf: 'flex-start', mb: 2 }}>Home</Link>
 
           <Box component="form" sx={{ bgcolor: 'white', p: 4, borderRadius: 1, boxShadow: 3, width: '100%', textAlign: 'center' }}>
             <Box sx={{ mb: 2, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -66,48 +69,47 @@ const ProfileForm = () => {
                 },
               }}
             />
-<TextField
-  fullWidth
-  label="Cidade"
-  variant="outlined"
-  margin="normal"
-  disabled
-  value={userCityId}
-  InputLabelProps={{
-    sx: {
-      backgroundColor: 'white',
-      paddingRight: '8px', // Optional: To avoid overlap with the outlined border
-      paddingLeft: '8px',  // Optional: To avoid overlap with the outlined border
-    },
-  }}
-  sx={{
-    // If you need the whole text field to have a white background
-    '& .MuiInputLabel-root': {
-      backgroundColor: 'white',
-    },
-  }}
-/>            
-<TextField
-  fullWidth
-  label="ID"
-  variant="outlined"
-  margin="normal"
-  disabled
-  value={userId}
-  InputLabelProps={{
-    sx: {
-      backgroundColor: 'white',
-      paddingRight: '8px', // Optional: To avoid overlap with the outlined border
-      paddingLeft: '8px',  // Optional: To avoid overlap with the outlined border
-    },
-  }}
-  sx={{
-    // If you need the whole text field to have a white background
-    '& .MuiInputLabel-root': {
-      backgroundColor: 'white',
-    },
-  }}
-/>
+            <TextField
+              fullWidth
+              label="Cidade"
+              variant="outlined"
+              margin="normal"
+              disabled
+              value={userCityId}
+              InputLabelProps={{
+                sx: {
+                  backgroundColor: 'white',
+                  paddingRight: '8px', // Optional: To avoid overlap with the outlined border
+                  paddingLeft: '8px',  // Optional: To avoid overlap with the outlined border
+                },
+              }}
+              sx={{
+                // If you need the whole text field to have a white background
+                '& .MuiInputLabel-root': {
+                  backgroundColor: 'white',
+                },
+              }}
+            />
+            <TextField
+              fullWidth
+              label="ID"
+              variant="outlined"
+              margin="normal"
+              disabled
+              value={userId}
+              InputLabelProps={{
+                sx: {
+                  backgroundColor: 'white',
+                  paddingRight: '8px',
+                  paddingLeft: '8px',
+                },
+              }}
+              sx={{
+                '& .MuiInputLabel-root': {
+                  backgroundColor: 'white',
+                },
+              }}
+            />
             <Link href="/" sx={{ display: 'block', mb: 2 }}>Trocar senha</Link>
             <Button variant="contained" color="primary">Salvar</Button>
           </Box>

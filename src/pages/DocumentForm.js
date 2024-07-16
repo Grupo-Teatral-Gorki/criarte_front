@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Button, Typography, Box, Grid, Card, CardContent, CircularProgress, Alert } from '@mui/material';
 import axios from 'axios';
 import { styled } from '@mui/system';
-
 import Header from '../components/Header/Header';
+import PrivateRoute from '../components/PrivateRoute';
+
 const DocumentUploadForm = () => {
   const [numeroInscricao, setNumeroInscricao] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -130,8 +131,8 @@ const DocumentUploadForm = () => {
   };
 
   const UploadField = ({ name, label }) => (
-    <Card sx={{ padding: '20px', borderRadius: '8px', boxShadow: 3, maxWidth: '700px', width: '800px',margin: 'auto' }}>
-    <p>*Cronograma de execução do projeto</p>
+    <Card sx={{ padding: '20px', borderRadius: '8px', boxShadow: 3, maxWidth: '700px', width: '800px', margin: 'auto' }}>
+      <p>*Cronograma de execução do projeto</p>
       <CardContent>
         <Typography variant="h6" sx={{ mb: 2 }}>{label}</Typography>
         <UploadBox>
@@ -154,8 +155,8 @@ const DocumentUploadForm = () => {
   );
 
   const UploadField2 = ({ name, label }) => (
-    <Card sx={{ padding: '20px', borderRadius: '8px', boxShadow: 3, maxWidth: '700px', width: '800px',margin: 'auto' }}>
-    <p>*Currículo do(a) responsável técnico(a)/artístico(a)</p>
+    <Card sx={{ padding: '20px', borderRadius: '8px', boxShadow: 3, maxWidth: '700px', width: '800px', margin: 'auto' }}>
+      <p>*Currículo do(a) responsável técnico(a)/artístico(a)</p>
       <CardContent>
         <Typography variant="h6" sx={{ mb: 2 }}>{label}</Typography>
         <UploadBox>
@@ -177,8 +178,8 @@ const DocumentUploadForm = () => {
     </Card>
   )
   const UploadField3 = ({ name, label }) => (
-    <Card sx={{ padding: '20px', borderRadius: '8px', boxShadow: 3, maxWidth: '700px', width: '800px',margin: 'auto' }}>
-    <p>*RG e CPF do(a) responsável técnico(a)</p>
+    <Card sx={{ padding: '20px', borderRadius: '8px', boxShadow: 3, maxWidth: '700px', width: '800px', margin: 'auto' }}>
+      <p>*RG e CPF do(a) responsável técnico(a)</p>
       <CardContent>
         <Typography variant="h6" sx={{ mb: 2 }}>{label}</Typography>
         <UploadBox>
@@ -201,8 +202,8 @@ const DocumentUploadForm = () => {
   )
 
   const UploadField4 = ({ name, label }) => (
-    <Card sx={{ padding: '20px', borderRadius: '8px', boxShadow: 3, maxWidth: '700px', width: '800px',margin: 'auto' }}>
-    <p>*Currículo do(a)s principais integrantes da equipe técnica e artística</p>
+    <Card sx={{ padding: '20px', borderRadius: '8px', boxShadow: 3, maxWidth: '700px', width: '800px', margin: 'auto' }}>
+      <p>*Currículo do(a)s principais integrantes da equipe técnica e artística</p>
       <CardContent>
         <Typography variant="h6" sx={{ mb: 2 }}>{label}</Typography>
         <UploadBox>
@@ -225,9 +226,10 @@ const DocumentUploadForm = () => {
   )
 
   const UploadField5 = ({ name, label }) => (
-    <Card sx={{ padding: '20px', borderRadius: '8px', boxShadow: 3, maxWidth: '700px', width: '800px',margin: 'auto' }}>
-    <p>*Direitos autorais e conexos</p>
+    <Card sx={{ padding: '20px', borderRadius: '8px', boxShadow: 3, maxWidth: '700px', width: '800px', margin: 'auto' }}>
+      <p>*Direitos autorais e conexos</p>
       <CardContent>
+      <a href='https://styxx-public.s3.sa-east-1.amazonaws.com/example-docs/ANEXO+III+-+DECLARA%C3%87%C3%83O+DE+OP%C3%87%C3%83O+DE+CESS%C3%83O+DE+DIREITOS+AUTORAIS.docx'>Baixar exemplo</a>
         <Typography variant="h6" sx={{ mb: 2 }}>{label}</Typography>
         <UploadBox>
           <Typography variant="body2" sx={{ mb: 1 }}>Selecione o arquivo aqui</Typography>
@@ -249,10 +251,10 @@ const DocumentUploadForm = () => {
   )
 
   const UploadField6 = ({ name, label }) => (
-    <Card sx={{ padding: '20px', borderRadius: '8px', boxShadow: 3, maxWidth: '700px', width: '800px',margin: 'auto' }}>
-    <p>*Termo de compromisso dos participantes</p>
+    <Card sx={{ padding: '20px', borderRadius: '8px', boxShadow: 3, maxWidth: '700px', width: '800px', margin: 'auto' }}>
+      <p>*Termo de compromisso dos participantes</p>
       <CardContent>
-      <a href='https://styxx-public.s3.sa-east-1.amazonaws.com/example-docs/ANEXO+V+-+MODELO+DE+TERMO+DE+COMPROMISSO+DOS+PARTICIPANTES.docx'>Baixar exemplo</a>
+        <a href='https://styxx-public.s3.sa-east-1.amazonaws.com/example-docs/ANEXO+V+-+MODELO+DE+TERMO+DE+COMPROMISSO+DOS+PARTICIPANTES.docx'>Baixar exemplo</a>
         <Typography variant="h6" sx={{ mb: 2 }}>{label}</Typography>
         <UploadBox>
           <Typography variant="body2" sx={{ mb: 1 }}>Selecione o arquivo aqui</Typography>
@@ -274,8 +276,8 @@ const DocumentUploadForm = () => {
   )
 
   const UploadField7 = ({ name, label }) => (
-    <Card sx={{ padding: '20px', borderRadius: '8px', boxShadow: 3, maxWidth: '700px', width: '800px',margin: 'auto' }}>
-    <p>*Comprovantes de domicílio ou sede atual</p>
+    <Card sx={{ padding: '20px', borderRadius: '8px', boxShadow: 3, maxWidth: '700px', width: '800px', margin: 'auto' }}>
+      <p>*Comprovantes de domicílio ou sede atual</p>
       <CardContent>
         <Typography variant="h6" sx={{ mb: 2 }}>{label}</Typography>
         <UploadBox>
@@ -298,8 +300,8 @@ const DocumentUploadForm = () => {
   )
 
   const UploadField8 = ({ name, label }) => (
-    <Card sx={{ padding: '20px', borderRadius: '8px', boxShadow: 3, maxWidth: '700px', width: '800px',margin: 'auto' }}>
-    <p>*Comprovantes de domicílio ou sede de 02 (dois) anos</p>
+    <Card sx={{ padding: '20px', borderRadius: '8px', boxShadow: 3, maxWidth: '700px', width: '800px', margin: 'auto' }}>
+      <p>*Comprovantes de domicílio ou sede de 02 (dois) anos</p>
       <CardContent>
         <Typography variant="h6" sx={{ mb: 2 }}>{label}</Typography>
         <UploadBox>
@@ -322,8 +324,8 @@ const DocumentUploadForm = () => {
   )
 
   const UploadField9 = ({ name, label }) => (
-    <Card sx={{ padding: '20px', borderRadius: '8px', boxShadow: 3, maxWidth: '700px', width: '800px',margin: 'auto' }}>
-    <p>*Curriculo ou portfólio de coletivo ou idealizador</p>
+    <Card sx={{ padding: '20px', borderRadius: '8px', boxShadow: 3, maxWidth: '700px', width: '800px', margin: 'auto' }}>
+      <p>*Curriculo ou portfólio de coletivo ou idealizador</p>
       <CardContent>
         <Typography variant="h6" sx={{ mb: 2 }}>{label}</Typography>
         <UploadBox>
@@ -346,10 +348,10 @@ const DocumentUploadForm = () => {
   )
 
   const UploadField10 = ({ name, label }) => (
-    <Card sx={{ padding: '20px', borderRadius: '8px', boxShadow: 3, maxWidth: '700px', width: '800px',margin: 'auto' }}>
-    <p>Declaração de pessoa com deficiência</p>
+    <Card sx={{ padding: '20px', borderRadius: '8px', boxShadow: 3, maxWidth: '700px', width: '800px', margin: 'auto' }}>
+      <p>Declaração de pessoa com deficiência</p>
       <CardContent>
-      <a href='https://styxx-public.s3.sa-east-1.amazonaws.com/example-docs/ANEXO+VIII+-+DECLARA%C3%87%C3%83O+PESSOA+COM+DEFICI%C3%8ANCIA.docx'>Baixar exemplo</a>
+        <a href='https://styxx-public.s3.sa-east-1.amazonaws.com/example-docs/ANEXO+VIII+-+DECLARA%C3%87%C3%83O+PESSOA+COM+DEFICI%C3%8ANCIA.docx'>Baixar exemplo</a>
         <Typography variant="h6" sx={{ mb: 2 }}>{label}</Typography>
         <UploadBox>
           <Typography variant="body2" sx={{ mb: 1 }}>Selecione o arquivo aqui</Typography>
@@ -371,10 +373,10 @@ const DocumentUploadForm = () => {
   )
 
   const UploadField11 = ({ name, label }) => (
-    <Card sx={{ padding: '20px', borderRadius: '8px', boxShadow: 3, maxWidth: '700px', width: '800px',margin: 'auto' }}>
-    <p>Declaração étnico-racial</p>
+    <Card sx={{ padding: '20px', borderRadius: '8px', boxShadow: 3, maxWidth: '700px', width: '800px', margin: 'auto' }}>
+      <p>Declaração étnico-racial</p>
       <CardContent>
-      <a href='https://styxx-public.s3.sa-east-1.amazonaws.com/example-docs/ANEXO+VII+-+MODELO+DE+DECLARA%C3%87%C3%83O+%C3%89TNICO-RACIAL.docx'>Baixar exemplo</a>
+        <a href='https://styxx-public.s3.sa-east-1.amazonaws.com/example-docs/ANEXO+VII+-+MODELO+DE+DECLARA%C3%87%C3%83O+%C3%89TNICO-RACIAL.docx'>Baixar exemplo</a>
         <Typography variant="h6" sx={{ mb: 2 }}>{label}</Typography>
         <UploadBox>
           <Typography variant="body2" sx={{ mb: 1 }}>Selecione o arquivo aqui</Typography>
@@ -396,10 +398,10 @@ const DocumentUploadForm = () => {
   )
 
   const UploadField12 = ({ name, label }) => (
-    <Card sx={{ padding: '20px', borderRadius: '8px', boxShadow: 3, maxWidth: '700px', width: '800px',margin: 'auto' }}>
-    <p>Autodeclaração de Residência</p>
+    <Card sx={{ padding: '20px', borderRadius: '8px', boxShadow: 3, maxWidth: '700px', width: '800px', margin: 'auto' }}>
+      <p>Autodeclaração de Residência</p>
       <CardContent>
-      <a href='https://styxx-public.s3.sa-east-1.amazonaws.com/example-docs/ANEXO+II+-+AUTODECLARA%C3%87%C3%83O+DE+RESID%C3%8ANCIA.docx'>Baixar exemplo</a>
+        <a href='https://styxx-public.s3.sa-east-1.amazonaws.com/example-docs/ANEXO+II+-+AUTODECLARA%C3%87%C3%83O+DE+RESID%C3%8ANCIA.docx'>Baixar exemplo</a>
         <Typography variant="h6" sx={{ mb: 2 }}>{label}</Typography>
         <UploadBox>
           <Typography variant="body2" sx={{ mb: 1 }}>Selecione o arquivo aqui</Typography>
@@ -421,8 +423,8 @@ const DocumentUploadForm = () => {
   )
 
   const UploadField13 = ({ name, label }) => (
-    <Card sx={{ padding: '20px', borderRadius: '8px', boxShadow: 3, maxWidth: '700px', width: '800px',margin: 'auto' }}>
-    <p>Outros documentos</p>
+    <Card sx={{ padding: '20px', borderRadius: '8px', boxShadow: 3, maxWidth: '700px', width: '800px', margin: 'auto' }}>
+      <p>Outros documentos</p>
       <CardContent>
         <Typography variant="h6" sx={{ mb: 2 }}>{label}</Typography>
         <UploadBox>
@@ -457,8 +459,10 @@ const DocumentUploadForm = () => {
   }));
 
   return (
-      <div>
-        <Header/>
+    <div>
+      <PrivateRoute />
+
+      <Header />
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}>
 
         <Box sx={{ width: '50%', border: '1px solid #ddd', padding: '2rem', borderRadius: '8px', backgroundColor: '#f9f9f9' }}>
@@ -466,17 +470,17 @@ const DocumentUploadForm = () => {
             Documentos do Projeto e Proponente
           </Typography>
           {isLoading ? (
-              <CircularProgress />
+            <CircularProgress />
           ) : error ? (
-              <Alert severity="error">{error}</Alert>
+            <Alert severity="error">{error}</Alert>
           ) : (
-              <>
-               
-                <form>
-                <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}><UploadField name="cronograma" /></Box>                    
-                <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}><UploadField2 name="cronograma" /></Box>                    
-                <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}><UploadField3 name="cronograma" /></Box>                    
-                <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}><UploadField4 name="cronograma" /></Box>                    
+            <>
+
+              <form>
+                <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}><UploadField name="cronograma" /></Box>
+                <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}><UploadField2 name="cronograma" /></Box>
+                <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}><UploadField3 name="cronograma" /></Box>
+                <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}><UploadField4 name="cronograma" /></Box>
                 <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}><UploadField5 name="cronograma" /></Box>
                 <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}><UploadField6 name="cronograma" /></Box>
                 <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}><UploadField7 name="cronograma" /></Box>
@@ -486,24 +490,24 @@ const DocumentUploadForm = () => {
                 <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}><UploadField11 name="cronograma" /></Box>
                 <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}><UploadField12 name="cronograma" /></Box>
                 <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}><UploadField13 name="cronograma" /></Box>
-                  <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Grid item>
-                      <a href='/pnab/projeto'><Button sx={{ mt: 4, mx: 2 }} variant="outlined" color="primary">Voltar</Button></a>
-                    </Grid>
-                    <Button
-                        onClick={onSubmit}
-                        variant="contained"
-                        sx={{ mt: 4, mb: 2, backgroundColor: '#1976d2', color: 'white' }}
-                    >
-                      Enviar documentos
-                    </Button>
-                  </Box>
-                </form>
-              </>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <Grid item>
+                    <a href='/pnab/projeto'><Button sx={{ mt: 4, mx: 2 }} variant="outlined" color="primary">Voltar</Button></a>
+                  </Grid>
+                  <Button
+                    onClick={onSubmit}
+                    variant="contained"
+                    sx={{ mt: 4, mb: 2, backgroundColor: '#1976d2', color: 'white' }}
+                  >
+                    Enviar documentos
+                  </Button>
+                </Box>
+              </form>
+            </>
           )}
         </Box>
       </Box>
-      </div>
+    </div>
   );
 };
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography } from '@mui/material';
 import NewProponentForm from './NovoProponente';
 import Header from '../components/Header/Header';
+import PrivateRoute from '../components/PrivateRoute';
 //import './Proponente.css';
 
 const Proponente = () => {
@@ -56,7 +57,8 @@ const Proponente = () => {
 
   return (
       <div>
-        <Header/>
+      <PrivateRoute>
+    <Header/>
     <div className="proponente-container">
       <h1>Proponente</h1>
       <div className="proponente-content">
@@ -96,6 +98,7 @@ const Proponente = () => {
       
       <NewProponentForm open={openForm} handleClose={handleCloseForm} />
     </div>
+    </PrivateRoute>
       </div>
   );
 };

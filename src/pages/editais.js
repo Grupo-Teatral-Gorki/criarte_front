@@ -1,4 +1,6 @@
 import { useRouter } from 'next/router';
+import PrivateRoute from '../components/PrivateRoute';
+import Header from '../components/Header/Header';
 
 const EditaisPage = () => {
     const router = useRouter();
@@ -43,6 +45,9 @@ const EditaisPage = () => {
     };
 
     return (
+        <div>
+        <PrivateRoute>
+        <Header></Header>
         <div className='editais-cards'>
             <section className="voltar-pagina">
                 <a href="/home" className="link-voltar">
@@ -140,6 +145,8 @@ const EditaisPage = () => {
                     </div>
                 </section>
             </div>
+        </div>
+        </PrivateRoute>
         </div>
     );
 };
