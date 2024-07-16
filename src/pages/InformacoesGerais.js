@@ -18,10 +18,13 @@ const InformacoesGerais = () => {
   const [numeroInscricao, setNumeroInscricao] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [userId, setUserId] = useState(null);
 
-  const storedUserDetails = localStorage.getItem('userDetails');
-  const userDetails = JSON.parse(storedUserDetails);
-  const userId = userDetails ? userDetails.id : null;
+  useEffect(() => {
+    const storedUserDetails = localStorage.getItem('userDetails');
+    const userDetails = JSON.parse(storedUserDetails);
+    setUserId(userDetails ? userDetails.id : null);
+  }, []);
 
   useEffect(() => {
     const fetchNumeroInscricao = async () => {
@@ -63,10 +66,10 @@ const InformacoesGerais = () => {
     if (numeroInscricao) {
       const fetchResumoProjeto = async () => {
         setIsLoading(true);
-
+    
         const url = `https://api.grupogorki.com.br/api/projeto/Projeto/${numeroInscricao}`;
         const token = localStorage.getItem('authToken');
-
+    
         try {
           const response = await fetch(url, {
             method: 'GET',
@@ -75,15 +78,22 @@ const InformacoesGerais = () => {
               'Content-Type': 'application/json',
             },
           });
-
+    
           if (!response.ok) {
             throw new Error(`Erro na requisição: ${response.status} ${response.statusText}`);
           }
-
+    
           const data = await response.json();
           if (data.data && data.data.projeto) {
             const resumoProjeto = data.data.projeto.resumoProjeto;
-            const descricao = JSON.parse(data.data.projeto.descricao);
+            let descricao = {};
+            if (data.data.projeto.descricao) {
+              try {
+                descricao = JSON.parse(data.data.projeto.descricao);
+              } catch (e) {
+                console.warn('Erro ao analisar descrição:', e);
+              }
+            }
             setFormData((prevFormData) => ({
               ...prevFormData,
               resumo: resumoProjeto || '',
@@ -102,7 +112,7 @@ const InformacoesGerais = () => {
           setIsLoading(false);
         }
       };
-
+    
       fetchResumoProjeto();
     }
   }, [numeroInscricao]);
@@ -121,9 +131,11 @@ const InformacoesGerais = () => {
     }
 
     const { resumo, ...rest } = formData;
-    
+
+    let idProjeto = localStorage.getItem('numeroInscricao');
+
     const body = {
-      idProjeto: localStorage.getItem('numeroInscricao'),
+      idProjeto: idProjeto,
       resumoProjeto: resumo,
       descricao: JSON.stringify(rest),
       idUsuario: userId,

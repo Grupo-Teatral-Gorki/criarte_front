@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import {
   Button, TextField, Box, Typography, IconButton, Table, TableBody, TableCell, TableContainer,
-  TableHead, TableRow, Paper, Menu, MenuItem, Select, InputLabel, FormControl, CircularProgress
+  TableHead, TableRow, Paper, Menu, MenuItem, Select, InputLabel, FormControl, Alert, CircularProgress
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import SaveIcon from '@mui/icons-material/Save';
@@ -30,7 +30,7 @@ const FichaTecnicaForm = () => {
   const [cnpj, setCnpj] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error] = useState(null);
 
 
   useEffect(() => {
@@ -298,7 +298,6 @@ return (
                       label="Tipo de pessoa"
                     >
                       <MenuItem value="Fisica">Pessoa Física</MenuItem>
-                      <MenuItem value="Juridica">Pessoa Jurídica</MenuItem>
                     </Select>
                   </FormControl>
                   <TextField
