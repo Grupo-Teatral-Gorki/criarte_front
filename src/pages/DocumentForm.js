@@ -189,6 +189,7 @@ const DocumentUploadForm = () => {
               <UploadField name="decResidencia" label="Autodeclaração de Residência" exampleLink="https://styxx-public.s3.sa-east-1.amazonaws.com/example-docs/ANEXO+II+-+AUTODECLARA%C3%87%C3%83O+DE+RESID%C3%8ANCIA.docx" exampleText="Baixar exemplo" />
               <UploadField name="outrosDocumentos" label="Outros documentos" />
               <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}>
+              <a href='/pnab/projeto'><Button variant="outlined" color="primary" sx={{marginRight: '5px'}}>Voltar</Button></a>
                 <Button variant="contained" type="submit">Enviar Documentos</Button>
               </Box>
             </form>

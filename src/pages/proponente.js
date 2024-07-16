@@ -3,6 +3,7 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography }
 import NewProponentForm from './NovoProponente';
 import Header from '../components/Header/Header';
 import PrivateRoute from '../components/PrivateRoute';
+import Checkbox from '@mui/material/Checkbox';
 //import './Proponente.css';
 
 const Proponente = () => {
@@ -82,11 +83,16 @@ const Proponente = () => {
         <DialogTitle>Lista de proponentes</DialogTitle>
         <DialogContent className='proponentes' dividers>
           {proponentes.map((proponente) => (
-            <div key={proponente.idProponente} style={{ marginBottom: "16px" }}>
+            
+            <div className='proponente-unity'>
+            <Checkbox sx={{display: 'flex',justifyContent: 'right', color: "gray"}}></Checkbox>
+
+            <div key={proponente.idProponente}  style={{ marginBottom: "16px" }}>
               <Typography variant="subtitle1">NOME: {proponente.responsavelLegal} <div>Tipo: Pessoa Física</div></Typography>
               <Typography variant="body2">
                 CPF: ***.***.***-{proponente.cpfResponsavel[9]}{proponente.cpfResponsavel[10]} | Email: {proponente.email}
               </Typography>
+              </div>
             </div>
           ))}
         </DialogContent>
