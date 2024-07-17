@@ -3,6 +3,7 @@ import { Container, Box, TextField, Button, Link, Alert } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
 import PrivateRoute from '../components/PrivateRoute';
+import Header from '../components/Header/Header';
 
 const ProfileForm = () => {
   const [userEmail, setUserEmail] = useState('');
@@ -30,7 +31,7 @@ const ProfileForm = () => {
   return (
     <div>
       <PrivateRoute />
-
+      <Header/>
       {showProfile && (
         <Container maxWidth="sm" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '70vh' }}>
           {userType === 5 && (

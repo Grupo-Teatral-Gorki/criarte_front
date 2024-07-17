@@ -48,7 +48,6 @@ const Home = () => {
                     <button onClick={handleButtonClick} className="btn-detalhes">Ver detalhes</button>
                 </section>
             </section>
-            <div className='notification'><InfoAlert/></div>
         </div>
         </PrivateRoute>
     );

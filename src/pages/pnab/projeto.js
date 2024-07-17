@@ -94,7 +94,7 @@ function PnabHomeForms() {
             <h2>Edital de Chamamento Público 001/2024 SMC</h2>
             <p>Pessoa Física</p>
             <p>Inscrições de 27/06/2024 00:00 até 28/07/2024 23:59</p>
-            <a href="https://dosp.com.br/exibe_do.php?i=NTEzMzU5">Leia o objeto do edital</a>
+            <a style={{color: 'black'}} href="https://dosp.com.br/exibe_do.php?i=NTEzMzU5">Leia o objeto do edital</a>
           </div>
           <div className="sections">
             <Section title="Proponente" description="Selecione o proponente do projeto" link="../proponente" />
