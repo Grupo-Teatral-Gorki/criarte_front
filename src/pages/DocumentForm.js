@@ -11,6 +11,7 @@ const DocumentUploadForm = () => {
   const [error, setError] = useState(null);
   const [files, setFiles] = useState({});
   const [uploadStatus, setUploadStatus] = useState({});
+  const [allFilesUploaded, setAllFilesUploaded] = useState(false); // State to track all uploads
 
   useEffect(() => {
     const fetchNumeroInscricao = async () => {
@@ -52,9 +53,10 @@ const DocumentUploadForm = () => {
     const file = event.target.files[0];
     setFiles(prevFiles => ({
       ...prevFiles,
-      [fieldName]: file,
+      [fieldName]: file
     }));
   };
+  
 
   const uploadFile = async (file, fieldName) => {
     if (!numeroInscricao) {
@@ -65,9 +67,6 @@ const DocumentUploadForm = () => {
     formData.append('IdProjeto', numeroInscricao);
     formData.append('IdTipo', 1);
     formData.append('Archive', file, file.name);
-
-    console.log(numeroInscricao, fieldName)
-    console.log(file)
   
     try {
       const response = await fetch('https://api.grupogorki.com.br/api/docProjeto/Create', {
@@ -109,17 +108,19 @@ const DocumentUploadForm = () => {
         // Algo aconteceu ao configurar a requisição que acionou um erro
         console.error('Error setting up request:', error.message);
       }
-  };
+    }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    Object.keys(files).forEach(fieldName => {
-      if (files[fieldName]) {
-        uploadFile(files[fieldName], fieldName);
-      }
-    });
+    try {
+      await Promise.all(Object.keys(files).map(fieldName => uploadFile(files[fieldName], fieldName)));
+      setAllFilesUploaded(true); // Set state indicating all uploads successful
+    } catch (error) {
+      console.error('Error uploading files:', error);
+      setAllFilesUploaded(false); // Reset state if any upload fails
+    }
   };
 
   const UploadField = ({ name, label, exampleLink, exampleText }) => (
@@ -129,6 +130,7 @@ const DocumentUploadForm = () => {
         <Typography variant="h6" sx={{ mb: 2 }}>{label}</Typography>
         <UploadBox>
           <Typography variant="body2" sx={{ mb: 1 }}>Selecione o arquivo aqui</Typography>
+          {files[name] && <p>{files[name].name}</p>} {/* Exibir o nome do arquivo */}
           <Typography variant="caption" sx={{ mb: 2, display: 'block' }}>Arquivos Suportados: PDF, TEXT, DOC, DOCX</Typography>
           <input
             type="file"
@@ -147,6 +149,7 @@ const DocumentUploadForm = () => {
       </CardContent>
     </Card>
   );
+  
 
   const UploadBox = styled('div')(({ theme }) => ({
     border: '2px dashed #ccc',
@@ -159,6 +162,14 @@ const DocumentUploadForm = () => {
       borderColor: '#999',
     }
   }));
+
+  const FooterAlert = () => {
+    if (allFilesUploaded) {
+      return <Alert severity="success">Todos os documentos foram enviados com sucesso!</Alert>;
+    } else {
+      return null;
+    }
+  };
 
   return (
     <div>
@@ -188,12 +199,17 @@ const DocumentUploadForm = () => {
               <UploadField name="decEtnicoRacial" label="Declaração étnico-racial" exampleLink="https://styxx-public.s3.sa-east-1.amazonaws.com/example-docs/ANEXO+VII+-+MODELO+DE+DECLARA%C3%87%C3%83O+%C3%89TNICO-RACIAL.docx" exampleText="Baixar exemplo" />
               <UploadField name="decResidencia" label="Autodeclaração de Residência" exampleLink="https://styxx-public.s3.sa-east-1.amazonaws.com/example-docs/ANEXO+II+-+AUTODECLARA%C3%87%C3%83O+DE+RESID%C3%8ANCIA.docx" exampleText="Baixar exemplo" />
               <UploadField name="outrosDocumentos" label="Outros documentos" />
+              <Box sx={{ marginTop: '2rem' }}>
+                <FooterAlert /> {/* Render footer alert based on state */}
+              </Box>
               <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}>
               <a href='/pnab/projeto'><Button variant="outlined" color="primary" sx={{marginRight: '5px'}}>Voltar</Button></a>
+              
                 <Button variant="contained" type="submit">Enviar Documentos</Button>
               </Box>
             </form>
           )}
+          
         </Box>
       </Box>
     </div>

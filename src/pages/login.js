@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useRouter } from 'next/router';
+import Footer from '../components/Footer/Footer';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -115,7 +116,9 @@ const Login = () => {
           <button type="submit">Login</button>
         </form>
       </div>
+      <Footer></Footer>
     </div>
+
   );
 };
 

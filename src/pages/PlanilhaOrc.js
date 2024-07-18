@@ -119,6 +119,7 @@ const DocumentUploadForm = () => {
                         <form onSubmit={onSubmit}>
                             <Card sx={{ padding: '20px', borderRadius: '8px', boxShadow: 3, maxWidth: '700px', width: '800px', margin: 'auto', mb: 2 }}>
                                 <CardContent>
+                                <a href='https://styxx-public.s3.sa-east-1.amazonaws.com/example-docs/ANEXO+IV+-+MODELO+DE+PLANILHA+OR%C3%87AMENT%C3%81RIA.docx'>Baixar modelo</a>
                                     <UploadBox>
                                         <Typography variant="body2" sx={{ mb: 1 }}>Selecione o arquivo aqui</Typography>
                                         <Typography variant="caption" sx={{ mb: 2, display: 'block' }}>Arquivos Suportados: PDF, TEXT, DOC, DOCX</Typography>

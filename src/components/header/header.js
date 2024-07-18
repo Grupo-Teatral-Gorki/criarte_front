@@ -41,40 +41,15 @@ const Header = () => {
           <nav>
             <ul>
               <li className="links_menu">
-                <a href="#">
+                <a href="/pnab/projeto">
                   <i className="bi bi-folder"></i> Meus Projetos
                 </a>
-                <ul className="submenu">
-                  <li>
-                    <a href="#" onClick={handleSubMenuClick}>
-                      Meus Projetos 2021
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" onClick={handleSubMenuClick}>
-                      Meus Projetos 2022
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" onClick={handleSubMenuClick}>
-                      Meus Projetos 2023
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" onClick={handleSubMenuClick}>
-                      Meus Projetos 2024
-                    </a>
-                  </li>
-                </ul>
               </li>
               <li className="links_menu">
-                <a href="/NovoProponenteForm">Meus Proponentes</a>
+                <a href="/proponente">Meus Proponentes</a>
               </li>
               <li className="links_menu">
                 <a href="/profile">Alterar Meus Dados</a>
-              </li>
-              <li className="links_menu">
-                <a href="#">Minhas Pendências</a>
               </li>
               <li className="links_menu">
                
@@ -92,9 +67,7 @@ const Header = () => {
                 </ul>
               </li>
               <li className="links_menu">
-                <a href="#">
-                  <i className="fas fa-question-circle"></i> Ajuda
-                </a>
+
                 <ul className="submenu">
                   <li>
                     <a href="#" onClick={handleSubMenuClick}>

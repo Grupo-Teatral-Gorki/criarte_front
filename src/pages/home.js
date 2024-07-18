@@ -4,8 +4,7 @@ import React from 'react';
 //import "./Home.css";
 import Header from '../components/Header/Header';
 import PrivateRoute from '../components/PrivateRoute';
-import InfoAlert from '../components/BasicAlerts/InfoAlert';
-
+import Footer from '../components/Footer/Footer';
 const Home = () => {
     const handleButtonClick = () => {
         window.open("/editais");
@@ -17,10 +16,12 @@ const Home = () => {
             <Header/>
             <section className="container_opcoes_banner">
                 <section className="container_opcoes">
-                    <div className="container_meus_projetos" id='meus_projetos_off'>
+                <a href='/pnab/projeto' className='opcao_link'>
+                <div className="container_meus_projetos" id='meus_projetos_off'>
                             <h3><i className="bi bi-folder"></i> Meus Projetos</h3>
                             <p>Lista de projetos inscritos</p>
                     </div>
+                </a>
                     
                     <div className="container_editais_vigentes">
                         <a href="/editais" className="opcao_link">
@@ -29,13 +30,7 @@ const Home = () => {
                         </a>
                     </div>
 
-                    <div className="container_ajuda" id='meus_projetos_off'>
-                            <h3><i className="bi bi-question-circle"></i> Ajuda</h3>
-                    </div>
-                    <div className="container_pendencias" id='meus_projetos_off'>
-                            <h3><i className="bi bi-exclamation-circle"></i> Pendências</h3>
-                            <p>Suas pendências serão exibidas aqui.</p>
-                    </div>
+               
                 </section>
 
                 <section className="container_banner">
@@ -49,6 +44,7 @@ const Home = () => {
                 </section>
             </section>
         </div>
+        <Footer></Footer>
         </PrivateRoute>
     );
 };

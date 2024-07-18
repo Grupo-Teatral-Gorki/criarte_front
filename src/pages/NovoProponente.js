@@ -142,6 +142,8 @@ const NewProponentForm = ({ open, handleClose }) => {
     <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
     
       <DialogTitle>Novo proponente</DialogTitle>
+      <Alert sx={{marginBottom: '15px', marginLeft: '20px', marginRight: '20px'}} severity="error">Cadastre 1 proponente por login</Alert>
+
       <DialogContent>
         <RadioGroup row defaultValue="Pessoa Jurídica" name="proponentType">
           <FormControlLabel value="Pessoa Física" checked={true} control={<Radio />} label="Pessoa Física" />

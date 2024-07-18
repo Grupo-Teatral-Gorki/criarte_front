@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Alert } from '@mui/material';
 import NewProponentForm from './NovoProponente';
 import Header from '../components/Header/Header';
 import PrivateRoute from '../components/PrivateRoute';
@@ -63,19 +63,20 @@ const Proponente = () => {
     <div className="proponente-container">
       <h1>Proponente</h1>
       <div className="proponente-content">
+      <Alert sx={{marginBottom: '15px'}} severity="error">Cadastre 1 proponente por login</Alert>
       <p>1. Selecione o(a) proponente ( Pessoa Física )</p>
         <div className="proponente-info">
           <p>2. Este proponente pode ter até <b>1</b> projeto(s) em andamento neste edital. Certifique-se que o proponente selecionado possui vagas para iniciar o cadastramento.</p>
         </div>
         <div className="proponente-selection">
-          <p>Nenhum proponente foi selecionado!</p>
-          <Button className="proponente-button" disabled={loading} variant="contained" color="primary" onClick={handleOpenList}>
-            Clique aqui ver sua lista de proponentes
-          </Button>
+         
+          
         </div>
         <div className="proponente-actions">
           <a href='/pnab/projeto'><Button className="back-button" variant="contained">Voltar para o projeto</Button></a>
-          <Button className="save-button" variant="contained" color="primary" disabled>Salvar alterações</Button>
+          <Button className="proponente-button" disabled={loading} variant="contained" color="primary" onClick={handleOpenList}>
+           Lista de proponentes
+          </Button>
         </div>
       </div>
       
@@ -85,7 +86,7 @@ const Proponente = () => {
           {proponentes.map((proponente) => (
             
             <div className='proponente-unity'>
-            <Checkbox sx={{display: 'flex',justifyContent: 'right', color: "gray"}}></Checkbox>
+            <Checkbox disabled checked sx={{display: 'flex',justifyContent: 'right', color: "gray"}}></Checkbox>
 
             <div key={proponente.idProponente}  style={{ marginBottom: "16px" }}>
               <Typography variant="subtitle1">NOME: {proponente.responsavelLegal} <div>Tipo: Pessoa Física</div></Typography>

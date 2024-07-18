@@ -859,4 +859,36 @@ input[type="range"] {
     margin-bottom: 20px;
 }
 
+.footer {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+    background-color: #ffffff;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+    box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1);
+}
+
+.footer-section {
+    display: flex;
+    align-items: center;
+    margin: 0 10px;
+}
+
+.footer-logo {
+    max-width: 90px;
+    margin-right: 20px;
+}
+
+.footer-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-info strong{
+    font-weight: 600;
+}
 
