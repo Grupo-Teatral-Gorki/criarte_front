@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Typography, Box, Grid, Card, CardContent, CircularProgress, Alert } from '@mui/material';
-import axios from 'axios';
+import { Button, Typography, Box, Card, CardContent, CircularProgress, Alert } from '@mui/material';
 import { styled } from '@mui/system';
 import Header from '../components/Header/Header';
 import PrivateRoute from '../components/PrivateRoute';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 const DocumentUploadForm = () => {
   const [numeroInscricao, setNumeroInscricao] = useState(null);
@@ -11,12 +14,14 @@ const DocumentUploadForm = () => {
   const [error, setError] = useState(null);
   const [files, setFiles] = useState({});
   const [uploadStatus, setUploadStatus] = useState({});
-  const [allFilesUploaded, setAllFilesUploaded] = useState(false); // State to track all uploads
+  const [allFilesUploaded, setAllFilesUploaded] = useState(false);
+  const [module, setModule] = useState('');
+  const [category, setCategory] = useState('');
+  const [categoryOptions, setCategoryOptions] = useState([]);
 
   useEffect(() => {
     const fetchNumeroInscricao = async () => {
       setIsLoading(true);
-
       const url = `https://api.grupogorki.com.br/api/projeto/listaProjetos`;
       const token = localStorage.getItem('authToken');
 
@@ -56,18 +61,17 @@ const DocumentUploadForm = () => {
       [fieldName]: file
     }));
   };
-  
 
   const uploadFile = async (file, fieldName) => {
     if (!numeroInscricao) {
       throw new Error('Número de inscrição do projeto não encontrado.');
     }
-  
+
     const formData = new FormData();
     formData.append('IdProjeto', numeroInscricao);
     formData.append('IdTipo', 1);
     formData.append('Archive', file, file.name);
-  
+
     try {
       const response = await fetch('https://api.grupogorki.com.br/api/docProjeto/Create', {
         method: 'PUT',
@@ -76,7 +80,7 @@ const DocumentUploadForm = () => {
         },
         body: formData
       });
-  
+
       if (response.ok) {
         setUploadStatus(prevStatus => ({
           ...prevStatus,
@@ -88,7 +92,7 @@ const DocumentUploadForm = () => {
           ...prevStatus,
           [fieldName]: 'error',
         }));
-        const errorText = await response.text(); // Lê o texto da resposta de erro
+        const errorText = await response.text();
         console.error('Upload error:', response.status, response.statusText, errorText);
       }
     } catch (error) {
@@ -96,16 +100,13 @@ const DocumentUploadForm = () => {
         ...prevStatus,
         [fieldName]: 'error',
       }));
-      console.error('Upload error:', error.message); // Log a mensagem de erro
-  
+      console.error('Upload error:', error.message);
+
       if (error.response) {
-        // A requisição foi feita e o servidor respondeu com um status de erro (ex: 4xx, 5xx)
         console.error('Server response:', error.response.status, error.response.data);
       } else if (error.request) {
-        // A requisição foi feita mas não houve resposta
         console.error('No response received:', error.request);
       } else {
-        // Algo aconteceu ao configurar a requisição que acionou um erro
         console.error('Error setting up request:', error.message);
       }
     }
@@ -116,11 +117,33 @@ const DocumentUploadForm = () => {
 
     try {
       await Promise.all(Object.keys(files).map(fieldName => uploadFile(files[fieldName], fieldName)));
-      setAllFilesUploaded(true); // Set state indicating all uploads successful
+      setAllFilesUploaded(true);
     } catch (error) {
       console.error('Error uploading files:', error);
-      setAllFilesUploaded(false); // Reset state if any upload fails
+      setAllFilesUploaded(false);
     }
+  };
+
+  const handleModuleChange = (event) => {
+    const selectedModule = event.target.value;
+    setModule(selectedModule);
+
+    if (selectedModule === 1) {
+      setCategoryOptions([
+        'Música',
+        'Artesanato',
+        'Artes Plásticas',
+        'Fotografia',
+        'Literatura'
+      ]);
+    } else if (selectedModule === 2) {
+      setCategoryOptions([
+        'Contação de Histórias',
+        'Teatro',
+        'Dança'
+      ]);
+    }
+    setCategory(''); // Reset category when module changes
   };
 
   const UploadField = ({ name, label, exampleLink, exampleText }) => (
@@ -130,7 +153,7 @@ const DocumentUploadForm = () => {
         <Typography variant="h6" sx={{ mb: 2 }}>{label}</Typography>
         <UploadBox>
           <Typography variant="body2" sx={{ mb: 1 }}>Selecione o arquivo aqui</Typography>
-          {files[name] && <p>{files[name].name}</p>} {/* Exibir o nome do arquivo */}
+          {files[name] && <p>{files[name].name}</p>}
           <Typography variant="caption" sx={{ mb: 2, display: 'block' }}>Arquivos Suportados: PDF, TEXT, DOC, DOCX</Typography>
           <input
             type="file"
@@ -149,7 +172,6 @@ const DocumentUploadForm = () => {
       </CardContent>
     </Card>
   );
-  
 
   const UploadBox = styled('div')(({ theme }) => ({
     border: '2px dashed #ccc',
@@ -180,6 +202,41 @@ const DocumentUploadForm = () => {
           <Typography variant="h4" sx={{ marginBottom: '1rem', textAlign: 'center' }}>
             Documentos do Projeto e Proponente
           </Typography>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginLeft: '100px', marginRight: '100px' }}>
+            <Box sx={{ minWidth: '50px' }}>
+              <FormControl fullWidth sx={{ width: '200px', display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+                <InputLabel id="module-select-label">Módulo</InputLabel>
+                <Select
+                  labelId="module-select-label"
+                  id="module-select"
+                  value={module}
+                  label="Módulo"
+                  onChange={handleModuleChange}
+                  sx={{ backgroundColor: 'white' }}
+                >
+                  <MenuItem value={1}>Módulo 1</MenuItem>
+                  <MenuItem value={2}>Módulo 2</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+            <Box sx={{ minWidth: '50px' }}>
+              <FormControl fullWidth sx={{ width: '200px', display: 'flex', justifyContent: 'center', marginLeft: 'auto', marginRight: 'auto', marginBottom: '20px' }}>
+                <InputLabel id="category-select-label">Categoria</InputLabel>
+                <Select
+                  labelId="category-select-label"
+                  id="category-select"
+                  value={category}
+                  label="Categoria"
+                  onChange={(e) => setCategory(e.target.value)}
+                  sx={{ backgroundColor: 'white' }}
+                >
+                  {categoryOptions.map((option, index) => (
+                    <MenuItem key={index} value={option}>{option}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+          </div>
           {isLoading ? (
             <CircularProgress />
           ) : error ? (
@@ -200,16 +257,14 @@ const DocumentUploadForm = () => {
               <UploadField name="decResidencia" label="Autodeclaração de Residência" exampleLink="https://styxx-public.s3.sa-east-1.amazonaws.com/example-docs/ANEXO+II+-+AUTODECLARA%C3%87%C3%83O+DE+RESID%C3%8ANCIA.docx" exampleText="Baixar exemplo" />
               <UploadField name="outrosDocumentos" label="Outros documentos" />
               <Box sx={{ marginTop: '2rem' }}>
-                <FooterAlert /> {/* Render footer alert based on state */}
+                <FooterAlert />
               </Box>
               <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}>
-              <a href='/pnab/projeto'><Button variant="outlined" color="primary" sx={{marginRight: '5px'}}>Voltar</Button></a>
-              
+                <a href='/pnab/projeto'><Button variant="outlined" color="primary" sx={{ marginRight: '5px' }}>Voltar</Button></a>
                 <Button variant="contained" type="submit">Enviar Documentos</Button>
               </Box>
             </form>
           )}
-          
         </Box>
       </Box>
     </div>
