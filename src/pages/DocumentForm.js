@@ -6,7 +6,7 @@ import PrivateRoute from '../components/PrivateRoute';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 
 const DocumentUploadForm = () => {
   const [numeroInscricao, setNumeroInscricao] = useState(null);
@@ -20,6 +20,10 @@ const DocumentUploadForm = () => {
   const [categoryOptions, setCategoryOptions] = useState([]);
 
   useEffect(() => {
+    const storedUserDetails = localStorage.getItem('userDetails');
+    const userDetails = JSON.parse(storedUserDetails);
+
+
     const fetchNumeroInscricao = async () => {
       setIsLoading(true);
       const url = `https://api.grupogorki.com.br/api/projeto/listaProjetos`;
@@ -40,7 +44,43 @@ const DocumentUploadForm = () => {
 
         const data = await response.json();
         if (data.data && data.data.length > 0) {
-          setNumeroInscricao(data.data[0].numeroInscricao);
+          const numeroInscricao = data.data[0].numeroInscricao;
+          setNumeroInscricao(numeroInscricao);
+
+          // Fetch project details
+          const projectResponse = await fetch(`https://api.grupogorki.com.br/api/projeto/Projeto/${numeroInscricao}`, {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          });
+
+          if (!projectResponse.ok) {
+            throw new Error(`Erro na requisição: ${projectResponse.status} ${projectResponse.statusText}`);
+          }
+
+          const projectData = await projectResponse.json();
+          if (projectData) {
+            setModule(projectData.module || '');
+            setCategory(projectData.category || '');
+            // Set category options based on module
+            if (projectData.module === 1) {
+              setCategoryOptions([
+                'Música',
+                'Artesanato',
+                'Artes Plásticas',
+                'Fotografia',
+                'Literatura'
+              ]);
+            } else if (projectData.module === 2) {
+              setCategoryOptions([
+                'Contação de Histórias',
+                'Teatro',
+                'Dança'
+              ]);
+            }
+          }
         } else {
           setError("Número de inscrição não encontrado.");
         }
@@ -101,28 +141,47 @@ const DocumentUploadForm = () => {
         [fieldName]: 'error',
       }));
       console.error('Upload error:', error.message);
-
-      if (error.response) {
-        console.error('Server response:', error.response.status, error.response.data);
-      } else if (error.request) {
-        console.error('No response received:', error.request);
-      } else {
-        console.error('Error setting up request:', error.message);
-      }
     }
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    const storedUserDetails = localStorage.getItem('userDetails');
+    const userDetails = JSON.parse(storedUserDetails);
+
+    console.log('Número de Inscrição:', numeroInscricao);
+    console.log('ID Proponente:', userDetails.id);
+    console.log('Módulo:', module);
+    console.log('Categoria:', category);
+
     try {
       await Promise.all(Object.keys(files).map(fieldName => uploadFile(files[fieldName], fieldName)));
       setAllFilesUploaded(true);
+
+      const updateResponse = await fetch('https://api.grupogorki.com.br/api/projeto/updateProjeto', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          idProponente: userDetails.id,
+          idModalidade: module,
+          outrasInformacoes: category
+        })
+      });
+
+      if (!updateResponse.ok) {
+        throw new Error(`Erro ao atualizar o projeto: ${updateResponse.status} ${updateResponse.statusText}`);
+      }
+
+      console.log('Projeto atualizado com sucesso:', await updateResponse.json());
     } catch (error) {
-      console.error('Error uploading files:', error);
-      setAllFilesUploaded(false);
+      console.error('Error updating project:', error);
     }
   };
+
 
   const handleModuleChange = (event) => {
     const selectedModule = event.target.value;
@@ -202,33 +261,25 @@ const DocumentUploadForm = () => {
           <Typography variant="h4" sx={{ marginBottom: '1rem', textAlign: 'center' }}>
             Documentos do Projeto e Proponente
           </Typography>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginLeft: '100px', marginRight: '100px' }}>
-            <Box sx={{ minWidth: '50px' }}>
-              <FormControl fullWidth sx={{ width: '200px', display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+          <div>
+            <Box sx={{ mb: 2 }}>
+              <FormControl fullWidth>
                 <InputLabel id="module-select-label">Módulo</InputLabel>
                 <Select
                   labelId="module-select-label"
-                  id="module-select"
                   value={module}
-                  label="Módulo"
                   onChange={handleModuleChange}
-                  sx={{ backgroundColor: 'white' }}
+                  label="Módulo"
                 >
                   <MenuItem value={1}>Módulo 1</MenuItem>
                   <MenuItem value={2}>Módulo 2</MenuItem>
                 </Select>
-              </FormControl>
-            </Box>
-            <Box sx={{ minWidth: '50px' }}>
-              <FormControl fullWidth sx={{ width: '200px', display: 'flex', justifyContent: 'center', marginLeft: 'auto', marginRight: 'auto', marginBottom: '20px' }}>
-                <InputLabel id="category-select-label">Categoria</InputLabel>
+
                 <Select
                   labelId="category-select-label"
-                  id="category-select"
                   value={category}
-                  label="Categoria"
                   onChange={(e) => setCategory(e.target.value)}
-                  sx={{ backgroundColor: 'white' }}
+                  label="Categoria"
                 >
                   {categoryOptions.map((option, index) => (
                     <MenuItem key={index} value={option}>{option}</MenuItem>
@@ -236,6 +287,7 @@ const DocumentUploadForm = () => {
                 </Select>
               </FormControl>
             </Box>
+
           </div>
           {isLoading ? (
             <CircularProgress />
@@ -260,7 +312,9 @@ const DocumentUploadForm = () => {
                 <FooterAlert />
               </Box>
               <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}>
-                <a href='/pnab/projeto'><Button variant="outlined" color="primary" sx={{ marginRight: '5px' }}>Voltar</Button></a>
+                <a href='/pnab/projeto'>
+                  <Button variant="outlined" color="primary" sx={{ marginRight: '5px' }}>Voltar</Button>
+                </a>
                 <Button variant="contained" type="submit">Enviar Documentos</Button>
               </Box>
             </form>
