@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-
-//import "../Proponente.css";
 import {
   Dialog,
   DialogTitle,
@@ -17,9 +15,10 @@ import {
   Select,
   InputLabel,
   FormControl,
+  Snackbar,
+  Alert,
 } from "@mui/material";
-import { Snackbar, Alert } from '@mui/material';
-
+import { useRouter } from 'next/router';
 
 const NewProponentForm = ({ open, handleClose }) => {
   const [loading, setLoading] = useState(false);
@@ -41,10 +40,36 @@ const NewProponentForm = ({ open, handleClose }) => {
   const [cidadeResponsavel, setCidadeResponsavel] = useState(" ");
   const [ufResponsavel, setUfResponsavel] = useState(" ");
   const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [snackbarSeverity, setSnackbarSeverity] = useState('success'); 
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [errors, setErrors] = useState({});
+  const router = useRouter();
 
   const handleSaveChanges = async () => {
+    const newErrors = {};
+
+    // Verifica campos obrigatórios
+    if (!nomeCompleto.trim()) newErrors.nomeCompleto = true;
+    if (!cpf.trim()) newErrors.cpf = true;
+    if (!rg.trim()) newErrors.rg = true;
+    if (!dataNascimento.trim()) newErrors.dataNascimento = true;
+    if (!email.trim()) newErrors.email = true;
+    if (!telefoneFixo.trim()) newErrors.telefoneFixo = true;
+    if (!cepResponsavel.trim()) newErrors.cepResponsavel = true;
+    if (!logradouroResponsavel.trim()) newErrors.logradouroResponsavel = true;
+    if (!numeroResponsavel.trim()) newErrors.numeroResponsavel = true;
+    if (!bairroResponsavel.trim()) newErrors.bairroResponsavel = true;
+    if (!cidadeResponsavel.trim()) newErrors.cidadeResponsavel = true;
+    if (!ufResponsavel.trim()) newErrors.ufResponsavel = true;
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      setSnackbarSeverity('error');
+      setSnackbarMessage('Por favor, preencha todos os campos obrigatórios.');
+      setOpenSnackbar(true);
+      return;
+    }
+
     setLoading(true);
     const url = `https://api.grupogorki.com.br/api/proponentes/createProponente`;
     const token = localStorage.getItem('authToken');
@@ -92,74 +117,70 @@ const NewProponentForm = ({ open, handleClose }) => {
         setSnackbarSeverity('success');
         setSnackbarMessage('Proponente cadastrado com sucesso!');
         setOpenSnackbar(true);
-        setTimeout(() => setOpenSnackbar(false), 5000);
-      } 
-      
+        setTimeout(() => {
+          setOpenSnackbar(false);
+          router.push('/success-page'); // Redirecionar para outra página
+        }, 2000);
+      }
 
       const data = await response.json();
       console.log("Proponente salvo com sucesso:", data);
-      alert("Proponente salvo com sucesso!");
-
-      //setRazaoSocial("");
-      //setCnpj("");
-      //setNomeFantasia("");
-      setWebSite("");
-      setEmail("");
-      setCelular("");
-      setTelefoneFixo("");
-      setTelefoneOutro("");
-      setNomeCompleto("");
-      setCpf("");
-      setRg("");
-      setNomeSocial("");
-      setDataNascimento("");
-      //setCargo("");
-      setCepResponsavel("");
-      setLogradouroResponsavel("");
-      setNumeroResponsavel("");
-      setComplementoResponsavel("");
-      setBairroResponsavel("");
-      setCidadeResponsavel("");
-      setUfResponsavel("");
-      //setCepPJ("");
-      //setLogradouroPJ("");
-      //setNumeroPJ("");
-      //setComplementoPJ("");
-      //setBairroPJ("");
-      //setCidadePJ("");
-      //setUfPJ("");
-
-      handleClose();
     } catch (error) {
-      console.log(error)
-        } finally {
+      console.log(error);
+    } finally {
       setLoading(false);
     }
   };
 
+  const handleCpfChange = (e) => {
+    let newValue = e.target.value.replace(/[^0-9]/g, '');
+    if (newValue.length > 11) {
+      newValue = newValue.slice(0, 11);
+    }
+    setCpf(newValue);
+  };
+
+  const handleRgChange = (e) => {
+    let newValue = e.target.value.replace(/[^0-9]/g, '');
+    if (newValue.length > 9) {
+      newValue = newValue.slice(0, 9);
+    }
+    setRg(newValue);
+  }
+
+  const handleNumFixoChange = (e) => {
+    let newValue = e.target.value.replace(/[^0-9]/g, '');
+    if (newValue.length > 10) {
+      newValue = newValue.slice(0, 10);
+    }
+    setTelefoneFixo(newValue);
+  }
+
+  const handleNumAltChange = (e) => {
+    let newValue = e.target.value.replace(/[^0-9]/g, '');
+    if (newValue.length > 11) {
+      newValue = newValue.slice(0, 11);
+    }
+    setTelefoneOutro(newValue);
+  }
+
   return (
-      <div>
     <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-    
       <DialogTitle>Novo proponente</DialogTitle>
-      <Alert sx={{marginBottom: '15px', marginLeft: '20px', marginRight: '20px'}} severity="error">Cadastre 1 proponente por login</Alert>
+      <Alert sx={{ marginBottom: '15px', marginLeft: '20px', marginRight: '20px' }} variant="filled" severity="info">Cadastre 1 proponente por login</Alert>
 
       <DialogContent>
         <RadioGroup row defaultValue="Pessoa Jurídica" name="proponentType">
           <FormControlLabel value="Pessoa Física" checked={true} control={<Radio />} label="Pessoa Física" />
           <FormControlLabel value="Pessoa Física" checked={false} disabled={true} control={<Radio />} label="Pessoa Jurídica" />
           <FormControlLabel value="Cooperativa" checked={false} disabled={true} control={<Radio />} label="Cooperativa" />
-
         </RadioGroup>
         <Snackbar open={openSnackbar} autoHideDuration={2000}>
-      <Alert severity={snackbarSeverity}>{snackbarMessage}</Alert>
-    </Snackbar>
+          <Alert severity={snackbarSeverity}>{snackbarMessage}</Alert>
+        </Snackbar>
         <Grid container spacing={2}>
-          {/* Dados pessoais */}
           <Grid item xs={12}>
-            <Typography variant="h6" mt={3} mb={1}>
-              Dados pessoais
-            </Typography>
+            <Typography variant="h6" mt={3} mb={1}>Dados pessoais</Typography>
           </Grid>
           <Grid item xs={12} md={6}>
             <TextField
@@ -168,6 +189,8 @@ const NewProponentForm = ({ open, handleClose }) => {
               value={nomeCompleto}
               onChange={(e) => setNomeCompleto(e.target.value)}
               required
+              error={errors.nomeCompleto}
+              helperText={errors.nomeCompleto && "Este campo é obrigatório"}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -175,8 +198,10 @@ const NewProponentForm = ({ open, handleClose }) => {
               fullWidth
               label="CPF"
               value={cpf}
-              onChange={(e) => setCpf(e.target.value)}
+              onChange={handleCpfChange}
               required
+              error={errors.cpf}
+              helperText={errors.cpf && "Este campo é obrigatório"}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -184,8 +209,10 @@ const NewProponentForm = ({ open, handleClose }) => {
               fullWidth
               label="RG"
               value={rg}
-              onChange={(e) => setRg(e.target.value)}
+              onChange={handleRgChange}
               required
+              error={errors.rg}
+              helperText={errors.rg && "Este campo é obrigatório"}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -204,14 +231,12 @@ const NewProponentForm = ({ open, handleClose }) => {
               value={dataNascimento}
               onChange={(e) => setDataNascimento(e.target.value)}
               required
+              error={errors.dataNascimento}
+              helperText={errors.dataNascimento && "Este campo é obrigatório"}
             />
           </Grid>
-
-          {/* Contato */}
           <Grid item xs={12}>
-            <Typography variant="h6" mt={3} mb={1}>
-              Contato
-            </Typography>
+            <Typography variant="h6" mt={3} mb={1}>Contato</Typography>
           </Grid>
           <Grid item xs={12} md={6}>
             <TextField
@@ -220,6 +245,8 @@ const NewProponentForm = ({ open, handleClose }) => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              error={errors.email}
+              helperText={errors.email && "Este campo é obrigatório"}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -228,30 +255,29 @@ const NewProponentForm = ({ open, handleClose }) => {
               label="Celular com (DDD)"
               value={celular}
               onChange={(e) => setCelular(e.target.value)}
-              required
             />
           </Grid>
           <Grid item xs={12} md={6}>
             <TextField
               fullWidth
-              label="Telefone fixo"
+              label="Telefone fixo com (DDD)"
               value={telefoneFixo}
-              onChange={(e) => setTelefoneFixo(e.target.value)}
+              onChange={handleNumFixoChange}
+              required
+              error={errors.telefoneFixo}
+              helperText={errors.telefoneFixo && "Este campo é obrigatório"}
             />
           </Grid>
           <Grid item xs={12} md={6}>
             <TextField
               fullWidth
-              label="Telefone alternativo"
+              label="Telefone alternativo com (DDD)"
               value={telefoneOutro}
-              onChange={(e) => setTelefoneOutro(e.target.value)}
+              onChange={handleNumAltChange}
             />
           </Grid>
-          {/* Endereço Responsável */}
           <Grid item xs={12}>
-            <Typography variant="h6" mt={3} mb={1}>
-              Endereço
-            </Typography>
+            <Typography variant="h6" mt={3} mb={1}>Endereço</Typography>
           </Grid>
           <Grid item xs={12} md={6}>
             <TextField
@@ -260,6 +286,8 @@ const NewProponentForm = ({ open, handleClose }) => {
               value={cepResponsavel}
               onChange={(e) => setCepResponsavel(e.target.value)}
               required
+              error={errors.cepResponsavel}
+              helperText={errors.cepResponsavel && "Este campo é obrigatório"}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -269,6 +297,8 @@ const NewProponentForm = ({ open, handleClose }) => {
               value={logradouroResponsavel}
               onChange={(e) => setLogradouroResponsavel(e.target.value)}
               required
+              error={errors.logradouroResponsavel}
+              helperText={errors.logradouroResponsavel && "Este campo é obrigatório"}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -278,6 +308,8 @@ const NewProponentForm = ({ open, handleClose }) => {
               value={numeroResponsavel}
               onChange={(e) => setNumeroResponsavel(e.target.value)}
               required
+              error={errors.numeroResponsavel}
+              helperText={errors.numeroResponsavel && "Este campo é obrigatório"}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -295,6 +327,8 @@ const NewProponentForm = ({ open, handleClose }) => {
               value={bairroResponsavel}
               onChange={(e) => setBairroResponsavel(e.target.value)}
               required
+              error={errors.bairroResponsavel}
+              helperText={errors.bairroResponsavel && "Este campo é obrigatório"}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -304,10 +338,12 @@ const NewProponentForm = ({ open, handleClose }) => {
               value={cidadeResponsavel}
               onChange={(e) => setCidadeResponsavel(e.target.value)}
               required
+              error={errors.cidadeResponsavel}
+              helperText={errors.cidadeResponsavel && "Este campo é obrigatório"}
             />
           </Grid>
           <Grid item xs={12} md={6}>
-            <FormControl fullWidth required>
+            <FormControl fullWidth required error={errors.ufResponsavel}>
               <InputLabel>UF</InputLabel>
               <Select
                 value={ufResponsavel}
@@ -316,8 +352,8 @@ const NewProponentForm = ({ open, handleClose }) => {
               >
                 <MenuItem value="MG">Minas Gerais</MenuItem>
                 <MenuItem value="SP">São Paulo</MenuItem>
-
               </Select>
+              {errors.ufResponsavel && <Typography color="error">Este campo é obrigatório</Typography>}
             </FormControl>
           </Grid>
         </Grid>
@@ -329,7 +365,6 @@ const NewProponentForm = ({ open, handleClose }) => {
         </Button>
       </DialogActions>
     </Dialog>
-      </div>
   );
 };
 

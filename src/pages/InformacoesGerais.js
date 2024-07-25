@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Grid, Typography, TextField, Button, Box, CircularProgress, Alert } from '@mui/material';
+import { Container, Grid, Typography, TextField, Button, Box, CircularProgress, Alert, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import Header from '../components/Header/Header';
 import PrivateRoute from '../components/PrivateRoute';
 
@@ -19,6 +19,9 @@ const InformacoesGerais = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [userId, setUserId] = useState(null);
+  const [module, setModule] = useState('');
+  const [category, setCategory] = useState('');
+  const [categoryOptions, setCategoryOptions] = useState([]);
 
   useEffect(() => {
     const storedUserDetails = localStorage.getItem('userDetails');
@@ -165,6 +168,28 @@ const InformacoesGerais = () => {
     }
   };
 
+  const handleModuleChange = (event) => {
+    const selectedModule = event.target.value;
+    setModule(selectedModule);
+
+    if (selectedModule === 1) {
+      setCategoryOptions([
+        'Música',
+        'Artesanato',
+        'Artes Plásticas',
+        'Fotografia',
+        'Literatura'
+      ]);
+    } else if (selectedModule === 2) {
+      setCategoryOptions([
+        'Contação de Histórias',
+        'Teatro',
+        'Dança'
+      ]);
+    }
+    setCategory(''); // Reset category when module changes
+  };
+
   return (
     <div>
       <PrivateRoute>
@@ -174,6 +199,31 @@ const InformacoesGerais = () => {
             <a href='/pnab/projeto'><Button variant="outlined" color="primary">Voltar</Button></a>
           </Grid>
           <h1 className='titulo-info'>Informações gerais do projeto</h1>
+          <Box sx={{ mb: 2, maxWidth: '500px', marginLeft: 'auto', marginRight: 'auto' }}>
+              <FormControl fullWidth>
+                <InputLabel id="module-select-label">Módulo</InputLabel>
+                <Select
+                  labelId="module-select-label"
+                  value={module}
+                  onChange={handleModuleChange}
+                  label="Módulo"
+                >
+                  <MenuItem  value={1}>Módulo 1</MenuItem>
+                  <MenuItem sx={{marginTop: '10px'}} value={2}>Módulo 2</MenuItem>
+                </Select>
+
+                <Select
+                  labelId="category-select-label"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  label="Categoria"
+                >
+                  {categoryOptions.map((option, index) => (
+                    <MenuItem key={index} value={option}>{option}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
           {isLoading ? (
             <CircularProgress />
           ) : error ? (

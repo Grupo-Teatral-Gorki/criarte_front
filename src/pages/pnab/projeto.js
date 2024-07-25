@@ -10,6 +10,7 @@ function PnabHomeForms() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+
     const fetchProjectInfo = async () => {
       setIsLoading(true);
       setError(null);
@@ -93,7 +94,7 @@ function PnabHomeForms() {
           <div className="card">
             <h2>Edital de Chamamento Público 001/2024 SMC</h2>
             <p>Pessoa Física</p>
-            <p>Inscrições de 27/06/2024 00:00 até 28/07/2024 23:59</p>
+            <p>Inscrições de 27/06/2024 00:00 até 21/08/2024 23:59</p>
             <a style={{color: 'black'}} href="https://dosp.com.br/exibe_do.php?i=NTEzMzU5">Leia o objeto do edital</a>
           </div>
           <div className="sections">

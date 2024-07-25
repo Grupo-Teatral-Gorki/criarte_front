@@ -262,31 +262,7 @@ const DocumentUploadForm = () => {
             Documentos do Projeto e Proponente
           </Typography>
           <div>
-            <Box sx={{ mb: 2 }}>
-              <FormControl fullWidth>
-                <InputLabel id="module-select-label">Módulo</InputLabel>
-                <Select
-                  labelId="module-select-label"
-                  value={module}
-                  onChange={handleModuleChange}
-                  label="Módulo"
-                >
-                  <MenuItem value={1}>Módulo 1</MenuItem>
-                  <MenuItem value={2}>Módulo 2</MenuItem>
-                </Select>
-
-                <Select
-                  labelId="category-select-label"
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                  label="Categoria"
-                >
-                  {categoryOptions.map((option, index) => (
-                    <MenuItem key={index} value={option}>{option}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
+            
 
           </div>
           {isLoading ? (
