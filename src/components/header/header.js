@@ -41,7 +41,7 @@ const Header = () => {
           <nav>
             <ul>
               <li className="links_menu">
-                <a href="/pnab/projeto">
+                <a href="/meusProjetos">
                   <i className="bi bi-folder"></i> Meus Projetos
                 </a>
               </li>

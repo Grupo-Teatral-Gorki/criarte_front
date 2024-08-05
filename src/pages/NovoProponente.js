@@ -22,23 +22,23 @@ import { useRouter } from 'next/router';
 
 const NewProponentForm = ({ open, handleClose }) => {
   const [loading, setLoading] = useState(false);
-  const [nomeCompleto, setNomeCompleto] = useState(" ");
-  const [cpf, setCpf] = useState(" ");
-  const [rg, setRg] = useState(" ");
-  const [nomeSocial, setNomeSocial] = useState(" ");
+  const [nomeCompleto, setNomeCompleto] = useState("");
+  const [cpf, setCpf] = useState("");
+  const [rg, setRg] = useState("");
+  const [nomeSocial, setNomeSocial] = useState("");
   const [dataNascimento, setDataNascimento] = useState(" ");
-  const [email, setEmail] = useState(" ");
-  const [celular, setCelular] = useState(" ");
-  const [telefoneFixo, setTelefoneFixo] = useState(" ");
-  const [telefoneOutro, setTelefoneOutro] = useState(" ");
-  const [webSite, setWebSite] = useState(" ");
-  const [cepResponsavel, setCepResponsavel] = useState(" ");
-  const [logradouroResponsavel, setLogradouroResponsavel] = useState(" ");
-  const [numeroResponsavel, setNumeroResponsavel] = useState(" ");
-  const [complementoResponsavel, setComplementoResponsavel] = useState(" ");
-  const [bairroResponsavel, setBairroResponsavel] = useState(" ");
-  const [cidadeResponsavel, setCidadeResponsavel] = useState(" ");
-  const [ufResponsavel, setUfResponsavel] = useState(" ");
+  const [email, setEmail] = useState("");
+  const [celular, setCelular] = useState("");
+  const [telefoneFixo, setTelefoneFixo] = useState("");
+  const [telefoneOutro, setTelefoneOutro] = useState("");
+  const [webSite, setWebSite] = useState("");
+  const [cepResponsavel, setCepResponsavel] = useState("");
+  const [logradouroResponsavel, setLogradouroResponsavel] = useState("");
+  const [numeroResponsavel, setNumeroResponsavel] = useState("");
+  const [complementoResponsavel, setComplementoResponsavel] = useState("");
+  const [bairroResponsavel, setBairroResponsavel] = useState("");
+  const [cidadeResponsavel, setCidadeResponsavel] = useState("");
+  const [ufResponsavel, setUfResponsavel] = useState("");
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
   const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -48,13 +48,12 @@ const NewProponentForm = ({ open, handleClose }) => {
   const handleSaveChanges = async () => {
     const newErrors = {};
 
-    // Verifica campos obrigatórios
     if (!nomeCompleto.trim()) newErrors.nomeCompleto = true;
     if (!cpf.trim()) newErrors.cpf = true;
     if (!rg.trim()) newErrors.rg = true;
     if (!dataNascimento.trim()) newErrors.dataNascimento = true;
     if (!email.trim()) newErrors.email = true;
-    if (!telefoneFixo.trim()) newErrors.telefoneFixo = true;
+    if (!celular.trim()) newErrors.celular = true;
     if (!cepResponsavel.trim()) newErrors.cepResponsavel = true;
     if (!logradouroResponsavel.trim()) newErrors.logradouroResponsavel = true;
     if (!numeroResponsavel.trim()) newErrors.numeroResponsavel = true;
@@ -85,7 +84,7 @@ const NewProponentForm = ({ open, handleClose }) => {
           razaoSocial: "off",
           cnpj: "off",
           nomeFantasia: "off",
-          webSite: webSite,
+          webSite: 'off@off.com',
           email: email,
           celular: celular,
           telefoneFixo: telefoneFixo,
@@ -119,7 +118,8 @@ const NewProponentForm = ({ open, handleClose }) => {
         setOpenSnackbar(true);
         setTimeout(() => {
           setOpenSnackbar(false);
-          router.push('/success-page'); // Redirecionar para outra página
+          handleClose()
+          router.reload() // fecha aba
         }, 2000);
       }
 
@@ -163,6 +163,40 @@ const NewProponentForm = ({ open, handleClose }) => {
     }
     setTelefoneOutro(newValue);
   }
+
+  const getCep = async (cep) => {
+    if (cep.length === 8) {
+      try {
+        let url = `https://viacep.com.br/ws/${cep}/json/`;
+        let response = await fetch(url, {
+          method: 'GET'
+        });
+        let data = await response.json();
+        return data;
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
+  
+  const handleCepChange = async (e) => {
+    let newValue = e.target.value.replace(/[^0-9]/g, '');
+    if (newValue.length > 8) {
+      newValue = newValue.slice(0, 8);
+    }
+    setCepResponsavel(newValue);
+  
+    if (newValue.length === 8) {
+      let cep = await getCep(newValue)
+      setLogradouroResponsavel(cep.logradouro)
+      setBairroResponsavel(cep.bairro)
+      setCidadeResponsavel(cep.localidade)
+      setUfResponsavel(cep.uf)
+
+    }
+  }
+  
+
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
@@ -254,6 +288,9 @@ const NewProponentForm = ({ open, handleClose }) => {
               fullWidth
               label="Celular com (DDD)"
               value={celular}
+              required
+              error={errors.celular}
+              helperText={errors.celular && "Este campo é obrigatório"}
               onChange={(e) => setCelular(e.target.value)}
             />
           </Grid>
@@ -263,9 +300,8 @@ const NewProponentForm = ({ open, handleClose }) => {
               label="Telefone fixo com (DDD)"
               value={telefoneFixo}
               onChange={handleNumFixoChange}
-              required
               error={errors.telefoneFixo}
-              helperText={errors.telefoneFixo && "Este campo é obrigatório"}
+              
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -284,7 +320,7 @@ const NewProponentForm = ({ open, handleClose }) => {
               fullWidth
               label="CEP"
               value={cepResponsavel}
-              onChange={(e) => setCepResponsavel(e.target.value)}
+              onChange={handleCepChange}
               required
               error={errors.cepResponsavel}
               helperText={errors.cepResponsavel && "Este campo é obrigatório"}
@@ -305,7 +341,7 @@ const NewProponentForm = ({ open, handleClose }) => {
             <TextField
               fullWidth
               label="Número"
-              value={numeroResponsavel}
+              value={numeroResponsavel.trim()}
               onChange={(e) => setNumeroResponsavel(e.target.value)}
               required
               error={errors.numeroResponsavel}

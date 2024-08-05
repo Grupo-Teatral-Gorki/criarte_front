@@ -16,7 +16,7 @@ const Home = () => {
             <Header/>
             <section className="container_opcoes_banner">
                 <section className="container_opcoes">
-                <a href='/pnab/projeto' className='opcao_link'>
+                <a href='/meusProjetos' className='opcao_link'>
                 <div className="container_meus_projetos" id='meus_projetos_off'>
                             <h3><i className="bi bi-folder"></i> Meus Projetos</h3>
                             <p>Lista de projetos inscritos</p>

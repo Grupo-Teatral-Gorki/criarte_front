@@ -30,8 +30,9 @@ const Proponente = () => {
         });
 
         if (!response.ok) {
-          throw new Error('Não foi possível trazer os dados da API');
+          throw new Error('Nenhum proponente encontrado');
         }
+
 
         const data = await response.json();
         console.log("Dados recebidos com sucesso:", data);
@@ -63,7 +64,7 @@ const Proponente = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Não foi possível trazer os dados da API');
+        throw new Error('Nenhum proponente encontrado');
       }
 
       const data = await response.json();
@@ -98,24 +99,27 @@ const Proponente = () => {
           <h1>Proponente</h1>
           <div className="proponente-content">
             <Alert sx={{ marginBottom: '15px' }} severity="info">Cadastre 1 proponente por login</Alert>
-            <p>1. Selecione o(a) proponente ( Pessoa Física )</p>
             <div className="proponente-info">
-              <p>2. Este proponente pode ter até <b>1</b> projeto(s) em andamento neste edital. Certifique-se que o proponente selecionado possui vagas para iniciar o cadastramento.</p>
+            <p>1. Selecione o(a) proponente (Pessoa Física)</p>
+              <p>2. Este proponente pode ter até <b>1</b> projeto(s) em andamento neste edital. Certifique-se de que o proponente selecionado possui vagas para iniciar o cadastramento.</p>
             </div>
             <DialogContent className='proponentes' dividers>
               {isLoading ? (
                 <CircularProgress />
               ) : error ? (
-                <Alert severity="error">{error}</Alert>
+                <Alert variant='outlined' severity="info">{error}</Alert>
               ) : (
                 proponentes.map((proponente) => (
                   <div key={proponente.idProponente} className='proponente-unity'>
-                    <Checkbox disabled checked sx={{ display: 'flex', justifyContent: 'right', color: "gray" }}></Checkbox>
-                    <div style={{ marginBottom: "16px" }}>
-                      <Typography variant="subtitle1">
-                        NOME: {proponente.responsavelLegal} <div>Tipo: Pessoa Física</div>
+                    <div className='checkbox-container'>
+                      <Checkbox disabled checked sx={{ color: "blue" }} />
+                    </div>
+                    <div className='info'>
+                      <Typography variant="subtitle1" className='name'>
+                        NOME: {proponente.responsavelLegal}
+                        <div className='type'>Tipo: Pessoa Física</div>
                       </Typography>
-                      <Typography variant="body2">
+                      <Typography variant="body2" className='details'>
                         CPF: ***.***.***-{proponente.cpfResponsavel[9]}{proponente.cpfResponsavel[10]} | Email: {proponente.email}
                       </Typography>
                     </div>
@@ -125,7 +129,9 @@ const Proponente = () => {
             </DialogContent>
             <div className="proponente-selection"></div>
             <div className="proponente-actions">
-              <a href='/pnab/projeto'><Button className="back-button" variant="contained">Voltar para o projeto</Button></a>
+              <a href='/pnab/projeto'>
+                <Button className="back-button" variant="outlined">Voltar para o projeto</Button>
+              </a>
               <Button className="proponente-button" disabled={loading} variant="contained" color="primary" onClick={handleOpenList}>
                 Lista de proponentes
               </Button>
@@ -138,11 +144,11 @@ const Proponente = () => {
               {isLoading ? (
                 <CircularProgress />
               ) : error ? (
-                <Alert severity="error">{error}</Alert>
+                <Alert variant='outlined' severity="info">{error}</Alert>
               ) : (
                 proponentes.map((proponente) => (
                   <div key={proponente.idProponente} className='proponente-unity'>
-                    <Checkbox disabled checked sx={{ display: 'flex', justifyContent: 'right', color: "gray" }}></Checkbox>
+                    <Checkbox disabled checked sx={{ display: 'flex', justifyContent: 'right', color: "blue" }} />
                     <div style={{ marginBottom: "16px" }}>
                       <Typography variant="subtitle1">
                         NOME: {proponente.responsavelLegal} <div>Tipo: Pessoa Física</div>
@@ -163,6 +169,7 @@ const Proponente = () => {
 
           <NewProponentForm open={openForm} handleClose={handleCloseForm} />
         </div>
+
       </PrivateRoute>
     </div>
   );

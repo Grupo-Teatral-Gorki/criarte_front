@@ -23,46 +23,22 @@ const InformacoesGerais = () => {
   const [category, setCategory] = useState('');
   const [categoryOptions, setCategoryOptions] = useState([]);
 
+  // Fetch user ID on mount
   useEffect(() => {
     const storedUserDetails = localStorage.getItem('userDetails');
     const userDetails = JSON.parse(storedUserDetails);
     setUserId(userDetails ? userDetails.id : null);
   }, []);
 
+  // Fetch numeroInscricao from localStorage and project data
   useEffect(() => {
-    const fetchNumeroInscricao = async () => {
-      setIsLoading(true);
-
-      const url = `https://api.grupogorki.com.br/api/projeto/listaProjetos`;
-      const token = localStorage.getItem('authToken');
-
-      try {
-        const response = await fetch(url, {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error(`Erro na requisição: ${response.status} ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        if (data.data && data.data.length > 0) {
-          setNumeroInscricao(data.data[0].numeroInscricao);
-        } else {
-          setError("Número de inscrição não encontrado.");
-        }
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchNumeroInscricao();
+    const storedNumeroInscricao = localStorage.getItem('numeroInscricao');
+    if (storedNumeroInscricao) {
+      setNumeroInscricao(storedNumeroInscricao);
+    } else {
+      setError("Número de inscrição não encontrado.");
+      setIsLoading(false);
+    }
   }, []);
 
   useEffect(() => {
@@ -70,36 +46,113 @@ const InformacoesGerais = () => {
       const fetchResumoProjeto = async () => {
         setIsLoading(true);
     
-        const url = `https://api.grupogorki.com.br/api/projeto/Projeto/${numeroInscricao}`;
+        const url = `https://styxx-api.w3vvzx.easypanel.host/api/getProjeto`;
         const token = localStorage.getItem('authToken');
     
         try {
           const response = await fetch(url, {
-            method: 'GET',
+            method: 'POST',
             headers: {
               Authorization: `Bearer ${token}`,
               'Content-Type': 'application/json',
             },
+            body: JSON.stringify({
+              usuario: localStorage.getItem('userEmail'),
+              senha: localStorage.getItem('userPassword'),
+              numeroInscricao
+            })
           });
     
           if (!response.ok) {
             throw new Error(`Erro na requisição: ${response.status} ${response.statusText}`);
           }
     
+          const data = await response.json();  // Aqui não precisa de JSON.parse
+          if (data[0]) {  // Verifica se há dados no array retornado
+            const projeto = data[0];
+  
+            // Lida com `descricao` normalmente, se não for um JSON serializado:
+            let descricao = {};
+            try {
+              descricao = JSON.parse(projeto.descricao);  // Tente desserializar apenas se `descricao` for realmente um JSON
+            } catch (e) {
+              // Se `descricao` não for um JSON serializado, lide com isso de forma diferente
+              descricao = { descricao: projeto.descricao };
+            }
+  
+            setFormData({
+              resumo: projeto.resumo_projeto || '',
+              relevancia: descricao.relevancia || projeto.relevancia_pertinencia || '',
+              perfil: descricao.perfil || projeto.perfil_publico || '',
+              expectativa: descricao.expectativa || projeto.qtd_publico || '',
+              contrapartida: descricao.contrapartida || projeto.proposta_contrapartida || '',
+              divulgacao: descricao.divulgacao || projeto.plano_divulgacao || '',
+              democratizacao: descricao.democratizacao || projeto.plano_democratizacao || '',
+              outras: descricao.outras || projeto.outras_informacoes || ''
+            });
+  
+            setModule(projeto.id_modalidade || '');
+            setCategory(projeto.nome_modalidade || '');
+          }
+        } catch (error) {
+          setError(error.message);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+    
+      fetchResumoProjeto();
+    }
+  }, [numeroInscricao]);
+  
+  
+
+  useEffect(() => {
+    if (numeroInscricao) {
+      const fetchResumoProjeto = async () => {
+        setIsLoading(true);
+  
+        const url = `https://styxx-api.w3vvzx.easypanel.host/api/getProjeto`;
+        const token = localStorage.getItem('authToken');
+  
+        try {
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              usuario: localStorage.getItem('userEmail'),
+              senha: localStorage.getItem('userPassword'),
+              numeroInscricao
+            })
+          });
+  
+          if (!response.ok) {
+            throw new Error(`Erro na requisição: ${response.status} ${response.statusText}`);
+          }
+  
           const data = await response.json();
           if (data.data && data.data.projeto) {
-            const resumoProjeto = data.data.projeto.resumoProjeto;
+            const resumoProjeto = data.data.projeto.resumo_projeto || '';
             let descricao = {};
+  
+            // Verifica se `descricao` não é null ou undefined antes de tentar parsear
             if (data.data.projeto.descricao) {
               try {
                 descricao = JSON.parse(data.data.projeto.descricao);
               } catch (e) {
                 console.warn('Erro ao analisar descrição:', e);
               }
+            } else {
+              // Se `descricao` for null ou undefined, usa um objeto vazio para garantir campos em branco
+              descricao = ' ';
             }
+  
             setFormData((prevFormData) => ({
               ...prevFormData,
-              resumo: resumoProjeto || '',
+              resumo: resumoProjeto,
               relevancia: descricao.relevancia || '',
               perfil: descricao.perfil || '',
               expectativa: descricao.expectativa || '',
@@ -115,16 +168,43 @@ const InformacoesGerais = () => {
           setIsLoading(false);
         }
       };
-    
+  
       fetchResumoProjeto();
     }
   }, [numeroInscricao]);
+  
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
+  };
+
+  const handleModuleChange = (event) => {
+    const selectedModule = event.target.value;
+    setModule(selectedModule);
+
+    if (selectedModule === 1) {
+      setCategoryOptions([
+        'Música',
+        'Artesanato',
+        'Artes Plásticas',
+        'Fotografia',
+        'Literatura'
+      ]);
+    } else if (selectedModule === 2) {
+      setCategoryOptions([
+        'Contação de Histórias',
+        'Teatro',
+        'Dança'
+      ]);
+    }
+    setCategory(''); // Reset category when module changes
+  };
+
+  const handleCategoryChange = (event) => {
+    setCategory(event.target.value);
   };
 
   const handleSubmit = async () => {
@@ -135,10 +215,11 @@ const InformacoesGerais = () => {
 
     const { resumo, ...rest } = formData;
 
-    let idProjeto = localStorage.getItem('numeroInscricao');
+    let userEmail = localStorage.getItem('userEmail');
+    let userPassword = localStorage.getItem('userPassword');
 
     const body = {
-      idProjeto: idProjeto,
+      idProjeto: numeroInscricao,
       resumoProjeto: resumo,
       descricao: JSON.stringify(rest),
       idUsuario: userId,
@@ -166,28 +247,36 @@ const InformacoesGerais = () => {
       console.error('Erro:', error);
       alert('Erro ao atualizar o projeto.');
     }
-  };
 
-  const handleModuleChange = (event) => {
-    const selectedModule = event.target.value;
-    setModule(selectedModule);
+    // Adicionando a parte de envio para o novo endpoint
+    const modalidadeData = {
+      usuario: userEmail,
+      senha: userPassword,
+      idModalidade: module,
+      nomeModalidade: category,
+      idProjeto: numeroInscricao
+    };
 
-    if (selectedModule === 1) {
-      setCategoryOptions([
-        'Música',
-        'Artesanato',
-        'Artes Plásticas',
-        'Fotografia',
-        'Literatura'
-      ]);
-    } else if (selectedModule === 2) {
-      setCategoryOptions([
-        'Contação de Histórias',
-        'Teatro',
-        'Dança'
-      ]);
+    const modalidadeUrl = 'https://styxx-api.w3vvzx.easypanel.host/api/updateModalidade';
+
+    try {
+      const modalidadeResponse = await fetch(modalidadeUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(modalidadeData)
+      });
+
+      if (modalidadeResponse.ok) {
+        console.log('Modalidade atualizada com sucesso!');
+      } else {
+        console.log('Erro ao atualizar a modalidade.');
+      }
+    } catch (error) {
+      console.error('Erro:', error);
+      console.log('Erro ao atualizar a modalidade.');
     }
-    setCategory(''); // Reset category when module changes
   };
 
   return (
@@ -199,31 +288,7 @@ const InformacoesGerais = () => {
             <a href='/pnab/projeto'><Button variant="outlined" color="primary">Voltar</Button></a>
           </Grid>
           <h1 className='titulo-info'>Informações gerais do projeto</h1>
-          <Box sx={{ mb: 2, maxWidth: '500px', marginLeft: 'auto', marginRight: 'auto' }}>
-              <FormControl fullWidth>
-                <InputLabel id="module-select-label">Módulo</InputLabel>
-                <Select
-                  labelId="module-select-label"
-                  value={module}
-                  onChange={handleModuleChange}
-                  label="Módulo"
-                >
-                  <MenuItem  value={1}>Módulo 1</MenuItem>
-                  <MenuItem sx={{marginTop: '10px'}} value={2}>Módulo 2</MenuItem>
-                </Select>
 
-                <Select
-                  labelId="category-select-label"
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                  label="Categoria"
-                >
-                  {categoryOptions.map((option, index) => (
-                    <MenuItem key={index} value={option}>{option}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
           {isLoading ? (
             <CircularProgress />
           ) : error ? (
@@ -254,6 +319,40 @@ const InformacoesGerais = () => {
                     />
                   </Grid>
                 ))}
+
+                <Grid item xs={12}>
+                  <FormControl fullWidth margin="normal">
+                    <InputLabel id="module-label">Módulo</InputLabel>
+                    <Select
+                      labelId="module-label"
+                      id="module"
+                      value={module}
+                      onChange={handleModuleChange}
+                    >
+                      <MenuItem value={1}>Módulo 1</MenuItem>
+                      <MenuItem value={2}>Módulo 2</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <FormControl fullWidth margin="normal">
+                    <InputLabel id="category-label">Categoria</InputLabel>
+                    <Select
+                      labelId="category-label"
+                      id="category"
+                      value={category}
+                      onChange={handleCategoryChange}
+                      disabled={!module}
+                    >
+                      {categoryOptions.map((option, index) => (
+                        <MenuItem key={index} value={option}>
+                          {option}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
 
                 <Grid item xs={12} container justifyContent="center" spacing={2}>
                   <Grid item>

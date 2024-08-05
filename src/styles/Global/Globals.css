@@ -1,5 +1,3 @@
-
-
 /* HEADER STYLES */
 .menu-mobile-all {
     display: flex;
@@ -16,12 +14,12 @@
     height: 30px;
 }
 
-.icon-user{
-     width: 30px;
-     height: 30px;
+.icon-user {
+    width: 30px;
+    height: 30px;
 }
 
-.arrow-menu{
+.arrow-menu {
     width: 30px;
     height: 30px;
 }
@@ -33,7 +31,8 @@
 .fa-cog {
     cursor: pointer;
     font-size: 1.25rem;
-    color: #ffffff;;
+    color: #ffffff;
+    ;
 }
 
 /* HOVER EFFECTS */
@@ -99,7 +98,8 @@ nav>ul>li>a:hover {
     color: #fff;
     text-decoration: none;
     padding: 0.75rem 1rem;
-    white-space: nowrap; /* Prevent line breaks */
+    white-space: nowrap;
+    /* Prevent line breaks */
 }
 
 /* MOBILE MENU OPEN STATE */
@@ -157,7 +157,7 @@ nav>ul>li>a:hover {
     }
 }
 
-.btn-sair{
+.btn-sair {
     color: red;
 }
 
@@ -192,9 +192,10 @@ nav>ul>li>a:hover {
 .container_ajuda:hover,
 .container_prestacoes:hover,
 .container_pendencias:hover {
-    transform:scale(1.02);
+    transform: scale(1.02);
     box-shadow: 0 0.5rem 1rem rgba(19, 19, 19, 0.2);
 }
+
 .opcao_link {
     color: #1D4A5D;
     text-decoration: none;
@@ -242,19 +243,22 @@ nav>ul>li>a:hover {
     background-color: #F49E4C;
 }
 
-@media (max-width: 768px)  {
-    .container_opcoes_banner{
+@media (max-width: 768px) {
+    .container_opcoes_banner {
         flex-direction: column;
         gap: 1rem;
         margin: 0.5rem;
     }
+
     .container_banner {
         width: fit-content;
     }
+
     .banner_img {
         width: 70%;
         margin: 0 auto;
     }
+
     .btn-detalhes {
         padding: 0.75rem 0.8rem;
         max-width: 8rem;
@@ -262,12 +266,13 @@ nav>ul>li>a:hover {
     }
 }
 
-.btn-sair{
+.btn-sair {
     color: red;
 }
 
 
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -294,10 +299,21 @@ main {
     transition: color 0.3s ease;
 }
 
-.editais-cards{
+.editais-cards {
     display: flex;
     justify-content: center;
     margin-top: 50px;
+}
+
+.edital-vigente img{
+    max-width: 150px;
+}
+
+.edital-vigente{
+    display: flex;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .voltar-pagina {
@@ -306,6 +322,7 @@ main {
     height: 30px;
     width: 60px;
     padding: 5px;
+    margin-left: auto;
 }
 
 .voltar-pagina a {
@@ -316,14 +333,17 @@ main {
 
 .filtro_resultado {
     display: flex;
-    justify-content: space-between; /* Adiciona espaço entre os elementos */
+    justify-content: space-between;
+    /* Adiciona espaço entre os elementos */
     width: 100%;
-    max-width: 800px; /* Define um limite máximo de largura para o conteúdo */
+    max-width: 800px;
+    /* Define um limite máximo de largura para o conteúdo */
 }
 
 .container_editais,
 .card-direita {
-    width: 45%; /* Define a largura como 45% para deixar um espaço entre os dois elementos */
+    width: 45%;
+    /* Define a largura como 45% para deixar um espaço entre os dois elementos */
     padding: 1rem;
     background-color: #f9f9f9;
     border: 1px solid #ccc;
@@ -333,7 +353,7 @@ main {
     flex-direction: column;
 }
 
-.card-direita img{
+.card-direita img {
     margin-bottom: 50px;
 }
 
@@ -351,35 +371,8 @@ main {
     color: #333;
 }
 
-.card-content button {
-    align-self: flex-start;
-    padding: 0.5rem 1rem;
-    border: none;
-    background-color: #1b4253;
-    color: white;
-    border-radius: 0.25rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
 
-.card-content button:hover {
-    background-color: #0056b3;
-}
 
-button {
-    align-self: flex-end;
-    padding: 0.5rem 1rem;
-    border: none;
-    background-color: #1b4253;
-    color: white;
-    border-radius: 0.25rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
 
 .form-editais {
     display: flex;
@@ -406,7 +399,8 @@ label {
 
 input[type="text"],
 select {
-    width: 100%; /* Define a largura dos inputs e selects como 100% */
+    width: 100%;
+    /* Define a largura dos inputs e selects como 100% */
     padding: 0.5rem;
     border: 1px solid #ccc;
     border-radius: 0.25rem;
@@ -423,93 +417,93 @@ input[type="range"] {
 
 .app-container {
     font-family: Arial, sans-serif;
-  }
-  
-  .header {
+}
+
+.header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
     background: #f5f5f5;
-  }
-  
-  .logo {
+}
+
+.logo {
     height: 40px;
-  }
-  
-  .nav a {
+}
+
+.nav a {
     margin: 0 10px;
     text-decoration: none;
     color: #333;
-  }
-  
-  .social-media a {
+}
+
+.social-media a {
     margin: 0 5px;
-  }
-  
-  .main-content {
+}
+
+.main-content {
     max-width: 800px;
     margin: 20px auto;
     padding: 20px;
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .project-id{
+}
+
+.project-id {
     font-weight: 700;
-  }
-  
-  .project-header {
+}
+
+.project-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-  
-  .history-button {
+}
+
+.history-button {
     background: none;
     border: none;
     color: blue;
     cursor: pointer;
     font-size: 14px;
-  }
-  
-  .progress-bar {
+}
+
+.progress-bar {
     height: 4px;
     background: #ddd;
     margin: 10px 0;
-  }
-  
-  .progress {
+}
+
+.progress {
     height: 100%;
     background: blue;
-  }
-  
-  .content {
+}
+
+.content {
     padding: 20px;
-  }
-  
-  .card {
+}
+
+.card {
     padding: 20px;
     background: #f9f9f9;
     border-radius: 8px;
     margin-bottom: 20px;
-  }
-  
-  .sections .section {
+}
+
+.sections .section {
     display: flex;
     align-items: center;
     padding: 10px 0;
     border-top: 1px solid #eee;
     text-decoration: none;
     color: inherit;
-  }
-  
-  .sections .section:first-of-type {
+}
+
+.sections .section:first-of-type {
     border-top: none;
-  }
-  
-  .section-icon {
+}
+
+.section-icon {
     width: 30px;
     height: 30px;
     display: flex;
@@ -520,88 +514,75 @@ input[type="range"] {
     font-size: 18px;
     color: gray;
     margin-right: 10px;
-  }
-  
-  .section-content {
+}
+
+.section-content {
     flex: 1;
-  }
-  
-  .section-arrow {
+}
+
+.section-arrow {
     font-size: 18px;
     color: gray;
-  }
-  
-  .actions {
+}
+
+.actions {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-top: 20px;
-  }
-  
-  .delete-button {
+}
+
+.delete-button {
     background: none;
     border: none;
     color: red;
     cursor: pointer;
     font-size: 14px;
-  }
+}
 
 .proponente-container {
     padding: 20px;
     background-color: #f3f4f6;
     height: 90vh;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    flex-direction: column; 
+    justify-content: center;
 }
 
 .proponente-content {
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 80%;
-    max-width: 600px;
-    margin-top: 1px; 
+    background: #ffffff;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 700px;
 }
 
 .proponente-container h1 {
-    margin-top: 0; 
-}
-
-.proponentes{
-    margin-left: 30px;
-    margin-right: 30px;
-    margin-top: 5px;
-    border-radius: 5px;
     margin-bottom: 20px;
-    
+    font-size: 2rem;
+    color: #333;
 }
-
-.proponente-unity{
-    background-color: rgb(247, 247, 247);
-    margin-top: 8px;
-    padding: 10px;
-    border-radius: 5px;
-    color: rgb(0, 0, 0);
-    background-color: #ebebeb;
-    border: #acacac;
-    border-style: dotted solid;
-}
-
 
 .proponente-info {
-    margin-bottom: 20px;
-    margin-top: 30px;
+    margin: 20px 0;
+    font-size: 0.875rem;
+    color: #666;
+}
+
+.proponente-info b {
+    font-weight: 500;
 }
 
 .badge {
     background-color: #ffc107;
     color: #fff;
-    padding: 5px 10px;
-    border-radius: 4px;
-    margin-left: 50px;
+    padding: 6px 12px;
+    border-radius: 12px;
+    display: inline-block;
+    margin-left: 20px;
+    font-size: 0.875rem;
 }
 
 .proponente-selection {
@@ -613,15 +594,77 @@ input[type="range"] {
     background-color: #007bff;
     color: #fff;
     border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
+    padding: 12px 24px;
+    border-radius: 8px;
     cursor: pointer;
+    font-size: 0.875rem;
+    transition: background-color 0.3s ease;
+}
+
+.proponente-button:hover {
+    background-color: #0056b3;
 }
 
 .proponente-actions {
     display: flex;
     justify-content: space-between;
+    margin-top: 20px;
 }
+
+.proponente-unity {
+    margin-top: 12px;
+    padding: 16px;
+    border-radius: 8px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: flex-start;
+    transition: background-color 0.3s ease;
+}
+
+.proponente-unity:hover {
+    background-color: #f9f9f9;
+}
+
+.proponente-unity .checkbox-container {
+    margin-right: 16px;
+}
+
+.proponente-unity .info {
+    flex: 1;
+}
+
+.proponente-unity .info .name {
+    font-weight: 500;
+    color: #333;
+}
+
+.proponente-unity .info .type {
+    font-size: 0.875rem;
+    color: #666;
+}
+
+.proponente-unity .info .details {
+    font-size: 0.75rem;
+    color: #999;
+}
+
+.proponente-actions .back-button {
+    background-color: transparent;
+    color: #007bff;
+    border: 1px solid #007bff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.proponente-actions .back-button:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
 
 .back-button {
     background-color: #6c757d;
@@ -824,7 +867,8 @@ input[type="range"] {
         font-size: 18px;
     }
 
-    .register-container input, .register-container button {
+    .register-container input,
+    .register-container button {
         font-size: 14px;
     }
 
@@ -835,25 +879,30 @@ input[type="range"] {
 
 /* ... (seus estilos anteriores) */
 
-.button-container { /* Estilos para o container dos botões */
+.button-container {
+    /* Estilos para o container dos botões */
     display: flex;
-    justify-content: space-around; /* Distribui os botões com espaço entre eles */
+    justify-content: space-around;
+    /* Distribui os botões com espaço entre eles */
     margin-top: 20px;
 }
 
-.login-button { /* Estilos para o botão "Logar" */
+.login-button {
+    /* Estilos para o botão "Logar" */
     background-color: white;
-    color: #000000; /* Cor do texto azul */
-    border: 1px solid #000000; /* Borda azul */
+    color: #000000;
+    /* Cor do texto azul */
+    border: 1px solid #000000;
+    /* Borda azul */
 }
 
 
-.t1-register-button{
+.t1-register-button {
     background-color: white;
     color: black;
 }
 
-.titulo-info{
+.titulo-info {
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
@@ -888,7 +937,74 @@ input[type="range"] {
     flex-direction: column;
 }
 
-.footer-info strong{
+.footer-info strong {
     font-weight: 600;
 }
 
+.app-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.project-id {
+    font-weight: bold;
+    color: #555;
+}
+
+.project-details {
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.sections {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.actions button {
+    min-width: 150px;
+}
+
+.filter-button button {
+    width: fit-content;
+    min-width: 100px;
+    height: 45px;
+    padding: 8px;
+    border-radius: 5px;
+    border: 2.5px solid #E0E1E4;
+    box-shadow: 0px 0px 20px -20px;
+    cursor: pointer;
+    background-color: white;
+    transition: all 0.2s ease-in-out 0ms;
+    user-select: none;
+    font-family: 'Poppins', sans-serif;
+}
+
+.filter-button button:hover {
+    background-color: #F2F2F2;
+    box-shadow: 0px 0px 20px -18px;
+}
+
+.filter-button button:active {
+    transform: scale(0.95);
+}

@@ -3,10 +3,6 @@ import { Button, Typography, Box, Card, CardContent, CircularProgress, Alert } f
 import { styled } from '@mui/system';
 import Header from '../components/Header/Header';
 import PrivateRoute from '../components/PrivateRoute';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 
 const DocumentUploadForm = () => {
   const [numeroInscricao, setNumeroInscricao] = useState(null);
@@ -15,83 +11,17 @@ const DocumentUploadForm = () => {
   const [files, setFiles] = useState({});
   const [uploadStatus, setUploadStatus] = useState({});
   const [allFilesUploaded, setAllFilesUploaded] = useState(false);
-  const [module, setModule] = useState('');
-  const [category, setCategory] = useState('');
-  const [categoryOptions, setCategoryOptions] = useState([]);
 
   useEffect(() => {
-    const storedUserDetails = localStorage.getItem('userDetails');
-    const userDetails = JSON.parse(storedUserDetails);
+    const numeroInscricaoStored = localStorage.getItem('numeroInscricao');
 
-
-    const fetchNumeroInscricao = async () => {
-      setIsLoading(true);
-      const url = `https://api.grupogorki.com.br/api/projeto/listaProjetos`;
-      const token = localStorage.getItem('authToken');
-
-      try {
-        const response = await fetch(url, {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error(`Erro na requisição: ${response.status} ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        if (data.data && data.data.length > 0) {
-          const numeroInscricao = data.data[0].numeroInscricao;
-          setNumeroInscricao(numeroInscricao);
-
-          // Fetch project details
-          const projectResponse = await fetch(`https://api.grupogorki.com.br/api/projeto/Projeto/${numeroInscricao}`, {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            },
-          });
-
-          if (!projectResponse.ok) {
-            throw new Error(`Erro na requisição: ${projectResponse.status} ${projectResponse.statusText}`);
-          }
-
-          const projectData = await projectResponse.json();
-          if (projectData) {
-            setModule(projectData.module || '');
-            setCategory(projectData.category || '');
-            // Set category options based on module
-            if (projectData.module === 1) {
-              setCategoryOptions([
-                'Música',
-                'Artesanato',
-                'Artes Plásticas',
-                'Fotografia',
-                'Literatura'
-              ]);
-            } else if (projectData.module === 2) {
-              setCategoryOptions([
-                'Contação de Histórias',
-                'Teatro',
-                'Dança'
-              ]);
-            }
-          }
-        } else {
-          setError("Número de inscrição não encontrado.");
-        }
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchNumeroInscricao();
+    if (numeroInscricaoStored && numeroInscricaoStored.length > 0) {
+      setNumeroInscricao(numeroInscricaoStored);
+      setIsLoading(false);
+    } else {
+      setError("Número de inscrição não encontrado.");
+      setIsLoading(false);
+    }
   }, []);
 
   const handleFileChange = (event, fieldName) => {
@@ -126,14 +56,12 @@ const DocumentUploadForm = () => {
           ...prevStatus,
           [fieldName]: 'success',
         }));
-        console.log('Upload success:', await response.text());
       } else {
         setUploadStatus(prevStatus => ({
           ...prevStatus,
           [fieldName]: 'error',
         }));
-        const errorText = await response.text();
-        console.error('Upload error:', response.status, response.statusText, errorText);
+        console.error('Upload error:', response.status, response.statusText, await response.text());
       }
     } catch (error) {
       setUploadStatus(prevStatus => ({
@@ -150,11 +78,6 @@ const DocumentUploadForm = () => {
     const storedUserDetails = localStorage.getItem('userDetails');
     const userDetails = JSON.parse(storedUserDetails);
 
-    console.log('Número de Inscrição:', numeroInscricao);
-    console.log('ID Proponente:', userDetails.id);
-    console.log('Módulo:', module);
-    console.log('Categoria:', category);
-
     try {
       await Promise.all(Object.keys(files).map(fieldName => uploadFile(files[fieldName], fieldName)));
       setAllFilesUploaded(true);
@@ -166,9 +89,7 @@ const DocumentUploadForm = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          idProponente: userDetails.id,
-          idModalidade: module,
-          outrasInformacoes: category
+          idProponente: userDetails.id
         })
       });
 
@@ -180,29 +101,6 @@ const DocumentUploadForm = () => {
     } catch (error) {
       console.error('Error updating project:', error);
     }
-  };
-
-
-  const handleModuleChange = (event) => {
-    const selectedModule = event.target.value;
-    setModule(selectedModule);
-
-    if (selectedModule === 1) {
-      setCategoryOptions([
-        'Música',
-        'Artesanato',
-        'Artes Plásticas',
-        'Fotografia',
-        'Literatura'
-      ]);
-    } else if (selectedModule === 2) {
-      setCategoryOptions([
-        'Contação de Histórias',
-        'Teatro',
-        'Dança'
-      ]);
-    }
-    setCategory(''); // Reset category when module changes
   };
 
   const UploadField = ({ name, label, exampleLink, exampleText }) => (
@@ -261,10 +159,6 @@ const DocumentUploadForm = () => {
           <Typography variant="h4" sx={{ marginBottom: '1rem', textAlign: 'center' }}>
             Documentos do Projeto e Proponente
           </Typography>
-          <div>
-            
-
-          </div>
           {isLoading ? (
             <CircularProgress />
           ) : error ? (
@@ -280,21 +174,20 @@ const DocumentUploadForm = () => {
               <UploadField name="comprovanteDomicilioAtual" label="*Comprovantes de domicílio ou sede atual" />
               <UploadField name="comprovanteDomicilio2Anos" label="*Comprovantes de domicílio ou sede de 02 (dois) anos" />
               <UploadField name="curriculoPortfolio" label="*Curriculo ou portfólio de coletivo ou idealizador" />
-              <UploadField name="decDeficiencia" label="Declaração de pessoa com deficiência" exampleLink="https://styxx-public.s3.sa-east-1.amazonaws.com/example-docs/ANEXO+VIII+-+DECLARA%C3%87%C3%83O+PESSOA+COM+DEFICI%C3%8ANCIA.docx" exampleText="Baixar exemplo" />
-              <UploadField name="decEtnicoRacial" label="Declaração étnico-racial" exampleLink="https://styxx-public.s3.sa-east-1.amazonaws.com/example-docs/ANEXO+VII+-+MODELO+DE+DECLARA%C3%87%C3%83O+%C3%89TNICO-RACIAL.docx" exampleText="Baixar exemplo" />
-              <UploadField name="decResidencia" label="Autodeclaração de Residência" exampleLink="https://styxx-public.s3.sa-east-1.amazonaws.com/example-docs/ANEXO+II+-+AUTODECLARA%C3%87%C3%83O+DE+RESID%C3%8ANCIA.docx" exampleText="Baixar exemplo" />
-              <UploadField name="outrosDocumentos" label="Outros documentos" />
-              <Box sx={{ marginTop: '2rem' }}>
-                <FooterAlert />
-              </Box>
-              <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}>
-                <a href='/pnab/projeto'>
-                  <Button variant="outlined" color="primary" sx={{ marginRight: '5px' }}>Voltar</Button>
-                </a>
-                <Button variant="contained" type="submit">Enviar Documentos</Button>
+              <UploadField name="decDeficiencia" label="Declaração de pessoa com deficiência" exampleLink="https://styxx-public.s3.sa-east-1.amazonaws.com/example-docs/ANEXO+VIII+-+DECLARA%C3%87%C3%83O+DE+PESSOA+COM+DEFICI%C3%8ANCIA.docx" exampleText="Baixar exemplo" />
+              <UploadField name="decBaixaRenda" label="Declaração de baixa renda" exampleLink="https://styxx-public.s3.sa-east-1.amazonaws.com/example-docs/ANEXO+VII+-+DECLARA%C3%87%C3%83O+DE+BAIXA+RENDA.docx" exampleText="Baixar exemplo" />
+              <UploadField name="decPoliticamenteExposto" label="Declaração de não ser politicamente exposto" exampleLink="https://styxx-public.s3.sa-east-1.amazonaws.com/example-docs/ANEXO+VI+-+DECLARA%C3%87%C3%83O+DE+N%C3%83O+SER+PESSOA+POLITICAMENTE+EXPOSTA.docx" exampleText="Baixar exemplo" />
+              <UploadField name="decComprovanteCategoria" label="Declaração de comprovação de categorias culturais" />
+              
+            
+              <Box sx={{ mt: 4, textAlign: 'center' }}>
+                <Button variant="contained" type="submit">
+                  Enviar Todos
+                </Button>
               </Box>
             </form>
           )}
+          <FooterAlert />
         </Box>
       </Box>
     </div>

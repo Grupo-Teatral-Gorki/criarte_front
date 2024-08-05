@@ -78,9 +78,13 @@ const Login = () => {
         tipoUsuario: data.user.data.tipoUsuario,
       };
 
+      // Salvar usuário e senha no localStorage (não recomendado em produção)
+      localStorage.setItem('userEmail', email);
+      localStorage.setItem('userPassword', password);
+
+      // Salvar token e detalhes do usuário no contexto
       login(data.token, userDetails);
       router.push('/home');
-
 
     } catch (error) {
       console.error('Erro na autenticação:', error.message);
@@ -118,7 +122,6 @@ const Login = () => {
       </div>
       <Footer></Footer>
     </div>
-
   );
 };
 
