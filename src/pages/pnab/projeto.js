@@ -9,7 +9,8 @@ function PnabHomeForms() {
   const [numeroInscricao, setNumeroInscricao] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [open, setOpen] = useState(false);
+  const [openSubmitDialog, setOpenSubmitDialog] = useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
@@ -24,12 +25,20 @@ function PnabHomeForms() {
     }
   }, []);
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleOpenSubmitDialog = () => {
+    setOpenSubmitDialog(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleOpenDeleteDialog = () => {
+    setOpenDeleteDialog(true);
+  };
+
+  const handleCloseSubmitDialog = () => {
+    setOpenSubmitDialog(false);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false);
   };
 
   const handleSubmit = async () => {
@@ -48,7 +57,7 @@ function PnabHomeForms() {
         }),
       });
 
-      router.push('/meusProjetos')
+      router.push('/meusProjetos');
 
       if (!response.ok) {
         throw new Error(`Erro ao enviar o projeto: ${response.status}`);
@@ -60,7 +69,21 @@ function PnabHomeForms() {
       setError('Erro ao enviar o projeto. Tente novamente mais tarde.');
     } finally {
       setIsSubmitting(false);
-      setOpen(false);
+      setOpenSubmitDialog(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    setIsSubmitting(true);
+    try {
+      // Aqui você adicionaria a lógica para deletar o projeto.
+      console.log('Projeto excluído com sucesso');
+    } catch (error) {
+      console.error('Erro ao excluir projeto:', error);
+      setError('Erro ao excluir o projeto. Tente novamente mais tarde.');
+    } finally {
+      setIsSubmitting(false);
+      setOpenDeleteDialog(false);
     }
   };
 
@@ -71,7 +94,7 @@ function PnabHomeForms() {
       <div className="app-container">
         <main className="main-content">
           <div className="project-header">
-            <Button variant="outlined" onClick={(() => { router.push('/meusProjetos') })}>Voltar</Button>
+            <Button variant="outlined" onClick={() => { router.push('/meusProjetos') }}>Voltar</Button>
             {isLoading ? (
               <CircularProgress />
             ) : error ? (
@@ -104,10 +127,10 @@ function PnabHomeForms() {
             <Section title="Documentos do projeto e proponente" description="Importante! Só é possível anexar 01 (um) arquivo por item exigido. Caso necessário, reúna todos os ..." link="/DocumentForm" />
           </div>
           <div className="actions">
-            <Button variant="outlined" color="error" onClick={handleClickOpen}>
+            <Button variant="outlined" color="error" onClick={handleOpenDeleteDialog}>
               Excluir projeto
             </Button>
-            <Button sx={{ backgroundColor: '#1D4A5D', color: 'white' }} onClick={handleClickOpen} variant="contained" color="primary">
+            <Button sx={{ backgroundColor: '#1D4A5D', color: 'white' }} onClick={handleOpenSubmitDialog} variant="contained" color="primary">
               Enviar projeto
             </Button>
           </div>
@@ -115,8 +138,8 @@ function PnabHomeForms() {
       </div>
 
       <Dialog
-        open={open}
-        onClose={handleClose}
+        open={openSubmitDialog}
+        onClose={handleCloseSubmitDialog}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -129,8 +152,30 @@ function PnabHomeForms() {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} disabled={isSubmitting}>Cancelar</Button>
+          <Button onClick={handleCloseSubmitDialog} disabled={isSubmitting}>Cancelar</Button>
           <Button onClick={handleSubmit} color='primary' disabled={isSubmitting} autoFocus>
+            {isSubmitting ? <CircularProgress size={24} /> : "Confirmar"}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openDeleteDialog}
+        onClose={handleCloseDeleteDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Confirmar Exclusão do Projeto"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Tem certeza que deseja excluir este projeto? Esta ação não pode ser desfeita.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDeleteDialog} disabled={isSubmitting}>Cancelar</Button>
+          <Button onClick={handleDelete} color='primary' disabled={isSubmitting} autoFocus>
             {isSubmitting ? <CircularProgress size={24} /> : "Confirmar"}
           </Button>
         </DialogActions>

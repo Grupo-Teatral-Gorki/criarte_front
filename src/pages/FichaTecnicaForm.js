@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   Button, TextField, Box, Typography, IconButton, Table, TableBody, TableCell, TableContainer,
@@ -13,10 +13,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Header from '../components/Header/Header';
 import PrivateRoute from '../components/PrivateRoute';
-import { useEffect } from 'react';
-//import './FichaTecnicaForm.css';
-
-
+import { useRouter } from 'next/router';
 
 const FichaTecnicaForm = () => {
   const [integrantes, setIntegrantes] = useState([]);
@@ -30,15 +27,13 @@ const FichaTecnicaForm = () => {
   const [cnpj, setCnpj] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [error] = useState(null);
-
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchNumeroInscricao = async () => {
       setIsLoading(true);
 
-      const idProjeto = localStorage.getItem('numeroInscricao')
-      console.log(idProjeto)
+      const idProjeto = localStorage.getItem('numeroInscricao');
       const url = `https://api.grupogorki.com.br/api/projeto/Integrantes/${idProjeto}`;
       const token = localStorage.getItem('authToken');
 
@@ -59,6 +54,7 @@ const FichaTecnicaForm = () => {
 
         if (data.data && data.data.length > 0) {
           const novosIntegrantes = data.data.map((item) => ({
+            id: item.id, // Adicionando o ID aqui
             nome: item.nomeCompleto,
             tipoPessoa: item.tipoPessoa,
             funcao: item.funcao,
@@ -67,127 +63,160 @@ const FichaTecnicaForm = () => {
           }));
 
           setIntegrantes([...integrantes, ...novosIntegrantes]);
-
-      } else {
-        console.log("Número de inscrição não encontrado.");
+        } else {
+          console.log("Número de inscrição não encontrado.");
+        }
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.log(error.message);
-    } finally {
-      console.log('Requisição finalizada');
-      setIsLoading(false);
+    };
+
+    fetchNumeroInscricao();
+  }, []);
+
+  const router = useRouter();
+
+  const handleAddIntegrante = async () => {
+    if (nome.trim() && tipoPessoa.trim() && funcao.trim() && (cpf.trim() || cnpj.trim())) {
+      const url = `https://styxx-api.w3vvzx.easypanel.host/api/setIntegrante`;
+      const token = localStorage.getItem('authToken');
+
+      const newIntegrante = {
+        usuario: localStorage.getItem('userEmail'),
+        senha: localStorage.getItem('userPassword'),
+        cpfIntegrante: cpf.trim(),
+        nomeIntegrante: nome.trim(),
+        numeroInscricao: parseInt(localStorage.getItem('numeroInscricao')),
+        funcaoIntegrante: funcao.trim(),
+        tipoIntegrante: tipoPessoa
+      };
+
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Accept": "*/*",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(newIntegrante)
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          console.log('Integrante adicionado:', result);
+          setIntegrantes([...integrantes, { ...newIntegrante, id: result.id }]); // Adiciona o ID ao novo integrante
+
+          router.reload();
+        } else {
+          const errorData = await response.json();
+          console.error('Erro ao adicionar integrante:', errorData);
+          alert('Erro ao adicionar integrante.');
+        }
+      } catch (error) {
+        console.error('Erro:', error);
+        alert('Erro ao adicionar integrante.');
+      }
+
+      setNome('');
+      setTipoPessoa('F');
+      setFuncao('');
+      setCpf('');
+      setCnpj(null);
+      setShowAddForm(false);
     }
   };
 
-  fetchNumeroInscricao();
-}, []);
+  const handleShowAddForm = () => {
+    setShowAddForm(true);
+  };
 
+  const handleCloseAddForm = () => {
+    setShowAddForm(false);
+  };
 
-const handleAddIntegrante = () => {
-  if (nome.trim() && tipoPessoa.trim() && funcao.trim() && (cpf.trim() || cnpj.trim())) {
-    setIntegrantes([...integrantes, { nome, tipoPessoa, funcao, cpf, cnpj }]);
+  const handleEditIntegrante = () => {
+    const updatedIntegrantes = [...integrantes];
+    updatedIntegrantes[currentIndex] = { id: integrantes[currentIndex].id, nome, tipoPessoa, funcao, cpf, cnpj };
+    setIntegrantes(updatedIntegrantes);
+    setShowEditForm(false);
+    setCurrentIndex(null);
+
     setNome('');
-    setTipoPessoa('');
+    setTipoPessoa('F');
     setFuncao('');
     setCpf('');
     setCnpj(null);
-    setShowAddForm(false);
-  }
-};
+  };
 
-const handleShowAddForm = () => {
-  setShowAddForm(true);
-};
+  const handleDeleteIntegrante = async (id) => {
+    const url = `https://styxx-api.w3vvzx.easypanel.host/api/deleteIntegrante`;
+    const token = localStorage.getItem('authToken');
 
-const handleCloseAddForm = () => {
-  setShowAddForm(false);
-};
+    const deleteRequest = {
+      usuario: localStorage.getItem('userEmail'),
+      senha: localStorage.getItem('userPassword'),
+      id: id
+    };
 
-const handleEditIntegrante = () => {
-  const updatedIntegrantes = [...integrantes];
-  updatedIntegrantes[currentIndex] = { nome, tipoPessoa, funcao, cpf, cnpj };
-  setIntegrantes(updatedIntegrantes);
-  setShowEditForm(false);
-  setCurrentIndex(null);
-  setNome('');
-  setTipoPessoa('F');
-  setFuncao('');
-  setCpf('');
-  setCnpj(null);
-};
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(deleteRequest),
+      });
 
-const handleDeleteIntegrante = (index) => {
-  const updatedIntegrantes = integrantes.filter((_, i) => i !== index);
-  setIntegrantes(updatedIntegrantes);
-};
-
-const handleShowEditForm = (index) => {
-  const integrante = integrantes[index];
-  setCurrentIndex(index);
-  setNome(integrante.nome);
-  setTipoPessoa("F");
-  setFuncao(integrante.funcao);
-  setCpf(integrante.cpf);
-  setCnpj(null);
-  setShowEditForm(true);
-};
-
-const handleCloseEditForm = () => {
-  setShowEditForm(false);
-};
-
-const handleMenuClick = (event, index) => {
-  setAnchorEl(event.currentTarget);
-  setCurrentIndex(index);
-};
-
-const handleMenuClose = () => {
-  setAnchorEl(null);
-  setCurrentIndex(null);
-};
-
-const handleSaveChanges = async () => {
-  const url = `https://api.grupogorki.com.br/api/projeto/createIntegrantes`;
-  const token = localStorage.getItem('authToken');
-
-  const data = integrantes.map(integrante => ({
-    idProjeto: parseInt(localStorage.getItem('numeroInscricao')),
-    nomeCompleto: integrante.nome.trim(),
-    tipoPessoa: "F",
-    funcao: integrante.funcao.trim(),
-    cpf: integrante.cpf.trim(),
-    cnpj: null
-  }));
-
-  console.log('Dados a serem enviados:', data);
-
-  try {
-    const response = await fetch(url, {
-      method: "PUT",
-      headers: {
-        "Accept": "*/*",
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data[0])
-    });
-
-    if (response.ok) {
-      alert('Integrante cadastrado');
-    } else {
-      const errorData = await response.json();
-      console.error('Erro ao atualizar o projeto:', errorData);
-      alert('Erro ao atualizar o projeto.');
+      if (response.ok) {
+        console.log('Integrante excluído com sucesso');
+        setIntegrantes(integrantes.filter(integrante => integrante.id !== id));
+      } else {
+        const errorData = await response.json();
+        console.error('Erro ao excluir integrante:', errorData);
+        alert('Erro ao excluir integrante.');
+      }
+    } catch (error) {
+      console.error('Erro:', error);
+      alert('Erro ao excluir integrante.');
     }
-  } catch (error) {
-    console.error('Erro:', error);
-    alert('Erro ao atualizar o projeto.');
-  }
-};
-return (
-  <div>
+  };
+
+  const handleShowEditForm = (index) => {
+    const integrante = integrantes[index];
+    setCurrentIndex(index);
+    setNome(integrante.nome);
+    setTipoPessoa(integrante.tipoPessoa);
+    setFuncao(integrante.funcao);
+    setCpf(integrante.cpf || '');
+    setCnpj(integrante.cnpj || '');
+    setShowEditForm(true);
+  };
+
+  const handleCloseEditForm = () => {
+    setShowEditForm(false);
+  };
+
+  const handleMenuClick = (event, index) => {
+    setAnchorEl(event.currentTarget);
+    setCurrentIndex(index);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    setCurrentIndex(null);
+  };
+
+  const handleSaveChanges = () => {
+    alert('Alterações salvas.');
+  };
+
+  return (
+    <div>
       <PrivateRoute />
-      <Header></Header>
+      <Header />
       <div className="form-page">
         <div className="form-container">
           <Typography variant="h6" className="form-title">
@@ -236,7 +265,7 @@ return (
                       onChange={(e) => setTipoPessoa(e.target.value)}
                       label="Tipo de pessoa"
                     >
-                      <MenuItem value="Fisica">Pessoa Física</MenuItem>
+                      <MenuItem value="F">Pessoa Física</MenuItem>
                     </Select>
                   </FormControl>
                   <TextField
@@ -248,7 +277,7 @@ return (
                     className="form-input"
                     margin="normal"
                   />
-                  {tipoPessoa === 'Fisica' && (
+                  {tipoPessoa === 'F' && (
                     <TextField
                       label="CPF"
                       variant="outlined"
@@ -259,7 +288,7 @@ return (
                       margin="normal"
                     />
                   )}
-                  {tipoPessoa === 'Juridica' && (
+                  {tipoPessoa === 'J' && (
                     <TextField
                       label="CNPJ"
                       variant="outlined"
@@ -270,145 +299,77 @@ return (
                       margin="normal"
                     />
                   )}
-                  <Button variant="contained" color="primary" onClick={handleAddIntegrante}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    startIcon={<SaveIcon />}
+                    onClick={handleAddIntegrante}
+                    className="save-integrante-button"
+                  >
                     Adicionar
                   </Button>
                 </Box>
               )}
 
-              {showEditForm && (
-                <Box className="edit-integrante-form">
-                  <IconButton onClick={handleCloseEditForm} className="close-edit-form">
-                    <CloseIcon />
-                  </IconButton>
-                  <TextField
-                    label="Nome completo"
-                    variant="outlined"
-                    fullWidth
-                    value={nome}
-                    onChange={(e) => setNome(e.target.value)}
-                    className="form-input"
-                    margin="normal"
-                  />
-                  <FormControl variant="outlined" fullWidth margin="normal">
-                    <InputLabel>Tipo de pessoa</InputLabel>
-                    <Select
-                      value={tipoPessoa}
-                      onChange={(e) => setTipoPessoa(e.target.value)}
-                      label="Tipo de pessoa"
-                    >
-                      <MenuItem value="Fisica">Pessoa Física</MenuItem>
-                    </Select>
-                  </FormControl>
-                  <TextField
-                    label="Função"
-                    variant="outlined"
-                    fullWidth
-                    value={funcao}
-                    onChange={(e) => setFuncao(e.target.value)}
-                    className="form-input"
-                    margin="normal"
-                  />
-                  {tipoPessoa === 'Fisica' && (
-                    <TextField
-                      label="CPF"
-                      variant="outlined"
-                      fullWidth
-                      value={cpf}
-                      onChange={(e) => setCpf(e.target.value)}
-                      className="form-input"
-                      margin="normal"
-                    />
-                  )}
-                  {tipoPessoa === 'Juridica' && (
-                    <TextField
-                      label="CNPJ"
-                      variant="outlined"
-                      fullWidth
-                      value={cnpj}
-                      onChange={(e) => setCnpj(e.target.value)}
-                      className="form-input"
-                      margin="normal"
-                    />
-                  )}
-                  <Button variant="contained" color="primary" onClick={handleEditIntegrante}>
-                    Salvar
-                  </Button>
-                </Box>
-              )}
-
-              <TableContainer component={Paper} className="integrante-table">
+              <TableContainer component={Paper} className="integrantes-table">
                 <Table>
                   <TableHead>
                     <TableRow>
-                      <TableCell>Nome completo</TableCell>
-                      <TableCell>Tipo de pessoa</TableCell>
+                      <TableCell>Nome</TableCell>
+                      <TableCell>Tipo de Pessoa</TableCell>
                       <TableCell>Função</TableCell>
-                      <TableCell>CPF</TableCell>
-                      <TableCell>CNPJ</TableCell>
+                      <TableCell>CPF/CNPJ</TableCell>
                       <TableCell>Ações</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {integrantes.length === 0 ? (
-                      <TableRow>
-                        <TableCell colSpan={6} className="no-data">
-                          Nenhum integrante cadastrado
+                    {integrantes.map((integrante, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{integrante.nome}</TableCell>
+                        <TableCell>{integrante.tipoPessoa === 'F' ? 'Pessoa Física' : 'Pessoa Jurídica'}</TableCell>
+                        <TableCell>{integrante.funcao}</TableCell>
+                        <TableCell>{integrante.tipoPessoa === 'F' ? integrante.cpf : integrante.cnpj}</TableCell>
+                        <TableCell>
+                          <IconButton
+                            aria-label="more"
+                            aria-controls="long-menu"
+                            aria-haspopup="true"
+                            onClick={(event) => handleMenuClick(event, index)}
+                          >
+                            <MoreVertIcon />
+                          </IconButton>
+                          <Menu
+                            anchorEl={anchorEl}
+                            keepMounted
+                            open={Boolean(anchorEl)}
+                            onClose={handleMenuClose}
+                          >
+
+                            <MenuItem onClick={() => handleDeleteIntegrante(integrante.id)}>
+                              <DeleteIcon fontSize="small" />
+                              Excluir
+                            </MenuItem>
+                          </Menu>
                         </TableCell>
                       </TableRow>
-                    ) : (
-                      integrantes.map((integrante, index) => (
-                        <TableRow key={index}>
-                          <TableCell>{integrante.nome}</TableCell>
-                          <TableCell>{integrante.tipoPessoa}</TableCell>
-                          <TableCell>{integrante.funcao}</TableCell>
-                          <TableCell>{integrante.cpf}</TableCell>
-                          <TableCell>{integrante.cnpj}</TableCell>
-                          <TableCell>
-                            <IconButton onClick={(e) => handleMenuClick(e, index)}>
-                              <MoreVertIcon />
-                            </IconButton>
-                            <Menu
-                              anchorEl={anchorEl}
-                              open={Boolean(anchorEl)}
-                              onClose={handleMenuClose}
-                            >
-                              <MenuItem onClick={() => handleShowEditForm(index)}>
-                                <EditIcon /> Editar
-                              </MenuItem>
-                              <MenuItem onClick={() => handleDeleteIntegrante(index)}>
-                                <DeleteIcon /> Excluir
-                              </MenuItem>
-                            </Menu>
-                          </TableCell>
-                        </TableRow>
-                      ))
-                    )}
+                    ))}
                   </TableBody>
                 </Table>
               </TableContainer>
 
-              <Box className="form-actions">
+              <Box sx={{ marginTop: '10px' }} className="save-changes-button-container">
                 <Link href="/pnab/projeto" passHref>
-                  <Button variant="contained" startIcon={<ArrowBackIcon />} className="back-button">
-                    Voltar para o projeto
+                  <Button variant="outlined" sx={{ marginRight: '10px' }} startIcon={<ArrowBackIcon />} className="cancel-button">
+                    Voltar
                   </Button>
                 </Link>
-                <Button
-                  variant="contained"
-                  onClick={handleSaveChanges}
-                  startIcon={<SaveIcon />}
-                  className="save-button"
-                >
-                  Salvar alterações
-                </Button>
               </Box>
             </>
           )}
         </div>
       </div>
     </div>
-);
+  );
 };
 
 export default FichaTecnicaForm;

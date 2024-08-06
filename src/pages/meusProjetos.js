@@ -57,8 +57,8 @@ const MeusProjetos = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          usuario: "contato@styxx.com.br",
-          senha: "Stx@12345678",
+          usuario: localStorage.getItem('userEmail'),
+          senha: localStorage.getItem('userPassword'),
           nomeProjeto: "Nome do seu projeto",
           idProponente: 0,
           idArea: 1,
@@ -166,8 +166,8 @@ const MeusProjetos = () => {
               <div className='mp-project-card' key={projeto.id}>
                 <div className='mp-project-header'>
                   <h2>{projeto.nomeProjeto}</h2>
-                  <span className={`mp-status ${projeto.status ? projeto.status.toLowerCase() : 'indefinido'}`}>
-                    {projeto.status || 'Indefinido'}
+                  <span className={`mp-status ${projeto.status ? projeto.status.toLowerCase() : 'rascunho'}`}>
+                    {projeto.status || 'Rascunho'}
                   </span>
                 </div>
                 <div className='mp-project-body'>

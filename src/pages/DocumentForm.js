@@ -174,10 +174,10 @@ const DocumentUploadForm = () => {
               <UploadField name="comprovanteDomicilioAtual" label="*Comprovantes de domicílio ou sede atual" />
               <UploadField name="comprovanteDomicilio2Anos" label="*Comprovantes de domicílio ou sede de 02 (dois) anos" />
               <UploadField name="curriculoPortfolio" label="*Curriculo ou portfólio de coletivo ou idealizador" />
-              <UploadField name="decDeficiencia" label="Declaração de pessoa com deficiência" exampleLink="https://styxx-public.s3.sa-east-1.amazonaws.com/example-docs/ANEXO+VIII+-+DECLARA%C3%87%C3%83O+DE+PESSOA+COM+DEFICI%C3%8ANCIA.docx" exampleText="Baixar exemplo" />
-              <UploadField name="decBaixaRenda" label="Declaração de baixa renda" exampleLink="https://styxx-public.s3.sa-east-1.amazonaws.com/example-docs/ANEXO+VII+-+DECLARA%C3%87%C3%83O+DE+BAIXA+RENDA.docx" exampleText="Baixar exemplo" />
-              <UploadField name="decPoliticamenteExposto" label="Declaração de não ser politicamente exposto" exampleLink="https://styxx-public.s3.sa-east-1.amazonaws.com/example-docs/ANEXO+VI+-+DECLARA%C3%87%C3%83O+DE+N%C3%83O+SER+PESSOA+POLITICAMENTE+EXPOSTA.docx" exampleText="Baixar exemplo" />
-              <UploadField name="decComprovanteCategoria" label="Declaração de comprovação de categorias culturais" />
+              <UploadField name="decDeficiencia" label="Declaração de pessoa com deficiência" exampleLink="https://styxx-public.s3.sa-east-1.amazonaws.com/example-docs/ANEXO+VIII+-+DECLARA%C3%87%C3%83O+PESSOA+COM+DEFICI%C3%8ANCIA.docx" exampleText="Baixar exemplo" />
+              <UploadField name="decEtnicoRacial" label="Declaração étnico-racial" exampleLink="https://styxx-public.s3.sa-east-1.amazonaws.com/example-docs/ANEXO+VII+-+MODELO+DE+DECLARA%C3%87%C3%83O+%C3%89TNICO-RACIAL.docx" exampleText="Baixar exemplo" />
+              <UploadField name="decResidencia" label="Autodeclaração de Residência" exampleLink="https://styxx-public.s3.sa-east-1.amazonaws.com/example-docs/ANEXO+II+-+AUTODECLARA%C3%87%C3%83O+DE+RESID%C3%8ANCIA.docx" exampleText="Baixar exemplo" />
+              <UploadField name="outrosDocumentos" label="Outros documentos" />
               
             
               <Box sx={{ mt: 4, textAlign: 'center' }}>
