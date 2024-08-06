@@ -115,7 +115,7 @@ function PnabHomeForms() {
             <Typography variant="body2" color="textSecondary">
               Inscrições de 27/06/2024 00:00 até 21/08/2024 23:59
             </Typography>
-            <Link href="https://dosp.com.br/exibe_do.php?i=NTEzMzU5" target="_blank" rel="noopener">
+            <Link href="https://styxx-public.s3.sa-east-1.amazonaws.com/Editao%2BAnexos_BRO.pdf" target="_blank" rel="noopener">
               Leia o objeto do edital
             </Link>
           </Card>

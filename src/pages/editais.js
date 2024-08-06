@@ -8,7 +8,7 @@ const EditaisPage = () => {
     const router = useRouter();
 
     const handleButtonClick = async () => {
-        router.push('/pnab/projeto');
+        router.push('/meusProjetos');
 
         const url = `https://api.grupogorki.com.br/api/projeto/listaProjetos`
         const token = localStorage.getItem('authToken');

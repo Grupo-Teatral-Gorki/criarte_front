@@ -150,7 +150,7 @@ const MeusProjetos = () => {
       <Header />
       <div className='mp-container'>
         <div className='mp-header'>
-          <Button variant="outlined" onClick={() => router.back()}>Voltar</Button>
+          <Button variant="outlined" onClick={() => router.push('/home')}>Voltar</Button>
           <h1 style={{ marginLeft: '25px' }}>Meus Projetos</h1>
           <div className='mp-controls'>
             <Button sx={{ backgroundColor: '#1D4A5D', color: 'white' }} onClick={handleCreateProject} variant="contained">Criar Projeto</Button>
