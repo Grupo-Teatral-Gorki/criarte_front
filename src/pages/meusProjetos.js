@@ -173,7 +173,7 @@ const MeusProjetos = () => {
                 <div className='mp-project-body'>
                   <p><strong>Nº de inscrição:</strong> {projeto.numeroInscricao || '---'}</p>
                   <p><strong>Título do edital:</strong> {projeto.titulo || 'PNAB 2024'}</p>
-                  <p><strong>Modalidade:</strong> {projeto.modalidade || '---'}</p>
+                  <p><strong>Modalidade:</strong> {'Pessoa Física' || '---'}</p>
                 </div>
                 <div className='mp-project-footer'>
                   <Button
