@@ -111,7 +111,7 @@ const ProfileForm = () => {
                 },
               }}
             />
-            <Link href="/" sx={{ display: 'block', mb: 2 }}>Trocar senha</Link>
+            <Link href="/pass/new" sx={{ display: 'block', mb: 2 }}>Trocar senha</Link>
             <Button variant="contained" color="primary">Salvar</Button>
           </Box>
         </Container>

@@ -2,15 +2,31 @@ import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useRouter } from 'next/router';
 import Footer from '../components/Footer/Footer';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Alert from '@mui/material/Alert';
+import Link from 'next/link';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [ipInfo, setIpInfo] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const { login } = useContext(AuthContext);
   const router = useRouter();
+  const [openDialog, setOpenDialog] = useState(false);
 
   useEffect(() => {
+    // Verificar se o usuário já aceitou os termos
+    const hasAcceptedTerms = localStorage.getItem('hasAcceptedTerms');
+    if (!hasAcceptedTerms) {
+      setOpenDialog(true);
+    }
+
     const fetchIpInfo = async () => {
       try {
         const response = await fetch('https://api.ipify.org?format=json');
@@ -48,6 +64,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true); // Ativa o estado de carregamento
 
     const deviceInfo = getDeviceInfo();
     const fullInfo = {
@@ -78,17 +95,26 @@ const Login = () => {
         tipoUsuario: data.user.data.tipoUsuario,
       };
 
-      // Salvar usuário e senha no localStorage (não recomendado em produção)
       localStorage.setItem('userEmail', email);
       localStorage.setItem('userPassword', password);
 
-      // Salvar token e detalhes do usuário no contexto
       login(data.token, userDetails);
       router.push('/home');
 
     } catch (error) {
       console.error('Erro na autenticação:', error.message);
       alert('Falha na autenticação: ' + error.message);
+    } finally {
+      setIsLoading(false); // Desativa o estado de carregamento
+    }
+  };
+
+  const handleDialogClose = (accept) => {
+    if (accept) {
+      localStorage.setItem('hasAcceptedTerms', 'true');
+      setOpenDialog(false);
+    } else {
+      router.push('/'); // Redireciona para a página inicial, por exemplo
     }
   };
 
@@ -105,6 +131,7 @@ const Login = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              disabled={isLoading}
             />
           </div>
           <div>
@@ -114,13 +141,57 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              disabled={isLoading}
             />
           </div>
-          <button className="t1-register-button" type="button" onClick={() => router.push('/register')}>Cadastrar</button>
-          <button type="submit">Login</button>
+          <Button
+            variant="outlined"
+            onClick={() => router.push('/register')}
+            disabled={isLoading}
+            sx={{ marginRight: '8px' }}
+          >
+            Cadastrar
+          </Button>
+          <Button
+            variant="contained"
+            type="submit"
+            disabled={isLoading}
+            fullWidth
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            {isLoading ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              'Login'
+            )}
+          </Button>
+          <a   href="/pass/recovery" style={{marginTop: '30px', cursor: 'pointer', color: 'GRAY', fontSize: '.8em'}}>Recuperar Senha</a>
         </form>
       </div>
       <Footer></Footer>
+      <Dialog open={false} onClose={() => setOpenDialog(false)}> // alterar open para "openDialog" para que mensagem LGPD seja exibida
+        <DialogTitle>Aceitação de Termos</DialogTitle>
+        <DialogContent>
+          <Alert severity="info">
+            Ao aceitar, você concorda que o Criarte e suas empresas parceiras, assim como outras organizações que colaboram para o funcionamento da plataforma, possam gerenciar e acessar todos os dados inseridos sempre que necessário.
+
+          </Alert>
+        </DialogContent>
+        <DialogActions>
+
+          <Button
+            onClick={() => handleDialogClose(true)}
+            color="success"
+            sx={{ marginLeft: 'auto' }}
+          >
+            Aceitar
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
