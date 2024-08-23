@@ -12,12 +12,19 @@ function PnabHomeForms() {
   const [openSubmitDialog, setOpenSubmitDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [canSubmit, setCanSubmit] = useState(false); // Nova lógica de submissão
   const router = useRouter();
 
   useEffect(() => {
     const storedNumeroInscricao = localStorage.getItem('numeroInscricao');
+    const now = new Date();
+    const deadline = new Date('2024-08-21T23:59:00'); // Data limite de inscrição
+
     if (storedNumeroInscricao) {
       setNumeroInscricao(storedNumeroInscricao);
+      if (now > deadline) {
+        setCanSubmit(false); // Inscrições encerradas
+      }
       setIsLoading(false);
     } else {
       setError("Número de inscrição não encontrado.");
@@ -26,7 +33,11 @@ function PnabHomeForms() {
   }, []);
 
   const handleOpenSubmitDialog = () => {
-    setOpenSubmitDialog(true);
+    if (canSubmit) {
+      setOpenSubmitDialog(true);
+    } else {
+      alert('As inscrições foram encerradas. Você não pode mais enviar projetos.');
+    }
   };
 
   const handleOpenDeleteDialog = () => {
@@ -105,6 +116,7 @@ function PnabHomeForms() {
               </Typography>
             )}
           </div>
+          <Alert severity="warning">O período de inscrições para o envio de projetos foi encerrado. Não é possível enviar novos projetos.</Alert>
           <Card className="project-details">
             <Typography variant="h6">
               Edital de Chamamento Público 001/2024 SMC
@@ -130,7 +142,7 @@ function PnabHomeForms() {
             <Button variant="outlined" color="error" onClick={handleOpenDeleteDialog}>
               Excluir projeto
             </Button>
-            <Button sx={{ backgroundColor: '#1D4A5D', color: 'white' }} onClick={handleOpenSubmitDialog} variant="contained" color="primary">
+            <Button sx={{ backgroundColor: '#1D4A5D', color: 'white' }}  disabled onClick={() => alert('O período de inscrições para o envio de projetos foi encerrado. Não foi possível completar o envio.')} variant="contained" color="primary">
               Enviar projeto
             </Button>
           </div>

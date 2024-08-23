@@ -124,6 +124,10 @@ const DocumentUploadForm = () => {
           <Typography variant="h4" sx={{ marginBottom: '1rem', textAlign: 'center' }}>
             Planilha orçamentária
           </Typography>
+          <Alert sx={{marginBottom: "20px"}} severity="warning">
+          Após receber a mensagem de confirmação, o arquivo será salvo automaticamente e não será exibido na tela. Caso precise enviar um novo arquivo para substituir o anterior, repita o processo, preenchendo apenas o campo necessário.
+
+          </Alert>
           {isLoading ? (
             <CircularProgress />
           ) : error ? (

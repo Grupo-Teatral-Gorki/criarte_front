@@ -173,7 +173,7 @@ const Login = () => {
         </form>
       </div>
       <Footer></Footer>
-      <Dialog open={false} onClose={() => setOpenDialog(false)}> // alterar open para "openDialog" para que mensagem LGPD seja exibida
+      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
         <DialogTitle>Aceitação de Termos</DialogTitle>
         <DialogContent>
           <Alert severity="info">
