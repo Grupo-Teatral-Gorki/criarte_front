@@ -27,7 +27,7 @@ const PassRecovery = () => {
     setIsLoading(true); // Ativa o estado de carregamento
 
     try {
-        const response = await fetch('https://gorki-api-recovery.w3vvzx.easypanel.host/recover-password', {
+        const response = await fetch('https://gorki-mail.iglgxt.easypanel.host/recover-password', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

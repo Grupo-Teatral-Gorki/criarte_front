@@ -12,14 +12,22 @@ const ProfileForm = () => {
   const [userType, setUserType] = useState(null);
   const [showProfile, setShowProfile] = useState(false);
 
+  // Mapeamento de idCidade para o nome da cidade
+  const cityNames = {
+    3842: 'Serrana',
+    3798: 'Santa Rita Do Passa Quatro',
+    // Adicione mais cidades conforme necessário
+  };
+
   useEffect(() => {
     const storedUserDetails = localStorage.getItem('userDetails');
 
     if (storedUserDetails) {
       const userDetails = JSON.parse(storedUserDetails);
       console.log("Dados do usuário:", userDetails);
+
       setUserEmail(userDetails.usuario || '');
-      setUserCityId(`${userDetails.idCidade} - Brodowski` || '');
+      setUserCityId(userDetails.idCidade || '');
       setUserId(userDetails.id || null);
       setUserType(Number(userDetails.tipoUsuario) || null);
     }
@@ -27,6 +35,9 @@ const ProfileForm = () => {
     setShowProfile(true);
   }, []);
 
+  const getCityName = (cityId) => {
+    return cityNames[cityId] || 'Cidade desconhecida';
+  };
 
   return (
     <div>
@@ -59,38 +70,38 @@ const ProfileForm = () => {
               InputLabelProps={{
                 sx: {
                   backgroundColor: 'white',
-                  paddingRight: '8px', // Optional: To avoid overlap with the outlined border
-                  paddingLeft: '8px',  // Optional: To avoid overlap with the outlined border
+                  paddingRight: '8px', // Para evitar sobreposição com a borda
+                  paddingLeft: '8px',
                 },
               }}
               sx={{
-                // If you need the whole text field to have a white background
                 '& .MuiInputLabel-root': {
                   backgroundColor: 'white',
                 },
               }}
             />
+
             <TextField
               fullWidth
               label="Cidade"
               variant="outlined"
               margin="normal"
               disabled
-              value={userCityId}
+              value={getCityName(userCityId)} // Converte o id da cidade para o nome
               InputLabelProps={{
                 sx: {
                   backgroundColor: 'white',
-                  paddingRight: '8px', // Optional: To avoid overlap with the outlined border
-                  paddingLeft: '8px',  // Optional: To avoid overlap with the outlined border
+                  paddingRight: '8px', // Para evitar sobreposição com a borda
+                  paddingLeft: '8px',
                 },
               }}
               sx={{
-                // If you need the whole text field to have a white background
                 '& .MuiInputLabel-root': {
                   backgroundColor: 'white',
                 },
               }}
             />
+
             <TextField
               fullWidth
               label="ID"
@@ -111,6 +122,7 @@ const ProfileForm = () => {
                 },
               }}
             />
+
             <Link href="/pass/new" sx={{ display: 'block', mb: 2 }}>Trocar senha</Link>
             <Button variant="contained" color="primary">Salvar</Button>
           </Box>

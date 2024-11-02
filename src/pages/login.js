@@ -122,7 +122,7 @@ const Login = () => {
     <div className='body-login'>
       <img className='logo-login' src="https://styxx-public.s3.sa-east-1.amazonaws.com/logo_criarte_black.png" alt="Logo Criarte" />
       <div className="login-container">
-        <h2>Login</h2>
+
         <form onSubmit={handleSubmit}>
           <div>
             <label>Email:</label>

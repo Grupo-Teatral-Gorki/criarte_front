@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Header from '../components/Header/Header';
-import PrivateRoute from '../components/PrivateRoute';
+import Header from '../../components/Header/Header';
+import PrivateRoute from '../../components/PrivateRoute';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
@@ -24,6 +24,7 @@ const MeusProjetos = () => {
   const router = useRouter();
 
   useEffect(() => {
+
     if (typeof window !== 'undefined') {
       const userDetails = localStorage.getItem('userDetails');
       if (userDetails) {
@@ -60,7 +61,7 @@ const MeusProjetos = () => {
     fetchProjectInfo();
   }, []);
 
-  const handleCreateProject = async () => {
+  const handleCreateProject2 = async () => {
 
     const userDetails = localStorage.getItem('userDetails');
     const parsedUserDetails = JSON.parse(userDetails);
@@ -79,15 +80,15 @@ const MeusProjetos = () => {
           dataPrevistaInicio: "2024-01-01",
           dataPrevistaFim: "2024-12-31",
           resumoProjeto: "Resumo do projeto",
-          descricao: "Descrição detalhada do projeto",
+          descricao: "...",
           objetivos: "Objetivos do projeto",
           justificativaProjeto: "Justificativa para o projeto",
           contrapartidaProjeto: "Contrapartida oferecida pelo projeto",
           planoDemocratizacao: "Plano de democratização",
-          outrasInformacoes: "Outras informações relevantes",
+          outrasInformacoes: "...",
           ingresso: false,
           valorIngresso: 0,
-          idEdital: 1,
+          idEdital: 2,
           idModalidade: 1,
           idUsuario: idUsuario,
           relevanciaPertinencia: "Relevância e pertinência do projeto",
@@ -101,6 +102,7 @@ const MeusProjetos = () => {
       });
 
       const data = await response.json();
+      // Atualizando para acessar corretamente o ID do projeto
       if (data && data.projeto && data.projeto.id_projeto) {
         localStorage.setItem('numeroInscricao', data.projeto.id_projeto);
         router.push('/pnab/projeto');
@@ -111,6 +113,89 @@ const MeusProjetos = () => {
       console.error('Erro ao criar projeto:', error);
     }
   };
+
+
+  const handleCreateProject = async () => {
+    const userDetails = localStorage.getItem('userDetails');
+    const parsedUserDetails = JSON.parse(userDetails);
+    const idUsuario = parsedUserDetails.id;
+
+    try {
+        const response = await fetch('https://gorki-api-nome.iglgxt.easypanel.host/api/createProjeto', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                usuario: localStorage.getItem('userEmail'),
+                senha: localStorage.getItem('userPassword'),
+                nomeProjeto: "Nome do seu projeto",
+                idProponente: 0,
+                idArea: 1,
+                dataPrevistaInicio: "2024-01-01",
+                dataPrevistaFim: "2024-12-31",
+                resumoProjeto: "Resumo do projeto",
+                descricao: "Descrição detalhada do projeto",
+                objetivos: "Objetivos do projeto",
+                justificativaProjeto: "Justificativa para o projeto",
+                contrapartidaProjeto: "Contrapartida oferecida pelo projeto",
+                planoDemocratizacao: "Plano de democratização",
+                outrasInformacoes: "Outras informações relevantes",
+                ingresso: false,
+                valorIngresso: 0,
+                idEdital: 1,
+                idModalidade: 1,
+                idUsuario: idUsuario,
+                relevanciaPertinencia: "Relevância e pertinência do projeto",
+                perfilPublico: "Perfil do público-alvo",
+                classificacaoIndicativa: "Livre",
+                qtdPublico: 100,
+                propostaContrapartida: "Proposta de contrapartida detalhada",
+                planoDivulgacao: "Plano de divulgação do projeto",
+                nomeModalidade: ""
+            }),
+        });
+
+        const data = await response.json();
+
+        // Atualizando para acessar corretamente o ID do projeto
+        if (data && data.projeto && data.projeto.id_projeto) {
+            localStorage.setItem('numeroInscricao', data.projeto.id_projeto);
+            router.push('/pnab/projeto');
+        } else {
+            console.error('Erro ao criar projeto:', data);
+            // Enviar log de erro para a API
+            await logError('Erro ao criar projeto: ' + JSON.stringify(data), idUsuario);
+        }
+    } catch (error) {
+        console.error('Erro ao criar projeto:', error);
+        // Enviar log de erro para a API
+        await logError(error.message, idUsuario);
+    }
+};
+
+// Função para enviar log de erro para a API
+async function logError(erro, idUsuario) {
+    try {
+        const response = await fetch('https://gorki-fix-proponente.iglgxt.easypanel.host/api/logErro', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                erro: erro,
+                numeroProjeto: localStorage.getItem('numeroInscricao') || null, // Pode ser obtido do localStorage se disponível
+                idUsuario: idUsuario,
+            }),
+        });
+
+        if (!response.ok) {
+            console.error('Falha ao enviar log de erro:', response.statusText);
+        } else {
+            const logResponse = await response.json();
+            console.log('Log de erro registrado com sucesso:', logResponse);
+        }
+    } catch (logError) {
+        console.error('Erro ao tentar enviar log para a API:', logError);
+    }
+}
+
 
   const handleEdit = (projeto) => {
     if (projeto.status === 'Enviado') {
@@ -127,12 +212,11 @@ const MeusProjetos = () => {
 
   const handleClickOpen = (project) => {
     setSelectedProject(project);
-    setOpen(true);  // Isso abre o diálogo de confirmação
+
   };
-  
 
   const handleClickOpenRecurso = (project) => {
-    router.push('/pnab/recurso');
+    router.push('/pnab/recurso')
   };
 
   const handleClose = () => {
@@ -143,7 +227,7 @@ const MeusProjetos = () => {
   const handleDelete = async () => {
     try {
       if (selectedProject) {
-        const response = await fetch('https://gorki-fix-proponente.iglgxt.easypanel.host/api/deleteProjeto', {
+        const response = await fetch('https://styxx-api.w3vvzx.easypanel.host/api/deleteProjeto', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -170,90 +254,69 @@ const MeusProjetos = () => {
       <div className='mp-container'>
         <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '10px' }} className='mp-header'>
           <Button variant="outlined" onClick={() => router.push('/home')}>Voltar</Button>
-          <h1 style={{ marginLeft: '25px', color: 'gray' }}>Meus Projetos</h1>
-          <div className='mp-controls'>
-            <Button sx={{ backgroundColor: '#1D4A5D', color: 'white', ':hover': { backgroundColor: '#1D4A5D' } }} onClick={() => {router.push('/projetos/selecao')}} variant="contained">Criar Projeto</Button>
-          </div>
+          <h1 style={{ marginLeft: '25px', color: 'gray' }}>Selecione o tipo do projeto</h1>
+
         </div>
-
-        {/* Mostrar o card "Criar Novo Projeto" apenas se não houver projetos */}
-        {projetos.length === 0 && (
-          <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '10px' }} className='mp-header new-proj-card blinking-shadow'>
-            <div
-              onClick={() => {router.push('/projetos/selecao')}}
-              style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer' }}
-              className='mp-controls'
-            >
-              <img
-                src='https://criarte.s3.us-east-2.amazonaws.com/public/botao-adicionar.png'
-                style={{ maxWidth: '40px' }}
-                alt="Botão Adicionar"
-              />
-              <Button
-                sx={{ backgroundColor: 'white', color: 'gray', boxShadow: 'none !important' , ':hover': { backgroundColor: 'white' } }}
-                variant="contained"
-                onClick={() => {router.push('/projetos/selecao')}}
-              >
-                Criar Novo Projeto
-              </Button>
-            </div>
-          </div>
-        )}
-
         <div className='mp-projects-grid'>
-          {isLoading ? (
-            <CircularProgress />
-          ) : error ? (
-            <Alert severity="info">{error}</Alert>
-          ) : (
-            projetos.map(projeto => (
-              <div style={{ backgroundColor: 'white' }} className='mp-project-card' key={projeto.id}>
-                <div className='mp-project-header'>
-                  <h2>{projeto.nomeProjeto}</h2>
-                  <span className={`mp-status ${projeto.status ? projeto.status.toLowerCase() : 'rascunho'}`}>
-                    {projeto.status || 'Rascunho'}
-                  </span>
-                </div>
-                <div className='mp-project-body'>
-                  <p><strong>Nº de inscrição:</strong> {projeto.numeroInscricao || '---'}</p>
-                  <p><strong>Título do edital:</strong> {projeto.titulo || 'PNAB 2024'}</p>
-                  <p><strong>Modalidade:</strong> {'Pessoa Física' || '---'}</p>
-                </div>
-                <div className='mp-project-footer'>
-                  <Button
-                    size='small'
-                    variant="outlined"
-                    sx={{ marginRight: '8px' }}
-                    onClick={() => {
-                      projeto.status === 'enviado' ? handleDisabledButtonClick() : handleClickOpenRecurso(projeto);
-                    }}
-                    disabled={projeto.status === 'enviado' || projeto.status == 'Habilitação' || projeto.status == 'Recurso'}
-                  >
-                    Recurso
-                  </Button>
-                  <Button
-                    size='small'
-                    variant="outlined"
-                    color="error"
-                    onClick={() => handleClickOpen(projeto)}
-                    disabled={projeto.status === 'enviado' || projeto.status == 'Habilitação' || projeto.status == 'Recurso'}
-                  >
-                    Excluir
-                  </Button>
-                  <Button
-                    size='small'
-                    variant="outlined"
-                    onClick={() => {
-                      projeto.status === 'enviado' ? handleDisabledButtonClick() : handleEdit(projeto);
-                    }}
-                    disabled={projeto.status === 'enviado' || projeto.status == 'Habilitação' || projeto.status == 'Recurso'}
-                  >
-                    Editar
-                  </Button>
-                </div>
-              </div>
-            ))
-          )}
+          <div style={{backgroundColor: 'white'}} className='mp-project-card' >
+            <div className='mp-project-header'>
+              <h1>Fomento</h1>
+              <span className={`mp-status`}>
+                Disponível
+              </span>
+            </div>
+            <div className='mp-project-body'>
+              <p><strong>Os programas de fomento da Secretaria de Cultura e Economia Criativa têm o objetivo de apoiar a realização de projetos culturais, por meio da concessão de incentivos financeiros para artistas, grupos, instituições e coletivos.</strong></p>
+            
+            </div>
+            <div className='mp-project-footer'>
+
+            </div>
+            <Button
+                size='small'
+                variant="outlined"
+                sx={{marginTop: '30px'}}
+                onClick={handleCreateProject}
+              >
+                Selecionar
+              </Button>
+          </div>
+          <div style={{backgroundColor: 'white'}} className='mp-project-card' >
+            <div className='mp-project-header'>
+              <h1>Premiação de Mestres E Mestras</h1>
+              
+              <span className={`mp-status`}>
+                {
+                  storageUserDetails ? (
+                    (storageUserDetails.idCidade == 3798) ? (
+                      <p>Disponível</p>
+                    ) : (
+                      <p>Não Qualificado</p>
+                    )
+                  ) : (
+                    <p>Carregando...</p>
+                  )
+                }
+              </span>
+            </div>
+            <div className='mp-project-body'>
+              <p><strong>O objeto deste Edital é a Premiação de Mestres e Mestras e Grupos e Coletivos das Culturas Tradicionais e Populares que tenham prestado relevante contribuição ao desenvolvimento artístico ou cultural do Município.</strong></p>
+              <a href='https://criarte.s3.us-east-2.amazonaws.com/documents/santa-rita-p4/edital-mestres-e-mestras/EDITAL-MESTRES-E-MESTRAS-PNAB-2024-assinado.pdf' target='_blank'>LER OBJETO DO EDITAL</a>
+            </div>
+            <div className='mp-project-footer'>
+
+            </div>
+            <Button
+                size='small'
+                variant="outlined"
+                sx={{marginTop: '30px'}}
+                disabled={storageUserDetails && storageUserDetails.idCidade != 3798}
+                onClick={handleCreateProject2}
+              >
+                Selecionar
+              </Button>
+          </div>
+
         </div>
       </div>
 
@@ -314,24 +377,6 @@ const MeusProjetos = () => {
           </Button>
         </DialogActions>
       </Dialog>
-
-      <style jsx>{`
-        @keyframes blinking-shadow {
-          0% {
-            box-shadow: none;
-          }
-          50% {
-            box-shadow: 0 0 10px 5px white;
-          }
-          100% {
-            box-shadow: none;
-          }
-        }
-
-        .blinking-shadow {
-          animation: blinking-shadow 1.5s infinite;
-        }
-      `}</style>
     </div>
   );
 };

@@ -1,23 +1,17 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import Link from 'next/link';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 const Register = () => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [city, setCity] = useState('');
+  const [cityOpen, setCityOpen] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e) => {
@@ -40,7 +34,7 @@ const Register = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ usuario: email, senha: password, idCidade: '3357' }),
+        body: JSON.stringify({ usuario: email, senha: password, idCidade: city }),
       });
 
       if (!response.ok) {
@@ -60,6 +54,18 @@ const Register = () => {
       console.error('Erro no cadastro:', error.message);
       alert('Falha no cadastro: ' + error.message);
     }
+  };
+
+  const handleChange = (event) => {
+    setCity(event.target.value);
+  };
+
+  const handleCloseCity = () => {
+    setCityOpen(false);
+  };
+
+  const handleOpenCity = () => {
+    setCityOpen(true);
   };
 
   return (
@@ -96,32 +102,35 @@ const Register = () => {
             />
           </div>
           <div className='selecao-cidade'>
-            <Button
-              id="basic-button"
-              aria-controls={open ? 'basic-menu' : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? 'true' : undefined}
-              onClick={handleClick}
-            >
-              Selecionar cidade
-            </Button>
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              MenuListProps={{
-                'aria-labelledby': 'basic-button',
-              }}
-            >
-              <MenuItem onClick={handleClose}>3357 - Brodowski</MenuItem>
-            </Menu>
+            <FormControl sx={{ m: 1, minWidth: "100%", marginLeft: 'auto', marginRight: 'auto' }}>
+              <InputLabel id="demo-controlled-open-select-label">Cidade</InputLabel>
+              <Select
+                labelId="demo-controlled-open-select-label"
+                id="demo-controlled-open-select"
+                open={cityOpen}
+                onClose={handleCloseCity}
+                onOpen={handleOpenCity}
+                value={city}
+                label="Cidade"
+                required
+                onChange={handleChange}
+              >
+                <MenuItem value="">
+                  <em>Nenhuma</em>
+                </MenuItem>
+                <MenuItem value="3357">Brodowski</MenuItem>
+                <MenuItem value="3798">Santa Rita do Passa Quatro</MenuItem>
+                <MenuItem value="3842">Serrana</MenuItem>
+                <MenuItem value="3716">Pontal</MenuItem>
+                <MenuItem value="3478">Guariba</MenuItem>
+                <MenuItem value="3823">São José do Rio Pardo</MenuItem>
+              </Select>
+            </FormControl>
           </div>
           <div className="button-container">
-            <Link href="/login" passHref>
-              <button className="login-button" type="button">Logar</button>
-            </Link>
-            <button className="register-button" type="submit">Cadastrar</button>
+            <Button variant="contained" type="submit">
+              Cadastrar
+            </Button>
           </div>
         </form>
       </div>

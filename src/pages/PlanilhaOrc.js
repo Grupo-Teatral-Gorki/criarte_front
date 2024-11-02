@@ -140,7 +140,7 @@ const DocumentUploadForm = () => {
                   <UploadBox>
                     <Typography variant="body2" sx={{ mb: 1 }}>Selecione o arquivo aqui</Typography>
                     {file && <p>{file.name}</p>}
-                    <Typography variant="caption" sx={{ mb: 2, display: 'block' }}>Arquivos Suportados: PDF, TEXT, DOC, DOCX</Typography>
+                    <Typography variant="caption" sx={{ mb: 2, display: 'block' }}>Arquivos Suportados: PDF</Typography>
                     <input
                       type="file"
                       onChange={handleFileChange}

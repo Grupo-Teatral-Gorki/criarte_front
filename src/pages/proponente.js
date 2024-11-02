@@ -4,7 +4,6 @@ import NewProponentForm from './NovoProponente';
 import Header from '../components/Header/Header';
 import PrivateRoute from '../components/PrivateRoute';
 import Checkbox from '@mui/material/Checkbox';
-//import './Proponente.css';
 
 const Proponente = () => {
   const [openList, setOpenList] = useState(false);
@@ -17,26 +16,37 @@ const Proponente = () => {
   useEffect(() => {
     const fetchProponentes = async () => {
       setLoading(true);
-      const url = `https://api.grupogorki.com.br/api/proponentes/getProponentesByUser`;
+      const url = `https://gorki-fix-proponente.iglgxt.easypanel.host/api/getProponenteByUser`;
       const token = localStorage.getItem('authToken');
+      const userDetails = localStorage.getItem('userDetails');
+      const parsedUserDetails = userDetails ? JSON.parse(userDetails) : null;
+      const idUsuario = parsedUserDetails ? parsedUserDetails.id : null;
+
+      if (!idUsuario) {
+        console.error('ID de usuário não encontrado em localStorage');
+        setError('Erro ao encontrar o usuário.');
+        setLoading(false);
+        setIsLoading(false);
+        return;
+      }
 
       try {
         const response = await fetch(url, {
-          method: "GET",
+          method: "POST",
           headers: {
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
           },
+          body: JSON.stringify({ idUsuario }),
         });
 
         if (!response.ok) {
           throw new Error('Nenhum proponente encontrado');
         }
 
-
         const data = await response.json();
         console.log("Dados recebidos com sucesso:", data);
-        setProponentes(data);
+        setProponentes(data.proponentes);
       } catch (error) {
         console.error("Erro ao receber os proponentes:", error);
         setError(error.message);
@@ -49,33 +59,7 @@ const Proponente = () => {
     fetchProponentes();
   }, []);
 
-  const handleOpenList = async () => {
-    setIsLoading(true);
-    const url = `https://api.grupogorki.com.br/api/proponentes/getProponentesByUser`;
-    const token = localStorage.getItem('authToken');
-
-    try {
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('Nenhum proponente encontrado');
-      }
-
-      const data = await response.json();
-      console.log("Dados recebidos com sucesso:", data);
-      setProponentes(data);
-    } catch (error) {
-      console.error("Erro ao receber os proponentes:", error);
-      setError(error.message);
-    } finally {
-      setIsLoading(false);
-    }
+  const handleOpenList = () => {
     setOpenList(true);
   };
 
@@ -91,6 +75,54 @@ const Proponente = () => {
     setOpenForm(false);
   };
 
+  const handleSelectProponente = async (idProponente) => {
+    setLoading(true);
+    const url = `https://gorki-fix-proponente.iglgxt.easypanel.host/api/selectProponente`;
+    const token = localStorage.getItem('authToken');
+    const userDetails = localStorage.getItem('userDetails');
+    const parsedUserDetails = userDetails ? JSON.parse(userDetails) : null;
+    const idUsuario = parsedUserDetails ? parsedUserDetails.id : null;
+
+    if (!idUsuario) {
+      console.error('ID de usuário não encontrado em localStorage');
+      setError('Erro ao encontrar o usuário.');
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id_proponente: idProponente, id_usuario: idUsuario }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao selecionar o proponente');
+      }
+
+      const data = await response.json();
+      console.log("Proponente selecionado com sucesso:", data);
+
+      setProponentes(prevProponentes =>
+        prevProponentes.map(proponente =>
+          proponente.id_proponente === idProponente
+            ? { ...proponente, is_selected: true }
+            : { ...proponente, is_selected: false }
+        )
+      );
+
+    } catch (error) {
+      console.error("Erro ao selecionar o proponente:", error);
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div>
       <PrivateRoute>
@@ -98,9 +130,8 @@ const Proponente = () => {
         <div className="proponente-container">
           <h1>Proponente</h1>
           <div className="proponente-content">
-            <Alert sx={{ marginBottom: '15px' }} severity="info">Cadastre 1 proponente por login</Alert>
             <div className="proponente-info">
-            <p>1. Selecione o(a) proponente (Pessoa Física)</p>
+              <p>1. Selecione o(a) proponente (Pessoa Física ou Jurídica)</p>
               <p>2. Este proponente pode ter até <b>1</b> projeto(s) em andamento neste edital. Certifique-se de que o proponente selecionado possui vagas para iniciar o cadastramento.</p>
             </div>
             <DialogContent className='proponentes' dividers>
@@ -110,24 +141,43 @@ const Proponente = () => {
                 <Alert variant='outlined' severity="info">{error}</Alert>
               ) : (
                 proponentes.map((proponente) => (
-                  <div key={proponente.idProponente} className='proponente-unity'>
-                    <div className='checkbox-container'>
-                      <Checkbox disabled checked sx={{ color: "blue" }} />
-                    </div>
+                  <div key={proponente.id_proponente} className='proponente-unity'>
+                    <Checkbox
+                      checked={proponente.is_selected}
+                      onChange={() => handleSelectProponente(proponente.id_proponente)}
+                      sx={{ color: "blue" }}
+                    />
                     <div className='info'>
-                      <Typography variant="subtitle1" className='name'>
-                        NOME: {proponente.responsavelLegal}
-                        <div className='type'>Tipo: Pessoa Física</div>
+                      <Typography>
+                        NOME: {
+                          (proponente.razao_social && proponente.razao_social !== "off") ?
+                            proponente.razao_social :
+                            (proponente.responsavel_legal && proponente.responsavel_legal !== "off") ?
+                              proponente.responsavel_legal :
+                              "Indisponível"
+                        }
+                        <div className='type'>
+                          Tipo: {proponente.cpf_responsavel ? "Pessoa Física" : "Pessoa Jurídica"}
+                        </div>
                       </Typography>
                       <Typography variant="body2" className='details'>
-                        CPF: ***.***.***-{proponente.cpfResponsavel[9]}{proponente.cpfResponsavel[10]} | Email: {proponente.email}
+                        {proponente.cpf_responsavel ? (
+                          <>CPF: ***.***.***-{proponente.cpf_responsavel.slice(-2)}</>
+                        ) : proponente.cnpj ? (
+                          <>CNPJ: **.***.***/{proponente.cnpj.slice(-4)}</>
+                        ) : (
+                          <>Documento não disponível</>
+                        )}
+                        | Email: {proponente.email}
+                      </Typography>
+                      <Typography variant="body2" className='details'>
+                        Endereço: {proponente.logradouro_responsavel}, {proponente.numero_responsavel}, {proponente.complemento_responsavel || ''}, {proponente.bairro_responsavel}, {proponente.cidade_responsavel}/{proponente.uf_responsavel}
                       </Typography>
                     </div>
                   </div>
                 ))
               )}
             </DialogContent>
-            <div className="proponente-selection"></div>
             <div className="proponente-actions">
               <a href='/pnab/projeto'>
                 <Button className="back-button" variant="outlined">Voltar para o projeto</Button>
@@ -137,7 +187,6 @@ const Proponente = () => {
               </Button>
             </div>
           </div>
-
           <Dialog open={openList} onClose={handleCloseList} maxWidth="sm" fullWidth>
             <DialogTitle>Lista de proponentes</DialogTitle>
             <DialogContent className='proponentes' dividers>
@@ -147,16 +196,29 @@ const Proponente = () => {
                 <Alert variant='outlined' severity="info">{error}</Alert>
               ) : (
                 proponentes.map((proponente) => (
-                  <div key={proponente.idProponente} className='proponente-unity'>
-                    <Checkbox disabled checked sx={{ display: 'flex', justifyContent: 'right', color: "blue" }} />
-                    <div style={{ marginBottom: "16px" }}>
-                      <Typography variant="subtitle1">
-                        NOME: {proponente.responsavelLegal} <div>Tipo: Pessoa Física</div>
-                      </Typography>
-                      <Typography variant="body2">
-                        CPF: ***.***.***-{proponente.cpfResponsavel[9]}{proponente.cpfResponsavel[10]} | Email: {proponente.email}
-                      </Typography>
-                    </div>
+                  <div key={proponente.id_proponente} className='proponente-unity'>
+                    <Checkbox
+                      checked={proponente.is_selected}
+                      onChange={() => handleSelectProponente(proponente.id_proponente)}
+                      sx={{ color: "blue" }}
+                    />
+                    <Typography variant="subtitle1">
+                      NOME: {proponente.razao_social || proponente.responsavel_legal || "Não disponível"}
+                      <div>Tipo: {proponente.cpf_responsavel ? "Pessoa Física" : "Pessoa Jurídica"}</div>
+                    </Typography>
+                    <Typography variant="body2">
+                      {proponente.cpf_responsavel ? (
+                        <>CPF: ***.***.***-{proponente.cpf_responsavel.slice(-2)}</>
+                      ) : proponente.cnpj ? (
+                        <>CNPJ: **.***.***/{proponente.cnpj.slice(-4)}</>
+                      ) : (
+                        <>Documento não disponível</>
+                      )}
+                      | Email: {proponente.email}
+                    </Typography>
+                    <Typography variant="body2">
+                      Endereço: {proponente.logradouro_responsavel}, {proponente.numero_responsavel}, {proponente.complemento_responsavel || ''}, {proponente.bairro_responsavel}, {proponente.cidade_responsavel}/{proponente.uf_responsavel}
+                    </Typography>
                   </div>
                 ))
               )}
@@ -166,10 +228,8 @@ const Proponente = () => {
               <Button variant="contained" color="primary" onClick={handleOpenForm}>Adicionar novo proponente</Button>
             </DialogActions>
           </Dialog>
-
           <NewProponentForm open={openForm} handleClose={handleCloseForm} />
         </div>
-
       </PrivateRoute>
     </div>
   );

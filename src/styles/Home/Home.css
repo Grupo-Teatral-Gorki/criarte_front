@@ -1,0 +1,15 @@
+.cityIdentifierContainer{
+    display: flex;
+    justify-content: space-between;
+    background-color: white;
+    height: 30px;
+    
+}
+
+.cityIdentifierContainer p{
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 20px;
+    margin-right: 20px;
+    color: gray;
+}

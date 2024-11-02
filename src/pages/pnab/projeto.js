@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { CircularProgress, Alert, Button, Typography, Card, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { CircularProgress, Alert, Button, Typography, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import Link from 'next/link';
 import PrivateRoute from '../../components/PrivateRoute';
 import Header from '../../components/Header/Header';
@@ -12,91 +12,198 @@ function PnabHomeForms() {
   const [openSubmitDialog, setOpenSubmitDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [canSubmit, setCanSubmit] = useState(false); // Nova lógica de submissão
+  const [canSubmit, setCanSubmit] = useState(false);
+  const [projectName, setProjectName] = useState('');
+  const [storageUserDetails, setStorageUserDetails] = useState(null);
+  const [idEdital, setIdEdital] = useState(null);
   const router = useRouter();
+  const [projeto, setProjeto] = useState({ status: '' });
+  const [hasProponent, setHasProponent] = useState(false);
+  const [statusProjeto, setStatusProjeto] = useState('');
+  const deadline = new Date('2024-12-31T23:59:59');
 
   useEffect(() => {
     const storedNumeroInscricao = localStorage.getItem('numeroInscricao');
+    const storedProjectName = localStorage.getItem('projectName');
     const now = new Date();
-    const deadline = new Date('2024-08-21T23:59:00'); // Data limite de inscrição
+
+    const checkProponents = async () => {
+      const token = localStorage.getItem('authToken');
+      const url = 'https://gorki-fix-proponente.iglgxt.easypanel.host/api/getProponenteByUser';
+      // Obtém o valor do localStorage para userDetails e converte para objeto
+      const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+
+      // Acessa o id do usuário, se userDetails existir
+      const userId = userDetails ? userDetails.id : null;
+
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            idUsuario: userId,
+          })
+        });
+
+        const data = await response.json();
+        if (response.ok && data.proponentes && data.proponentes.length > 0) {
+          setHasProponent(true); // Habilita o envio do projeto
+        } else {
+          setError('Nenhum proponente cadastrado.');
+          setHasProponent(false); // Desabilita o envio do projeto
+        }
+      } catch (error) {
+        setError('Erro ao verificar proponentes. Tente novamente mais tarde.');
+      }
+    };
+
+    if (typeof window !== 'undefined') {
+      const userDetails = localStorage.getItem('userDetails');
+      if (userDetails) {
+        setStorageUserDetails(JSON.parse(userDetails));
+      }
+    }
 
     if (storedNumeroInscricao) {
       setNumeroInscricao(storedNumeroInscricao);
-      if (now > deadline) {
-        setCanSubmit(false); // Inscrições encerradas
+      if (storedProjectName) {
+        setProjectName(storedProjectName);
       }
-      setIsLoading(false);
+      if (now > deadline) {
+        setCanSubmit(false);
+      } else {
+        setCanSubmit(true);
+      }
+
+      const fetchResumoProjeto = async () => {
+        setIsLoading(true);
+
+        const url = `https://gorki-api-nome.iglgxt.easypanel.host/api/getProjeto`;
+        const token = localStorage.getItem('authToken');
+
+        try {
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              usuario: localStorage.getItem('userEmail'),
+              senha: localStorage.getItem('userPassword'),
+              numeroInscricao: storedNumeroInscricao,
+            })
+          });
+
+          if (!response.ok) {
+            throw new Error(`Erro na requisição: ${response.status} ${response.statusText}`);
+          }
+
+          const data = await response.json();
+          if (data.projeto) {
+            const projeto = data.projeto;
+            setProjeto(projeto);
+            setIdEdital(projeto.id_edital || '');
+            setProjectName(projeto.nome || '');
+            setStatusProjeto(projeto.status || '');
+          } else {
+            throw new Error('Projeto não encontrado.');
+          }
+        } catch (error) {
+          setError(error.message);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      fetchResumoProjeto();
+      checkProponents();  // Chamada da função para verificar proponentes
     } else {
       setError("Número de inscrição não encontrado.");
       setIsLoading(false);
     }
   }, []);
 
-  const handleOpenSubmitDialog = () => {
-    if (canSubmit) {
-      setOpenSubmitDialog(true);
-    } else {
-      alert('As inscrições foram encerradas. Você não pode mais enviar projetos.');
-    }
+  const handleProjectNameChange = (event) => {
+    setProjectName(event.target.value);
   };
 
-  const handleOpenDeleteDialog = () => {
-    setOpenDeleteDialog(true);
-  };
-
-  const handleCloseSubmitDialog = () => {
-    setOpenSubmitDialog(false);
-  };
-
-  const handleCloseDeleteDialog = () => {
-    setOpenDeleteDialog(false);
-  };
-
-  const handleSubmit = async () => {
-    setIsSubmitting(true);
+  const handleProjectNameBlur = async () => {
     try {
-      const response = await fetch('https://styxx-api.w3vvzx.easypanel.host/api/updateStatus', {
+      const response = await fetch('https://gorki-api-nome.iglgxt.easypanel.host/api/updateProjectName', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          usuario: localStorage.getItem('userEmail'),
-          senha: localStorage.getItem('userPassword'),
           idProjeto: numeroInscricao,
-          status: 'enviado',
+          novoNome: projectName,
         }),
       });
 
-      router.push('/meusProjetos');
+      if (!response.ok) {
+        throw new Error(`Erro ao atualizar o nome do projeto: ${response.status}`);
+      }
+
+      console.log('Nome do projeto atualizado com sucesso');
+      localStorage.setItem('projectName', projectName);
+    } catch (error) {
+      setError('Erro ao atualizar o nome do projeto. Tente novamente mais tarde.');
+    }
+  };
+
+  const handleOpenDeleteDialog = () => setOpenDeleteDialog(true);
+  const handleCloseDeleteDialog = () => setOpenDeleteDialog(false);
+
+  const handleOpenSubmitDialog = () => setOpenSubmitDialog(true);
+  const handleCloseSubmitDialog = () => setOpenSubmitDialog(false);
+
+  const handleDelete = async () => {
+    setIsSubmitting(true);
+    setIsSubmitting(false);
+  };
+
+  const handleSubmit = async () => {
+    if (!hasProponent) {
+      setError('Você deve cadastrar um proponente antes de enviar o projeto.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    const token = localStorage.getItem('authToken');
+    const url = 'https://gorki-fix-proponente.iglgxt.easypanel.host/api/submitProjeto';
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          numeroInscricao,
+          idEdital,
+          projectName,
+          usuario: localStorage.getItem('userEmail'),
+        })
+      });
 
       if (!response.ok) {
         throw new Error(`Erro ao enviar o projeto: ${response.status}`);
       }
 
-      console.log('Projeto enviado com sucesso');
+      alert("Projeto enviado com sucesso!");
+      setStatusProjeto('enviado');
     } catch (error) {
-      console.error('Erro ao enviar projeto:', error);
       setError('Erro ao enviar o projeto. Tente novamente mais tarde.');
     } finally {
       setIsSubmitting(false);
-      setOpenSubmitDialog(false);
     }
   };
 
-  const handleDelete = async () => {
-    setIsSubmitting(true);
-    try {
-      // Aqui você adicionaria a lógica para deletar o projeto.
-      console.log('Projeto excluído com sucesso');
-    } catch (error) {
-      console.error('Erro ao excluir projeto:', error);
-      setError('Erro ao excluir o projeto. Tente novamente mais tarde.');
-    } finally {
-      setIsSubmitting(false);
-      setOpenDeleteDialog(false);
-    }
-  };
 
   return (
     <div>
@@ -105,47 +212,130 @@ function PnabHomeForms() {
       <div className="app-container">
         <main className="main-content">
           <div className="project-header">
-            <Button variant="outlined" onClick={() => { router.push('/meusProjetos') }}>Voltar</Button>
             {isLoading ? (
-              <CircularProgress />
+              <CircularProgress />  // Exibe o spinner de carregamento enquanto a requisição está sendo feita
             ) : error ? (
               <Alert severity="error">{error}</Alert>
             ) : (
-              <Typography variant="subtitle1" className="project-id">
-                ID: {numeroInscricao}
-              </Typography>
+              <>
+                {/* Mostra apenas depois que o idEdital é definido */}
+                <Button variant="outlined" onClick={() => router.push('/meusProjetos')}>Voltar</Button>
+                <TextField
+                  sx={{ minWidth: "400px" }}
+                  id="standard-basic"
+                  label="Nome do projeto"
+                  required
+                  variant="standard"
+                  value={projectName}
+                  onChange={handleProjectNameChange}
+                  onBlur={handleProjectNameBlur}
+                  InputLabelProps={{
+                    sx: {
+                      left: '10px',
+                      top: '5px',
+                      textAlign: 'center',
+                    }
+                  }}
+                />
+                <Typography variant="subtitle1" className="project-id">
+                  ID: {numeroInscricao}
+                </Typography>
+              </>
             )}
           </div>
-          <Alert severity="warning">O período de inscrições para o envio de projetos foi encerrado. Não é possível enviar novos projetos.</Alert>
-          <Card className="project-details">
-            <Typography variant="h6">
-              Edital de Chamamento Público 001/2024 SMC
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              Pessoa Física
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              Inscrições de 27/06/2024 00:00 até 21/08/2024 23:59
-            </Typography>
-            <Link href="https://styxx-public.s3.sa-east-1.amazonaws.com/Editao%2BAnexos_BRO.pdf" target="_blank" rel="noopener">
-              Leia o objeto do edital
-            </Link>
-          </Card>
-          <div className="sections">
-            <Section title="Proponente" description="Selecione o proponente do projeto" link="../proponente" />
-            <Section title="Informações gerais do projeto" description="Informe o segmento, período previsto e o valor do projeto" link="/InformacoesGerais" />
-            <Section title="Planilha orçamentária" description="O valor total das despesas cadastradas deverá corresponder ao informado no orçamento." link="/PlanilhaOrc" />
-            <Section title="Ficha técnica" description="Você deve cadastrar o(a)s principais integrantes da ficha técnica do projeto." link="/FichaTecnicaForm" />
-            <Section title="Documentos do projeto e proponente" description="Importante! Só é possível anexar 01 (um) arquivo por item exigido. Caso necessário, reúna todos os ..." link="/DocumentForm" />
-          </div>
-          <div className="actions">
-            <Button variant="outlined" color="error" onClick={handleOpenDeleteDialog}>
-              Excluir projeto
-            </Button>
-            <Button sx={{ backgroundColor: '#1D4A5D', color: 'white' }}  disabled onClick={() => alert('O período de inscrições para o envio de projetos foi encerrado. Não foi possível completar o envio.')} variant="contained" color="primary">
-              Enviar projeto
-            </Button>
-          </div>
+
+          {!isLoading && idEdital !== null && storageUserDetails.idCidade !== null && (
+            <>
+              {idEdital === 2 ? (
+                <div className="sections">
+                  <div style={{
+                    backgroundColor: 'white',
+                    minHeight: '90px',
+                    display: 'flex',
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                    minWidth: '80%',
+                    borderRadius: '8px',
+                    boxShadow: 'rgba(0, 0, 0, 0.2) 0px 2px 1px -1px, rgba(0, 0, 0, 0.14) 0px 1px 1px 0px, rgba(0, 0, 0, 0.12) 0px 1px 3px 0px', // Sombra
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '10px',
+                  }}>
+                    <a href='https://criarte.s3.us-east-2.amazonaws.com/documents/santa-rita-p4/edital-mestres-e-mestras/EDITAL-MESTRES-E-MESTRAS-PNAB-2024-assinado.pdf' target='_blank'>LER OBJETO DO EDITAL</a>
+                    <p></p>
+                  </div>
+                  <Section title="Anexos" description="Anexe seus documentos aqui" link="/documentoPremiacao" />
+                  <Section title="Proponente" description="Selecione o proponente do projeto" link="../proponente" />
+
+                </div>
+              ) : storageUserDetails.idCidade === 3798 ? (
+                <div className="sections">
+                  <div style={{
+                    backgroundColor: 'white',
+                    minHeight: '90px',
+                    display: 'flex',
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                    minWidth: '80%',
+                    borderRadius: '8px',
+                    boxShadow: 'rgba(0, 0, 0, 0.2) 0px 2px 1px -1px, rgba(0, 0, 0, 0.14) 0px 1px 1px 0px, rgba(0, 0, 0, 0.12) 0px 1px 3px 0px', // Sombra
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '10px',
+                  }}>
+                    <a href='https://criarte.s3.us-east-2.amazonaws.com/public/Edital%2Bde%2BFomento-%2BSanta%2BRita-6-37.pdf' target='_blank'>LER OBJETO DO EDITAL</a>
+                    <p></p>
+                  </div>
+
+                  <Section title="Proponente" description="Selecione o proponente do projeto" link="../proponente" />
+                  <Section title="Informações gerais do projeto" description="Informe o segmento, período previsto e o valor do projeto" link="/InformacoesGerais" />
+                  <Section title="Documentos do projeto e proponente" description="Importante! Só é possível anexar 01 (um) arquivo por item exigido. Caso necessário, reúna todos os ..." link="/DocumentForm" />
+                  <Section title="Planilha orçamentária" description="O valor total das despesas cadastradas deverá corresponder ao informado no orçamento." link="/PlanilhaOrc" />
+                </div>
+              ) : (
+                <div className="sections">
+                  <div style={{
+                    backgroundColor: 'white',
+                    minHeight: '90px',
+                    display: 'flex',
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                    minWidth: '80%',
+                    borderRadius: '8px',
+                    boxShadow: 'rgba(0, 0, 0, 0.2) 0px 2px 1px -1px, rgba(0, 0, 0, 0.14) 0px 1px 1px 0px, rgba(0, 0, 0, 0.12) 0px 1px 3px 0px', // Sombra
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '10px',
+                  }}>
+                    <a href='https://criarte.s3.us-east-2.amazonaws.com/documents/edital/edital.pdf' target='_blank'>LER OBJETO DO EDITAL</a>
+                    <p></p>
+                  </div>
+
+                  <Section title="Proponente" description="Selecione o proponente do projeto" link="../proponente" />
+                  <Section title="Informações gerais do projeto" description="Informe o segmento, período previsto e o valor do projeto" link="/InformacoesGerais" />
+                  <Section title="Planilha orçamentária" description="O valor total das despesas cadastradas deverá corresponder ao informado no orçamento." link="/PlanilhaOrc" />
+                  <Section title="Ficha técnica" description="Você deve cadastrar o(a)s principais integrantes da ficha técnica do projeto." link="/FichaTecnicaForm" />
+                  <Section title="Documentos do projeto e proponente" description="Importante! Só é possível anexar 01 (um) arquivo por item exigido. Caso necessário, reúna todos os ..." link="/DocumentForm" />
+                </div>
+              )}
+
+              <div className="actions">
+                <Button variant="outlined" color="error" onClick={handleOpenDeleteDialog}>
+                  Excluir projeto
+                </Button>
+                <Button
+                  sx={{ backgroundColor: '#1D4A5D', color: 'white' }}
+                  onClick={handleSubmit}
+                  variant="contained"
+                  color="primary"
+                  disabled={statusProjeto === 'enviado'}
+                >
+                  Enviar projeto
+                </Button>
+              </div>
+            </>
+          )}
+
         </main>
       </div>
 
@@ -182,7 +372,7 @@ function PnabHomeForms() {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Tem certeza que deseja excluir este projeto? Esta ação não pode ser desfeita.
+            Após excluir o projeto, você não poderá recuperá-lo. Deseja continuar?
           </DialogContentText>
         </DialogContent>
         <DialogActions>

@@ -2,19 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Container, Grid, Typography, TextField, Button, Box, CircularProgress, Alert, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import Header from '../components/Header/Header';
 import PrivateRoute from '../components/PrivateRoute';
-require('dotenv').config();
+require('dotenv').config()
 
-const InformacoesGerais = () => {
+const SegmentoArtistico = () => {
   const [formData, setFormData] = useState({
-    resumo: '',
-    relevancia: '',
-    perfil: '',
-    expectativa: '',
-    contrapartida: '',
-    divulgacao: '',
-    democratizacao: '',
-    afirmativas: '',
-    local: '',
     outras: ''
   });
 
@@ -29,7 +20,7 @@ const InformacoesGerais = () => {
 
   const citySantaRitaId = 3798; // ID da cidade de Santa Rita Do Passa Quatro
 
-  // Buscar userID e idCidade ao montar o componente
+  // Fetch user ID and city ID on mount
   useEffect(() => {
     const storedUserDetails = localStorage.getItem('userDetails');
     const userDetails = JSON.parse(storedUserDetails);
@@ -37,7 +28,7 @@ const InformacoesGerais = () => {
     setUserCityId(userDetails ? userDetails.idCidade : null);
   }, []);
 
-  // Buscar numeroInscricao do localStorage e dados do projeto
+  // Fetch numeroInscricao from localStorage and project data
   useEffect(() => {
     const storedNumeroInscricao = localStorage.getItem('numeroInscricao');
     if (storedNumeroInscricao) {
@@ -48,35 +39,7 @@ const InformacoesGerais = () => {
     }
   }, []);
 
-
-  async function logError(erro, idUsuario) {
-    try {
-      const response = await fetch('https://gorki-fix-proponente.iglgxt.easypanel.host/api/logErro', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          erro: erro,
-          numeroProjeto: localStorage.getItem('numeroInscricao') || null, // Pode ser obtido do localStorage se disponível
-          idUsuario: idUsuario,
-        }),
-      });
-
-      if (!response.ok) {
-        console.error('Falha ao enviar log de erro:', response.statusText);
-      } else {
-        const logResponse = await response.json();
-        console.log('Log de erro registrado com sucesso:', logResponse);
-      }
-    } catch (logError) {
-      console.error('Erro ao tentar enviar log para a API:', logError);
-    }
-  }
-
   useEffect(() => {
-    const userDetails = localStorage.getItem('userDetails');
-    const parsedUserDetails = JSON.parse(userDetails);
-    const idUsuario = parsedUserDetails.id;
-
     if (numeroInscricao) {
       const fetchResumoProjeto = async () => {
         setIsLoading(true);
@@ -105,56 +68,46 @@ const InformacoesGerais = () => {
 
           if (data.projeto) {
             const projeto = data.projeto;
+
+            // Parse do campo descricao, que contém o JSON com "outras"
             let descricao = {};
 
             if (projeto.descricao) {
               try {
-                descricao = JSON.parse(projeto.descricao);
+                descricao = JSON.parse(projeto.descricao); // Converte a string JSON em objeto
               } catch (e) {
-                console.warn('Erro ao analisar descrição:', e);
+                console.error('Erro ao fazer o parse de descricao:', e);
               }
             }
 
-            setFormData({
-              resumo: projeto.resumo_projeto || '',
-              relevancia: descricao.relevancia || '',
-              perfil: descricao.perfil || '',
-              expectativa: descricao.expectativa || '',
-              contrapartida: descricao.contrapartida || '',
-              divulgacao: descricao.divulgacao || '',
-              democratizacao: descricao.democratizacao || '',
-              afirmativas: descricao.afirmativas || '',
-              local: descricao.local || '',
-              outras: descricao.outras || ''
-            });
+            // Atualiza o campo "outras" no formData com o valor extraído
+            setFormData((prevFormData) => ({
+              ...prevFormData,
+              outras: descricao.outras || '' // Pega "outras" de dentro de "descricao"
+            }));
 
+            // Set module and category based on project data
             setModule(projeto.id_modalidade || '');
             setCategory(projeto.nome_modalidade || '');
-
-            // Atualiza as opções de categoria após definir o módulo
-            updateCategoryOptions(projeto.id_modalidade || '');
           } else {
             throw new Error('Projeto não encontrado.');
           }
         } catch (error) {
           setError(error.message);
-          await logError(error.message, idUsuario);
         } finally {
           setIsLoading(false);
         }
       };
 
       fetchResumoProjeto();
-    } else {
-      logError('Erro ao verificar o id do projeto', idUsuario);
-
     }
   }, [numeroInscricao]);
 
-  // Função para atualizar as opções de categoria
-  const updateCategoryOptions = (selectedModule) => {
+  useEffect(() => {
+    // Condicionar as opções de categorias com base no módulo selecionado e na cidade do usuário
     if (userCityId === citySantaRitaId) {
-      const santaRitaOptions = [
+      // As opções de categoria são as mesmas para todos os módulos
+      setCategoryOptions([
         'Artes visuais',
         'Artesanato',
         'Audiovisual',
@@ -165,26 +118,26 @@ const InformacoesGerais = () => {
         'Literatura',
         'Patrimônio',
         'Teatro'
-      ];
-      setCategoryOptions(santaRitaOptions);
+      ]);
     } else {
-      if (selectedModule === 1) {
+      // Regras para outras cidades
+      if (module === '1') {
         setCategoryOptions([
-          'PRODUÇÃO DE EVENTOS',
-          'ARTES PLÁSTICAS OU VISUAIS',
-          'EXPOSIÇÃO COLETIVA DE ARTESANATO',
-          'APRESENTAÇÃO TEATRAL',
-          'APRESENTAÇÃO DE DANÇA',
-          'CONTAÇÃO DE HISTÓRIAS',
-          'ATIVIDADES CULTURAIS VOLTADAS PARA A CULTURA AFRO-BRASILEIRA'
+          'Produção de eventos',
+          'Artes plásticas ou visuais',
+          'Exposição coletiva de artesanato',
+          'Apresentação teatral',
+          'Apresentação de dança',
+          'Contação de histórias',
+          'Atividades culturais voltadas para a cultura afro-brasileira'
         ]);
-      } else if (selectedModule === 2) {
+      } else if (module === '2') {
         setCategoryOptions([
-          'ATIVIDADES DE FORMAÇÃO VOLTADAS PARA ZONAS PERIFÉRICAS'
+          'Atividades de formação voltadas para zonas periféricas'
         ]);
       }
     }
-  };
+  }, [module, userCityId]);
 
   const handleChange = (e) => {
     setFormData({
@@ -194,10 +147,8 @@ const InformacoesGerais = () => {
   };
 
   const handleModuleChange = (event) => {
-    const selectedModule = event.target.value;
-    setModule(selectedModule);
-    setCategory(''); // Reseta categoria quando o módulo mudar
-    updateCategoryOptions(selectedModule); // Atualiza as opções de categoria
+    setModule(event.target.value);
+    setCategory(''); // Reseta a categoria quando o módulo muda
   };
 
   const handleCategoryChange = (event) => {
@@ -210,26 +161,13 @@ const InformacoesGerais = () => {
       return;
     }
 
-    const { resumo, ...rest } = formData;
-
     let userEmail = localStorage.getItem('userEmail');
     let userPassword = localStorage.getItem('userPassword');
 
-    // Cria o corpo da requisição com o formato correto
+    // Envio para atualizar o projeto
     const body = {
       idProjeto: numeroInscricao,
-      resumoProjeto: resumo,
-      descricao: {
-        relevancia: formData.relevancia,
-        perfil: formData.perfil,
-        expectativa: formData.expectativa,
-        contrapartida: formData.contrapartida,
-        divulgacao: formData.divulgacao,
-        democratizacao: formData.democratizacao,
-        afirmativas: formData.afirmativas,
-        local: formData.local,
-        outras: formData.outras
-      },
+      descricao: JSON.stringify(formData),
       idUsuario: userId,
     };
 
@@ -248,42 +186,36 @@ const InformacoesGerais = () => {
 
       if (response.ok) {
         alert('Projeto atualizado com sucesso!');
+        // Atualizar a modalidade após o projeto ser atualizado
+        const modalidadeData = {
+          usuario: userEmail,
+          senha: userPassword,
+          idModalidade: module,
+          nomeModalidade: category,
+          idProjeto: numeroInscricao
+        };
+
+        const modalidadeUrl = 'https://gorki-api-nome.iglgxt.easypanel.host/api/updateModalidade';
+
+        const modalidadeResponse = await fetch(modalidadeUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(modalidadeData)
+        });
+
+        if (modalidadeResponse.ok) {
+          console.log('Modalidade atualizada com sucesso!');
+        } else {
+          console.log('Erro ao atualizar a modalidade.');
+        }
       } else {
         alert('Erro ao atualizar o projeto.');
       }
     } catch (error) {
       console.error('Erro:', error);
       alert('Erro ao atualizar o projeto.');
-    }
-
-    // Envio para o endpoint de modalidade
-    const modalidadeData = {
-      usuario: userEmail,
-      senha: userPassword,
-      idModalidade: module,
-      nomeModalidade: category,
-      idProjeto: numeroInscricao
-    };
-
-    const modalidadeUrl = 'https://gorki-api-nome.iglgxt.easypanel.host/api/updateModalidade';
-
-    try {
-      const modalidadeResponse = await fetch(modalidadeUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(modalidadeData)
-      });
-
-      if (modalidadeResponse.ok) {
-        console.log('Modalidade atualizada com sucesso!');
-      } else {
-        console.log('Erro ao atualizar a modalidade.');
-      }
-    } catch (error) {
-      console.error('Erro:', error);
-      console.log('Erro ao atualizar a modalidade.');
     }
   };
 
@@ -295,7 +227,7 @@ const InformacoesGerais = () => {
           <Grid item>
             <a href='/pnab/projeto'><Button variant="outlined" color="primary">Voltar</Button></a>
           </Grid>
-          <h1 className='titulo-info'>Informações gerais do projeto</h1>
+          <h1 className='titulo-info'>Segmento artístico</h1>
 
           {isLoading ? (
             <CircularProgress />
@@ -305,20 +237,7 @@ const InformacoesGerais = () => {
             <Box border={1} borderRadius={4} padding={3} borderColor="grey.300" width="100%" maxWidth="800px" margin="0 auto">
               <Grid container spacing={2}>
                 {[
-                  { label: 'Resumo do projeto:', key: 'resumo' },
-                  { label: 'Relevância e pertinência:', key: 'relevancia' },
-                  { label: 'Perfil de público e classificação indicativa:', key: 'perfil' },
-                  { label: 'Expectativa da quantidade do público alcançado com o projeto:', key: 'expectativa' },
-                  { label: 'Detalhamento da proposta de contrapartida do projeto:', key: 'contrapartida' },
-                  { label: 'Plano de Divulgação:', key: 'divulgacao' },
-                  ...(JSON.parse(localStorage.getItem('userDetails')).idCidade === 3798
-                    ? [{ label: 'Medidas de democratização de acesso e acessibilidade', key: 'democratizacao' }]
-                    : [
-                      { label: 'Plano de Democratização:', key: 'democratizacao' },
-                      { label: 'Plano de ações afirmativas:', key: 'afirmativas' },
-                    ]),
-                  { label: 'Local de realização e justificativa da escolha do local', key: 'local' },
-                  { label: 'Outras Informações', key: 'outras' }
+                  { label: 'Segmento artístico do seu projeto', key: 'outras' },
                 ].map((field) => (
                   <Grid item xs={12} key={field.key}>
                     <Typography variant="body1" gutterBottom>{field.label}</Typography>
@@ -338,11 +257,9 @@ const InformacoesGerais = () => {
                   <FormControl fullWidth>
                     <InputLabel>Modalidade</InputLabel>
                     <Select value={module} onChange={handleModuleChange}>
-                      <MenuItem value={1}>Módulo 1</MenuItem>
-                      <MenuItem value={2}>Módulo 2</MenuItem>
-                      {JSON.parse(localStorage.getItem('userDetails')).idCidade !== 3842 && (
-                        <MenuItem value={3}>Módulo 3</MenuItem>
-                      )}
+                      <MenuItem value={1}>Módulo I</MenuItem>
+                      <MenuItem value={2}>Módulo II</MenuItem>
+                      <MenuItem value={3}>Módulo III</MenuItem>
                     </Select>
                   </FormControl>
                 </Grid>
@@ -350,29 +267,29 @@ const InformacoesGerais = () => {
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
                     <InputLabel>Categoria</InputLabel>
-                    <Select value={category} onChange={handleCategoryChange}>
+                    <Select value={category} onChange={handleCategoryChange} disabled={!module}>
                       {categoryOptions.map((option) => (
-                        <MenuItem key={option} value={option}>
-                          {option}
-                        </MenuItem>
+                        <MenuItem key={option} value={option}>{option}</MenuItem>
                       ))}
                     </Select>
                   </FormControl>
                 </Grid>
 
-                <Grid item xs={12} style={{ marginTop: '20px' }}>
-                  <Button variant="contained" color="primary" onClick={handleSubmit}>
-                    Atualizar Informações
-                  </Button>
+                <Grid item xs={12} container justifyContent="center" spacing={2}>
+                  <Grid item>
+                    <a href='/pnab/projeto'><Button variant="outlined" color="primary">Voltar</Button></a>
+                  </Grid>
+                  <Grid item>
+                    <Button variant="contained" color="primary" onClick={handleSubmit}>Salvar</Button>
+                  </Grid>
                 </Grid>
               </Grid>
             </Box>
           )}
-
         </Container>
       </PrivateRoute>
     </div>
   );
 };
 
-export default InformacoesGerais;
+export default SegmentoArtistico;

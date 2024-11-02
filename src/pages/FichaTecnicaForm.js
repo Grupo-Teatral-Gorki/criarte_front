@@ -80,19 +80,21 @@ const FichaTecnicaForm = () => {
 
   const handleAddIntegrante = async () => {
     if (nome.trim() && tipoPessoa.trim() && funcao.trim() && (cpf.trim() || cnpj.trim())) {
-      const url = `https://styxx-api.w3vvzx.easypanel.host/api/setIntegrante`;
+      const url = `https://gorki-fix-proponente.iglgxt.easypanel.host/api/setIntegrante`;
       const token = localStorage.getItem('authToken');
-
+  
       const newIntegrante = {
         usuario: localStorage.getItem('userEmail'),
         senha: localStorage.getItem('userPassword'),
-        cpfIntegrante: cpf.trim(),
-        nomeIntegrante: nome.trim(),
-        numeroInscricao: parseInt(localStorage.getItem('numeroInscricao')),
-        funcaoIntegrante: funcao.trim(),
-        tipoIntegrante: tipoPessoa
+        cpf: tipoPessoa === 'F' ? cpf.trim() : null,
+        nome_completo: nome.trim(),
+        id_projeto: parseInt(localStorage.getItem('numeroInscricao')),
+        funcao: funcao.trim(),
+        tipo_pessoa: tipoPessoa,
+        cnpj: tipoPessoa === 'J' ? cnpj.trim() : null
       };
-
+      
+  
       try {
         const response = await fetch(url, {
           method: "POST",
@@ -102,12 +104,11 @@ const FichaTecnicaForm = () => {
           },
           body: JSON.stringify(newIntegrante)
         });
-
+  
         if (response.ok) {
           const result = await response.json();
           console.log('Integrante adicionado:', result);
-          setIntegrantes([...integrantes, { ...newIntegrante, id: result.id }]); // Adiciona o ID ao novo integrante
-
+          setIntegrantes([...integrantes, { ...newIntegrante, id: result.id }]);
           router.reload();
         } else {
           const errorData = await response.json();
@@ -118,15 +119,17 @@ const FichaTecnicaForm = () => {
         console.error('Erro:', error);
         alert('Erro ao adicionar integrante.');
       }
-
+  
+      // Limpa os campos após o envio
       setNome('');
-      setTipoPessoa('F');
+      setTipoPessoa('');
       setFuncao('');
       setCpf('');
-      setCnpj(null);
+      setCnpj('');
       setShowAddForm(false);
     }
   };
+  
 
   const handleShowAddForm = () => {
     setShowAddForm(true);
@@ -151,36 +154,35 @@ const FichaTecnicaForm = () => {
   };
 
   const handleDeleteIntegrante = async (id) => {
-    const url = `https://styxx-api.w3vvzx.easypanel.host/api/deleteIntegrante`;
-    const token = localStorage.getItem('authToken');
+    if (window.confirm("Tem certeza que deseja excluir este integrante?")) {
+      const url = `https://gorki-fix-proponente.iglgxt.easypanel.host/api/deleteIntegrante`;
 
-    const deleteRequest = {
-      usuario: localStorage.getItem('userEmail'),
-      senha: localStorage.getItem('userPassword'),
-      id: id
-    };
+      const deleteRequest = {
+        usuario: localStorage.getItem('userEmail'),
+        senha: localStorage.getItem('userPassword'),
+        id: id
+      };
 
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(deleteRequest),
-      });
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(deleteRequest),
+        });
 
-      if (response.ok) {
-        console.log('Integrante excluído com sucesso');
-        setIntegrantes(integrantes.filter(integrante => integrante.id !== id));
-      } else {
-        const errorData = await response.json();
-        console.error('Erro ao excluir integrante:', errorData);
+        if (response.ok) {
+          setIntegrantes(integrantes.filter(integrante => integrante.id !== id));
+        } else {
+          const errorData = await response.json();
+          console.error('Erro ao excluir integrante:', errorData);
+          alert('Erro ao excluir integrante.');
+        }
+      } catch (error) {
+        console.error('Erro:', error);
         alert('Erro ao excluir integrante.');
       }
-    } catch (error) {
-      console.error('Erro:', error);
-      alert('Erro ao excluir integrante.');
     }
   };
 
@@ -266,6 +268,8 @@ const FichaTecnicaForm = () => {
                       label="Tipo de pessoa"
                     >
                       <MenuItem value="F">Pessoa Física</MenuItem>
+                      <MenuItem value="J">Pessoa Jurídica</MenuItem>
+
                     </Select>
                   </FormControl>
                   <TextField

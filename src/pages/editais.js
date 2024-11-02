@@ -58,8 +58,8 @@ const EditaisPage = () => {
                         <section className="card-direita">
                             <img src='https://styxx-public.s3.sa-east-1.amazonaws.com/pnab-logo.png' alt="Logo PNAB" />
 
-                            <div className="card-content">
-                                <p className="desc">A Prefeitura Municipal de Brodowski torna público o Edital de Seleção Pública, em
+                            <div style={{minWidth: '500px'}} className="card-content">
+                                <p style={{minWidth: '500px'}} className="desc">A Prefeitura Municipal de Brodowski torna público o Edital de Seleção Pública, em
                                     atendimento à Lei Federal nº 14.399, de 08 de julho de 2022, regulamentada pelo Decreto
                                     Federal nº 11.740, de 18 de outubro de 2023, observando-se suas normas legais vigentes,
                                     regulamentares e pertinentes, além das condições expressas no conteúdo e anexos do
