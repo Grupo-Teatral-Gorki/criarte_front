@@ -350,22 +350,7 @@ const InformacoesGerais = () => {
           ) : (
             <Box border={1} borderRadius={4} padding={3} borderColor="grey.300" width="100%" maxWidth="800px" margin="0 auto">
               <Grid container spacing={2}>
-                {[
-                  { label: 'Resumo do projeto:', key: 'resumo' },
-                  { label: 'Relevância e pertinência:', key: 'relevancia' },
-                  { label: 'Perfil de público e classificação indicativa:', key: 'perfil' },
-                  { label: 'Expectativa da quantidade do público alcançado com o projeto:', key: 'expectativa' },
-                  { label: 'Detalhamento da proposta de contrapartida do projeto:', key: 'contrapartida' },
-                  { label: 'Plano de Divulgação:', key: 'divulgacao' },
-                  ...(JSON.parse(localStorage.getItem('userDetails')).idCidade === 3798
-                    ? [{ label: 'Medidas de democratização de acesso e acessibilidade', key: 'democratizacao' }]
-                    : [
-                      { label: 'Plano de Democratização:', key: 'democratizacao' },
-                      { label: 'Plano de ações afirmativas:', key: 'afirmativas' },
-                    ]),
-                  { label: 'Local de realização e justificativa da escolha do local', key: 'local' },
-                  { label: 'Outras Informações', key: 'outras' }
-                ].map((field) => (
+                {CheckLabels().map((field) => (
                   <Grid item xs={12} key={field.key}>
                     <Typography variant="body1" gutterBottom>{field.label}</Typography>
                     <TextField
