@@ -18,7 +18,7 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 
 const NewProponentForm = ({ open, handleClose }) => {
   const [loading, setLoading] = useState(false);
@@ -44,8 +44,8 @@ const NewProponentForm = ({ open, handleClose }) => {
   const [nomeFantasia, setNomeFantasia] = useState("");
   const [tipoCadastro, setTipoCadastro] = useState("PF"); // Novo estado para controlar o tipo de cadastro
   const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
-  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  const [snackbarMessage, setSnackbarMessage] = useState("");
   const [errors, setErrors] = useState({});
   const router = useRouter();
 
@@ -62,7 +62,7 @@ const NewProponentForm = ({ open, handleClose }) => {
       if (!cpf.trim()) newErrors.cpf = true;
       if (!rg.trim()) newErrors.rg = true;
       if (!dataNascimento.trim()) newErrors.dataNascimento = true;
-    } 
+    }
     // Validação para Pessoa Jurídica ou Cooperativa
     else {
       if (!razaoSocial.trim()) newErrors.razaoSocial = true;
@@ -81,26 +81,54 @@ const NewProponentForm = ({ open, handleClose }) => {
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      setSnackbarSeverity('error');
-      setSnackbarMessage('Por favor, preencha todos os campos obrigatórios.');
+      setSnackbarSeverity("error");
+      setSnackbarMessage("Por favor, preencha todos os campos obrigatórios.");
       setOpenSnackbar(true);
       return;
     }
 
     setLoading(true);
     const url = `https://api.grupogorki.com.br/api/proponentes/createProponente`;
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem("authToken");
 
     try {
-      const body = tipoCadastro === "PF" 
-        ? {
-          nomeCompleto, cpf, rg, nomeSocial, dataNascimento, email, celular, telefoneFixo, telefoneOutro,
-          cepResponsavel, logradouroResponsavel, numeroResponsavel, complementoResponsavel, bairroResponsavel, cidadeResponsavel, ufResponsavel
-        }
-        : {
-          razaoSocial, cnpj, nomeFantasia, webSite, email, celular, telefoneFixo, telefoneOutro,
-          cepResponsavel, logradouroResponsavel, numeroResponsavel, complementoResponsavel, bairroResponsavel, cidadeResponsavel, ufResponsavel
-        };
+      const body =
+        tipoCadastro === "PF"
+          ? {
+              nomeCompleto,
+              cpf,
+              rg,
+              nomeSocial,
+              dataNascimento,
+              email,
+              celular,
+              telefoneFixo,
+              telefoneOutro,
+              cepResponsavel,
+              logradouroResponsavel,
+              numeroResponsavel,
+              complementoResponsavel,
+              bairroResponsavel,
+              cidadeResponsavel,
+              ufResponsavel,
+            }
+          : {
+              razaoSocial,
+              cnpj,
+              nomeFantasia,
+              webSite,
+              email,
+              celular,
+              telefoneFixo,
+              telefoneOutro,
+              cepResponsavel,
+              logradouroResponsavel,
+              numeroResponsavel,
+              complementoResponsavel,
+              bairroResponsavel,
+              cidadeResponsavel,
+              ufResponsavel,
+            };
 
       const response = await fetch(url, {
         method: "PUT",
@@ -112,8 +140,8 @@ const NewProponentForm = ({ open, handleClose }) => {
       });
 
       if (response.ok) {
-        setSnackbarSeverity('success');
-        setSnackbarMessage('Proponente cadastrado com sucesso!');
+        setSnackbarSeverity("success");
+        setSnackbarMessage("Proponente cadastrado com sucesso!");
         setOpenSnackbar(true);
         setTimeout(() => {
           setOpenSnackbar(false);
@@ -134,15 +162,36 @@ const NewProponentForm = ({ open, handleClose }) => {
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
       <DialogTitle>Novo proponente</DialogTitle>
-      <Alert sx={{ marginBottom: '15px', marginLeft: '20px', marginRight: '20px' }} variant="filled" severity="info">
+      <Alert
+        sx={{ marginBottom: "15px", marginLeft: "20px", marginRight: "20px" }}
+        variant="filled"
+        severity="info"
+      >
         Cadastre 1 proponente por login
       </Alert>
 
       <DialogContent>
-        <RadioGroup row value={tipoCadastro} onChange={handleTipoCadastroChange} name="proponentType">
-          <FormControlLabel value="PF" control={<Radio />} label="Pessoa Física" />
-          <FormControlLabel value="PJ" control={<Radio />} label="Pessoa Jurídica" />
-          <FormControlLabel value="Cooperativa" control={<Radio />} label="Cooperativa" />
+        <RadioGroup
+          row
+          value={tipoCadastro}
+          onChange={handleTipoCadastroChange}
+          name="proponentType"
+        >
+          <FormControlLabel
+            value="PF"
+            control={<Radio />}
+            label="Pessoa Física"
+          />
+          <FormControlLabel
+            value="PJ"
+            control={<Radio />}
+            label="Pessoa Jurídica"
+          />
+          <FormControlLabel
+            value="Cooperativa"
+            control={<Radio />}
+            label="Cooperativa"
+          />
         </RadioGroup>
         <Snackbar open={openSnackbar} autoHideDuration={2000}>
           <Alert severity={snackbarSeverity}>{snackbarMessage}</Alert>
@@ -153,7 +202,9 @@ const NewProponentForm = ({ open, handleClose }) => {
           {tipoCadastro === "PF" && (
             <>
               <Grid item xs={12}>
-                <Typography variant="h6" mt={3} mb={1}>Dados pessoais</Typography>
+                <Typography variant="h6" mt={3} mb={1}>
+                  Dados pessoais
+                </Typography>
               </Grid>
               <Grid item xs={12} md={6}>
                 <TextField
@@ -197,7 +248,9 @@ const NewProponentForm = ({ open, handleClose }) => {
                   onChange={(e) => setDataNascimento(e.target.value)}
                   required
                   error={errors.dataNascimento}
-                  helperText={errors.dataNascimento && "Este campo é obrigatório"}
+                  helperText={
+                    errors.dataNascimento && "Este campo é obrigatório"
+                  }
                 />
               </Grid>
             </>
@@ -207,7 +260,9 @@ const NewProponentForm = ({ open, handleClose }) => {
           {tipoCadastro !== "PF" && (
             <>
               <Grid item xs={12}>
-                <Typography variant="h6" mt={3} mb={1}>Dados da empresa</Typography>
+                <Typography variant="h6" mt={3} mb={1}>
+                  Dados da empresa
+                </Typography>
               </Grid>
               <Grid item xs={12} md={6}>
                 <TextField
@@ -255,7 +310,9 @@ const NewProponentForm = ({ open, handleClose }) => {
 
           {/* Campos comuns para ambos os tipos */}
           <Grid item xs={12}>
-            <Typography variant="h6" mt={3} mb={1}>Informações de contato</Typography>
+            <Typography variant="h6" mt={3} mb={1}>
+              Informações de contato
+            </Typography>
           </Grid>
           <Grid item xs={12} md={6}>
             <TextField
@@ -297,7 +354,9 @@ const NewProponentForm = ({ open, handleClose }) => {
           </Grid>
 
           <Grid item xs={12}>
-            <Typography variant="h6" mt={3} mb={1}>Endereço do responsável</Typography>
+            <Typography variant="h6" mt={3} mb={1}>
+              Endereço do responsável
+            </Typography>
           </Grid>
           <Grid item xs={12} md={6}>
             <TextField
@@ -318,7 +377,9 @@ const NewProponentForm = ({ open, handleClose }) => {
               onChange={(e) => setLogradouroResponsavel(e.target.value)}
               required
               error={errors.logradouroResponsavel}
-              helperText={errors.logradouroResponsavel && "Este campo é obrigatório"}
+              helperText={
+                errors.logradouroResponsavel && "Este campo é obrigatório"
+              }
             />
           </Grid>
           <Grid item xs={12} md={3}>
@@ -329,7 +390,9 @@ const NewProponentForm = ({ open, handleClose }) => {
               onChange={(e) => setNumeroResponsavel(e.target.value)}
               required
               error={errors.numeroResponsavel}
-              helperText={errors.numeroResponsavel && "Este campo é obrigatório"}
+              helperText={
+                errors.numeroResponsavel && "Este campo é obrigatório"
+              }
             />
           </Grid>
           <Grid item xs={12} md={9}>
@@ -348,7 +411,9 @@ const NewProponentForm = ({ open, handleClose }) => {
               onChange={(e) => setBairroResponsavel(e.target.value)}
               required
               error={errors.bairroResponsavel}
-              helperText={errors.bairroResponsavel && "Este campo é obrigatório"}
+              helperText={
+                errors.bairroResponsavel && "Este campo é obrigatório"
+              }
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -359,7 +424,9 @@ const NewProponentForm = ({ open, handleClose }) => {
               onChange={(e) => setCidadeResponsavel(e.target.value)}
               required
               error={errors.cidadeResponsavel}
-              helperText={errors.cidadeResponsavel && "Este campo é obrigatório"}
+              helperText={
+                errors.cidadeResponsavel && "Este campo é obrigatório"
+              }
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -411,9 +478,11 @@ const NewProponentForm = ({ open, handleClose }) => {
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={handleClose} color="secondary">Cancelar</Button>
+        <Button onClick={handleClose} color="secondary">
+          Cancelar
+        </Button>
         <Button onClick={handleSaveChanges} color="primary" disabled={loading}>
-          {loading ? 'Salvando...' : 'Salvar'}
+          {loading ? "Salvando..." : "Salvar"}
         </Button>
       </DialogActions>
     </Dialog>

@@ -1,19 +1,19 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
-import { useRouter } from 'next/router';
-import Footer from '../components/Footer/Footer';
-import Button from '@mui/material/Button';
-import CircularProgress from '@mui/material/CircularProgress';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import Alert from '@mui/material/Alert';
-import Link from 'next/link';
+import React, { useState, useEffect, useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { useRouter } from "next/router";
+import Footer from "../components/Footer/Footer";
+import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import Alert from "@mui/material/Alert";
+import Link from "next/link";
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [ipInfo, setIpInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useContext(AuthContext);
@@ -22,18 +22,18 @@ const Login = () => {
 
   useEffect(() => {
     // Verificar se o usuário já aceitou os termos
-    const hasAcceptedTerms = localStorage.getItem('hasAcceptedTerms');
+    const hasAcceptedTerms = localStorage.getItem("hasAcceptedTerms");
     if (!hasAcceptedTerms) {
       setOpenDialog(true);
     }
 
     const fetchIpInfo = async () => {
       try {
-        const response = await fetch('https://api.ipify.org?format=json');
+        const response = await fetch("https://api.ipify.org?format=json");
         const data = await response.json();
         setIpInfo(data);
       } catch (error) {
-        console.error('Erro ao obter informações de IP:', error);
+        console.error("Erro ao obter informações de IP:", error);
       }
     };
 
@@ -45,8 +45,8 @@ const Login = () => {
     const platform = navigator.platform;
     const vendor = navigator.vendor;
     const language = navigator.language;
-    const deviceMemory = navigator.deviceMemory || 'unknown';
-    const hardwareConcurrency = navigator.hardwareConcurrency || 'unknown';
+    const deviceMemory = navigator.deviceMemory || "unknown";
+    const hardwareConcurrency = navigator.hardwareConcurrency || "unknown";
     const screenWidth = window.screen.width;
     const screenHeight = window.screen.height;
 
@@ -69,18 +69,21 @@ const Login = () => {
     const deviceInfo = getDeviceInfo();
     const fullInfo = {
       ...deviceInfo,
-      ip: ipInfo?.ip || 'IP not available'
+      ip: ipInfo?.ip || "IP not available",
     };
-    console.log('Device Info:', JSON.stringify(fullInfo));
+    console.log("Device Info:", JSON.stringify(fullInfo));
 
     try {
-      const response = await fetch('https://api.grupogorki.com.br/api/usuarios/authenticate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        "https://api.grupogorki.com.br/api/usuarios/authenticate",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ usuario: email, senha: password }),
         },
-        body: JSON.stringify({ usuario: email, senha: password }),
-      });
+      );
 
       if (!response.ok) {
         const errorResponse = await response.text();
@@ -95,15 +98,14 @@ const Login = () => {
         tipoUsuario: data.user.data.tipoUsuario,
       };
 
-      localStorage.setItem('userEmail', email);
-      localStorage.setItem('userPassword', password);
+      localStorage.setItem("userEmail", email);
+      localStorage.setItem("userPassword", password);
 
       login(data.token, userDetails);
-      router.push('/home');
-
+      router.push("/home");
     } catch (error) {
-      console.error('Erro na autenticação:', error.message);
-      alert('Falha na autenticação: ' + error.message);
+      console.error("Erro na autenticação:", error.message);
+      alert("Falha na autenticação: " + error.message);
     } finally {
       setIsLoading(false); // Desativa o estado de carregamento
     }
@@ -111,18 +113,21 @@ const Login = () => {
 
   const handleDialogClose = (accept) => {
     if (accept) {
-      localStorage.setItem('hasAcceptedTerms', 'true');
+      localStorage.setItem("hasAcceptedTerms", "true");
       setOpenDialog(false);
     } else {
-      router.push('/'); // Redireciona para a página inicial, por exemplo
+      router.push("/"); // Redireciona para a página inicial, por exemplo
     }
   };
 
   return (
-    <div className='body-login'>
-      <img className='logo-login' src="https://styxx-public.s3.sa-east-1.amazonaws.com/logo_criarte_black.png" alt="Logo Criarte" />
+    <div className="body-login">
+      <img
+        className="logo-login"
+        src="https://styxx-public.s3.sa-east-1.amazonaws.com/logo_criarte_black.png"
+        alt="Logo Criarte"
+      />
       <div className="login-container">
-
         <form onSubmit={handleSubmit}>
           <div>
             <label>Email:</label>
@@ -146,9 +151,9 @@ const Login = () => {
           </div>
           <Button
             variant="outlined"
-            onClick={() => router.push('/register')}
+            onClick={() => router.push("/register")}
             disabled={isLoading}
-            sx={{ marginRight: '8px' }}
+            sx={{ marginRight: "8px" }}
           >
             Cadastrar
           </Button>
@@ -158,18 +163,28 @@ const Login = () => {
             disabled={isLoading}
             fullWidth
             sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
             {isLoading ? (
               <CircularProgress size={24} color="inherit" />
             ) : (
-              'Login'
+              "Login"
             )}
           </Button>
-          <a   href="/pass/recovery" style={{marginTop: '30px', cursor: 'pointer', color: 'GRAY', fontSize: '.8em'}}>Recuperar Senha</a>
+          <a
+            href="/pass/recovery"
+            style={{
+              marginTop: "30px",
+              cursor: "pointer",
+              color: "GRAY",
+              fontSize: ".8em",
+            }}
+          >
+            Recuperar Senha
+          </a>
         </form>
       </div>
       <Footer></Footer>
@@ -177,16 +192,17 @@ const Login = () => {
         <DialogTitle>Aceitação de Termos</DialogTitle>
         <DialogContent>
           <Alert severity="info">
-            Ao aceitar, você concorda que o Criarte e suas empresas parceiras, assim como outras organizações que colaboram para o funcionamento da plataforma, possam gerenciar e acessar todos os dados inseridos sempre que necessário.
-
+            Ao aceitar, você concorda que o Criarte e suas empresas parceiras,
+            assim como outras organizações que colaboram para o funcionamento da
+            plataforma, possam gerenciar e acessar todos os dados inseridos
+            sempre que necessário.
           </Alert>
         </DialogContent>
         <DialogActions>
-
           <Button
             onClick={() => handleDialogClose(true)}
             color="success"
-            sx={{ marginLeft: 'auto' }}
+            sx={{ marginLeft: "auto" }}
           >
             Aceitar
           </Button>

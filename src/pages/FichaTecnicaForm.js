@@ -1,29 +1,46 @@
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import {
-  Button, TextField, Box, Typography, IconButton, Table, TableBody, TableCell, TableContainer,
-  TableHead, TableRow, Paper, Menu, MenuItem, Select, InputLabel, FormControl, Alert, CircularProgress
-} from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import SaveIcon from '@mui/icons-material/Save';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import CloseIcon from '@mui/icons-material/Close';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import Header from '../components/Header/Header';
-import PrivateRoute from '../components/PrivateRoute';
-import { useRouter } from 'next/router';
+  Button,
+  TextField,
+  Box,
+  Typography,
+  IconButton,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Menu,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
+  Alert,
+  CircularProgress,
+} from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import SaveIcon from "@mui/icons-material/Save";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import CloseIcon from "@mui/icons-material/Close";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Header from "../components/Header/Header";
+import PrivateRoute from "../components/PrivateRoute";
+import { useRouter } from "next/router";
 
 const FichaTecnicaForm = () => {
   const [integrantes, setIntegrantes] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(null);
-  const [nome, setNome] = useState('');
-  const [tipoPessoa, setTipoPessoa] = useState('F');
-  const [funcao, setFuncao] = useState('');
-  const [cpf, setCpf] = useState('');
+  const [nome, setNome] = useState("");
+  const [tipoPessoa, setTipoPessoa] = useState("F");
+  const [funcao, setFuncao] = useState("");
+  const [cpf, setCpf] = useState("");
   const [cnpj, setCnpj] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -33,21 +50,23 @@ const FichaTecnicaForm = () => {
     const fetchNumeroInscricao = async () => {
       setIsLoading(true);
 
-      const idProjeto = localStorage.getItem('numeroInscricao');
+      const idProjeto = localStorage.getItem("numeroInscricao");
       const url = `https://api.grupogorki.com.br/api/projeto/Integrantes/${idProjeto}`;
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem("authToken");
 
       try {
         const response = await fetch(url, {
-          method: 'GET',
+          method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         });
 
         if (!response.ok) {
-          throw new Error(`Erro na requisição: ${response.status} ${response.statusText}`);
+          throw new Error(
+            `Erro na requisição: ${response.status} ${response.statusText}`,
+          );
         }
 
         const data = await response.json();
@@ -59,7 +78,7 @@ const FichaTecnicaForm = () => {
             tipoPessoa: item.tipoPessoa,
             funcao: item.funcao,
             cpf: item.cpf,
-            cnpj: item.cnpj
+            cnpj: item.cnpj,
           }));
 
           setIntegrantes([...integrantes, ...novosIntegrantes]);
@@ -79,57 +98,60 @@ const FichaTecnicaForm = () => {
   const router = useRouter();
 
   const handleAddIntegrante = async () => {
-    if (nome.trim() && tipoPessoa.trim() && funcao.trim() && (cpf.trim() || cnpj.trim())) {
+    if (
+      nome.trim() &&
+      tipoPessoa.trim() &&
+      funcao.trim() &&
+      (cpf.trim() || cnpj.trim())
+    ) {
       const url = `https://gorki-fix-proponente.iglgxt.easypanel.host/api/setIntegrante`;
-      const token = localStorage.getItem('authToken');
-  
+      const token = localStorage.getItem("authToken");
+
       const newIntegrante = {
-        usuario: localStorage.getItem('userEmail'),
-        senha: localStorage.getItem('userPassword'),
-        cpf: tipoPessoa === 'F' ? cpf.trim() : null,
+        usuario: localStorage.getItem("userEmail"),
+        senha: localStorage.getItem("userPassword"),
+        cpf: tipoPessoa === "F" ? cpf.trim() : null,
         nome_completo: nome.trim(),
-        id_projeto: parseInt(localStorage.getItem('numeroInscricao')),
+        id_projeto: parseInt(localStorage.getItem("numeroInscricao")),
         funcao: funcao.trim(),
         tipo_pessoa: tipoPessoa,
-        cnpj: tipoPessoa === 'J' ? cnpj.trim() : null
+        cnpj: tipoPessoa === "J" ? cnpj.trim() : null,
       };
-      
-  
+
       try {
         const response = await fetch(url, {
           method: "POST",
           headers: {
-            "Accept": "*/*",
-            "Content-Type": "application/json"
+            Accept: "*/*",
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify(newIntegrante)
+          body: JSON.stringify(newIntegrante),
         });
-  
+
         if (response.ok) {
           const result = await response.json();
-          console.log('Integrante adicionado:', result);
+          console.log("Integrante adicionado:", result);
           setIntegrantes([...integrantes, { ...newIntegrante, id: result.id }]);
           router.reload();
         } else {
           const errorData = await response.json();
-          console.error('Erro ao adicionar integrante:', errorData);
-          alert('Erro ao adicionar integrante.');
+          console.error("Erro ao adicionar integrante:", errorData);
+          alert("Erro ao adicionar integrante.");
         }
       } catch (error) {
-        console.error('Erro:', error);
-        alert('Erro ao adicionar integrante.');
+        console.error("Erro:", error);
+        alert("Erro ao adicionar integrante.");
       }
-  
+
       // Limpa os campos após o envio
-      setNome('');
-      setTipoPessoa('');
-      setFuncao('');
-      setCpf('');
-      setCnpj('');
+      setNome("");
+      setTipoPessoa("");
+      setFuncao("");
+      setCpf("");
+      setCnpj("");
       setShowAddForm(false);
     }
   };
-  
 
   const handleShowAddForm = () => {
     setShowAddForm(true);
@@ -141,15 +163,22 @@ const FichaTecnicaForm = () => {
 
   const handleEditIntegrante = () => {
     const updatedIntegrantes = [...integrantes];
-    updatedIntegrantes[currentIndex] = { id: integrantes[currentIndex].id, nome, tipoPessoa, funcao, cpf, cnpj };
+    updatedIntegrantes[currentIndex] = {
+      id: integrantes[currentIndex].id,
+      nome,
+      tipoPessoa,
+      funcao,
+      cpf,
+      cnpj,
+    };
     setIntegrantes(updatedIntegrantes);
     setShowEditForm(false);
     setCurrentIndex(null);
 
-    setNome('');
-    setTipoPessoa('F');
-    setFuncao('');
-    setCpf('');
+    setNome("");
+    setTipoPessoa("F");
+    setFuncao("");
+    setCpf("");
     setCnpj(null);
   };
 
@@ -158,30 +187,32 @@ const FichaTecnicaForm = () => {
       const url = `https://gorki-fix-proponente.iglgxt.easypanel.host/api/deleteIntegrante`;
 
       const deleteRequest = {
-        usuario: localStorage.getItem('userEmail'),
-        senha: localStorage.getItem('userPassword'),
-        id: id
+        usuario: localStorage.getItem("userEmail"),
+        senha: localStorage.getItem("userPassword"),
+        id: id,
       };
 
       try {
         const response = await fetch(url, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(deleteRequest),
         });
 
         if (response.ok) {
-          setIntegrantes(integrantes.filter(integrante => integrante.id !== id));
+          setIntegrantes(
+            integrantes.filter((integrante) => integrante.id !== id),
+          );
         } else {
           const errorData = await response.json();
-          console.error('Erro ao excluir integrante:', errorData);
-          alert('Erro ao excluir integrante.');
+          console.error("Erro ao excluir integrante:", errorData);
+          alert("Erro ao excluir integrante.");
         }
       } catch (error) {
-        console.error('Erro:', error);
-        alert('Erro ao excluir integrante.');
+        console.error("Erro:", error);
+        alert("Erro ao excluir integrante.");
       }
     }
   };
@@ -192,8 +223,8 @@ const FichaTecnicaForm = () => {
     setNome(integrante.nome);
     setTipoPessoa(integrante.tipoPessoa);
     setFuncao(integrante.funcao);
-    setCpf(integrante.cpf || '');
-    setCnpj(integrante.cnpj || '');
+    setCpf(integrante.cpf || "");
+    setCnpj(integrante.cnpj || "");
     setShowEditForm(true);
   };
 
@@ -212,7 +243,7 @@ const FichaTecnicaForm = () => {
   };
 
   const handleSaveChanges = () => {
-    alert('Alterações salvas.');
+    alert("Alterações salvas.");
   };
 
   return (
@@ -248,7 +279,10 @@ const FichaTecnicaForm = () => {
             <>
               {showAddForm && (
                 <Box className="add-integrante-form">
-                  <IconButton onClick={handleCloseAddForm} className="close-add-form">
+                  <IconButton
+                    onClick={handleCloseAddForm}
+                    className="close-add-form"
+                  >
                     <CloseIcon />
                   </IconButton>
                   <TextField
@@ -269,7 +303,6 @@ const FichaTecnicaForm = () => {
                     >
                       <MenuItem value="F">Pessoa Física</MenuItem>
                       <MenuItem value="J">Pessoa Jurídica</MenuItem>
-
                     </Select>
                   </FormControl>
                   <TextField
@@ -281,7 +314,7 @@ const FichaTecnicaForm = () => {
                     className="form-input"
                     margin="normal"
                   />
-                  {tipoPessoa === 'F' && (
+                  {tipoPessoa === "F" && (
                     <TextField
                       label="CPF"
                       variant="outlined"
@@ -292,7 +325,7 @@ const FichaTecnicaForm = () => {
                       margin="normal"
                     />
                   )}
-                  {tipoPessoa === 'J' && (
+                  {tipoPessoa === "J" && (
                     <TextField
                       label="CNPJ"
                       variant="outlined"
@@ -330,9 +363,17 @@ const FichaTecnicaForm = () => {
                     {integrantes.map((integrante, index) => (
                       <TableRow key={index}>
                         <TableCell>{integrante.nome}</TableCell>
-                        <TableCell>{integrante.tipoPessoa === 'F' ? 'Pessoa Física' : 'Pessoa Jurídica'}</TableCell>
+                        <TableCell>
+                          {integrante.tipoPessoa === "F"
+                            ? "Pessoa Física"
+                            : "Pessoa Jurídica"}
+                        </TableCell>
                         <TableCell>{integrante.funcao}</TableCell>
-                        <TableCell>{integrante.tipoPessoa === 'F' ? integrante.cpf : integrante.cnpj}</TableCell>
+                        <TableCell>
+                          {integrante.tipoPessoa === "F"
+                            ? integrante.cpf
+                            : integrante.cnpj}
+                        </TableCell>
                         <TableCell>
                           <IconButton
                             aria-label="more"
@@ -348,8 +389,11 @@ const FichaTecnicaForm = () => {
                             open={Boolean(anchorEl)}
                             onClose={handleMenuClose}
                           >
-
-                            <MenuItem onClick={() => handleDeleteIntegrante(integrante.id)}>
+                            <MenuItem
+                              onClick={() =>
+                                handleDeleteIntegrante(integrante.id)
+                              }
+                            >
                               <DeleteIcon fontSize="small" />
                               Excluir
                             </MenuItem>
@@ -361,9 +405,17 @@ const FichaTecnicaForm = () => {
                 </Table>
               </TableContainer>
 
-              <Box sx={{ marginTop: '10px' }} className="save-changes-button-container">
+              <Box
+                sx={{ marginTop: "10px" }}
+                className="save-changes-button-container"
+              >
                 <Link href="/pnab/projeto" passHref>
-                  <Button variant="outlined" sx={{ marginRight: '10px' }} startIcon={<ArrowBackIcon />} className="cancel-button">
+                  <Button
+                    variant="outlined"
+                    sx={{ marginRight: "10px" }}
+                    startIcon={<ArrowBackIcon />}
+                    className="cancel-button"
+                  >
                     Voltar
                   </Button>
                 </Link>

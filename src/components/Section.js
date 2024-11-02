@@ -1,13 +1,15 @@
 // components/Section.js
-import React from 'react';
-import Button from '@mui/material/Button';
+import React from "react";
+import Button from "@mui/material/Button";
 
 const Section = ({ title, description, link }) => {
   return (
-    <div className='section'>
+    <div className="section">
       <h3>{title}</h3>
       <p>{description}</p>
-      <Button variant="text" href={link}>Ir</Button>
+      <Button variant="text" href={link}>
+        Ir
+      </Button>
     </div>
   );
 };

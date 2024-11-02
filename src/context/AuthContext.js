@@ -1,5 +1,4 @@
-
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect } from "react";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -8,8 +7,8 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem('authToken');
-    const storedUserDetails = localStorage.getItem('userDetails');
+    const storedToken = localStorage.getItem("authToken");
+    const storedUserDetails = localStorage.getItem("userDetails");
 
     if (storedToken) {
       setAuthToken(storedToken);
@@ -20,8 +19,8 @@ export const AuthProvider = ({ children }) => {
         const parsedUserDetails = JSON.parse(storedUserDetails);
         setUserDetails(parsedUserDetails);
       } catch (error) {
-        console.error('Erro ao analisar userDetails do localStorage:', error);
-        localStorage.removeItem('userDetails');
+        console.error("Erro ao analisar userDetails do localStorage:", error);
+        localStorage.removeItem("userDetails");
       }
     }
 
@@ -32,23 +31,25 @@ export const AuthProvider = ({ children }) => {
     setAuthToken(token);
     setUserDetails(user);
 
-    localStorage.setItem('authToken', token);
+    localStorage.setItem("authToken", token);
     try {
-      localStorage.setItem('userDetails', JSON.stringify(user));
+      localStorage.setItem("userDetails", JSON.stringify(user));
     } catch (error) {
-      console.error('Erro ao serializar userDetails para localStorage:', error);
+      console.error("Erro ao serializar userDetails para localStorage:", error);
     }
   };
 
   const logout = () => {
     setAuthToken(null);
     setUserDetails(null);
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('userDetails');
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("userDetails");
   };
 
   return (
-    <AuthContext.Provider value={{ authToken, userDetails, login, logout, isLoading }}>
+    <AuthContext.Provider
+      value={{ authToken, userDetails, login, logout, isLoading }}
+    >
       {children}
     </AuthContext.Provider>
   );

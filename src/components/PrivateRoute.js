@@ -1,6 +1,6 @@
-import { useRouter } from 'next/router';
-import { useContext, useEffect } from 'react';
-import { AuthContext } from '../context/AuthContext';
+import { useRouter } from "next/router";
+import { useContext, useEffect } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 const PrivateRoute = ({ children }) => {
   const { authToken, isLoading } = useContext(AuthContext);
@@ -8,8 +8,7 @@ const PrivateRoute = ({ children }) => {
 
   useEffect(() => {
     if (!isLoading && !authToken) {
-      router.push('/login');
-
+      router.push("/login");
     }
   }, [authToken, isLoading, router]);
 

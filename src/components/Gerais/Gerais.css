@@ -1,19 +1,18 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: 'Poppins', Arial, sans-serif;
-    background-color: rgb(221, 221, 221);
-
+  font-family: "Poppins", Arial, sans-serif;
+  background-color: rgb(221, 221, 221);
 }
 
 main {
-    margin: 1rem;
+  margin: 1rem;
 }
 
-.btn-sair{
-    color: red;
+.btn-sair {
+  color: red;
 }

@@ -1,35 +1,52 @@
-import React, { useState } from 'react';
-import { Button, TextField, Box, Typography, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Menu, MenuItem } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import SaveIcon from '@mui/icons-material/Save';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import CloseIcon from '@mui/icons-material/Close';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import React, { useState } from "react";
+import {
+  Button,
+  TextField,
+  Box,
+  Typography,
+  IconButton,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Menu,
+  MenuItem,
+} from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import SaveIcon from "@mui/icons-material/Save";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import CloseIcon from "@mui/icons-material/Close";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 //import './LocalForm.css';
-
 
 const LocalForm = () => {
   const [locais, setLocais] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(null);
-  const [cidade, setCidade] = useState('');
-  const [nomeLocal, setNomeLocal] = useState('');
-  const [lotacao, setLotacao] = useState('');
-  const [qtdApresentacoes, setQtdApresentacoes] = useState('');
-  const [endereco, setEndereco] = useState('');
+  const [cidade, setCidade] = useState("");
+  const [nomeLocal, setNomeLocal] = useState("");
+  const [lotacao, setLotacao] = useState("");
+  const [qtdApresentacoes, setQtdApresentacoes] = useState("");
+  const [endereco, setEndereco] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleAddLocal = () => {
     if (cidade && nomeLocal && lotacao && qtdApresentacoes && endereco) {
-      setLocais([...locais, { cidade, nomeLocal, lotacao, qtdApresentacoes, endereco }]);
-      setCidade('');
-      setNomeLocal('');
-      setLotacao('');
-      setQtdApresentacoes('');
-      setEndereco('');
+      setLocais([
+        ...locais,
+        { cidade, nomeLocal, lotacao, qtdApresentacoes, endereco },
+      ]);
+      setCidade("");
+      setNomeLocal("");
+      setLotacao("");
+      setQtdApresentacoes("");
+      setEndereco("");
       setShowAddForm(false);
     }
   };
@@ -44,15 +61,21 @@ const LocalForm = () => {
 
   const handleEditLocal = () => {
     const updatedLocais = [...locais];
-    updatedLocais[currentIndex] = { cidade, nomeLocal, lotacao, qtdApresentacoes, endereco };
+    updatedLocais[currentIndex] = {
+      cidade,
+      nomeLocal,
+      lotacao,
+      qtdApresentacoes,
+      endereco,
+    };
     setLocais(updatedLocais);
     setShowEditForm(false);
     setCurrentIndex(null);
-    setCidade('');
-    setNomeLocal('');
-    setLotacao('');
-    setQtdApresentacoes('');
-    setEndereco('');
+    setCidade("");
+    setNomeLocal("");
+    setLotacao("");
+    setQtdApresentacoes("");
+    setEndereco("");
   };
 
   const handleDeleteLocal = (index) => {
@@ -85,7 +108,6 @@ const LocalForm = () => {
     setCurrentIndex(null);
   };
 
-
   return (
     <div className="form-page">
       <div className="form-container">
@@ -93,13 +115,19 @@ const LocalForm = () => {
           Local de realização
         </Typography>
         <Typography variant="body2" className="form-description">
-          Informe o local de realização do projeto (você pode incluir mais de um local).
+          Informe o local de realização do projeto (você pode incluir mais de um
+          local).
         </Typography>
         <Box className="form-field">
           <Typography variant="body2" className="required-label">
             * Adicionar local de realização
           </Typography>
-          <Button variant="outlined" startIcon={<AddIcon />} onClick={handleShowAddForm} className="add-local-button">
+          <Button
+            variant="outlined"
+            startIcon={<AddIcon />}
+            onClick={handleShowAddForm}
+            className="add-local-button"
+          >
             Adicionar local
           </Button>
         </Box>
@@ -154,7 +182,11 @@ const LocalForm = () => {
               className="form-input"
               margin="normal"
             />
-            <Button variant="contained" color="primary" onClick={handleAddLocal}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleAddLocal}
+            >
               Adicionar
             </Button>
           </Box>
@@ -162,7 +194,10 @@ const LocalForm = () => {
 
         {showEditForm && (
           <Box className="edit-local-form">
-            <IconButton onClick={handleCloseEditForm} className="close-edit-form">
+            <IconButton
+              onClick={handleCloseEditForm}
+              className="close-edit-form"
+            >
               <CloseIcon />
             </IconButton>
             <TextField
@@ -210,7 +245,11 @@ const LocalForm = () => {
               className="form-input"
               margin="normal"
             />
-            <Button variant="contained" color="primary" onClick={handleEditLocal}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleEditLocal}
+            >
               Salvar
             </Button>
           </Box>
@@ -252,10 +291,20 @@ const LocalForm = () => {
                         open={Boolean(anchorEl)}
                         onClose={handleMenuClose}
                       >
-                        <MenuItem onClick={() => { handleShowEditForm(currentIndex); handleMenuClose(); }}>
+                        <MenuItem
+                          onClick={() => {
+                            handleShowEditForm(currentIndex);
+                            handleMenuClose();
+                          }}
+                        >
                           <EditIcon /> Editar
                         </MenuItem>
-                        <MenuItem onClick={() => { handleDeleteLocal(currentIndex); handleMenuClose(); }}>
+                        <MenuItem
+                          onClick={() => {
+                            handleDeleteLocal(currentIndex);
+                            handleMenuClose();
+                          }}
+                        >
                           <DeleteIcon /> Excluir
                         </MenuItem>
                       </Menu>
@@ -271,10 +320,18 @@ const LocalForm = () => {
           Necessário ao menos um registro.
         </Typography>
         <Box className="form-actions">
-          <Button variant="contained" startIcon={<ArrowBackIcon />} className="back-button">
+          <Button
+            variant="contained"
+            startIcon={<ArrowBackIcon />}
+            className="back-button"
+          >
             Voltar para o projeto
           </Button>
-          <Button variant="contained" startIcon={<SaveIcon />} className="save-button">
+          <Button
+            variant="contained"
+            startIcon={<SaveIcon />}
+            className="save-button"
+          >
             Salvar alterações
           </Button>
         </Box>

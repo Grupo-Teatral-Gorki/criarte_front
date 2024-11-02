@@ -1,27 +1,32 @@
-import { useRouter } from 'next/router';
-import { useContext, useEffect, useState } from 'react';
-import { AuthContext } from '../context/AuthContext';
+import { useRouter } from "next/router";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 const AdminPrivateRoute = ({ children }) => {
   const { authToken, isLoading } = useContext(AuthContext);
   const router = useRouter();
   const [userMail, setUserMail] = useState(null);
 
-  const allowedUsers = [ 'contato@styxx.com.br', 'gaferreirainicial@gmail.com', 'analuzmira23@gmail.com', 'producaocultural@grupoteatralgorki.com']; // Lista de usuários permitidos
+  const allowedUsers = [
+    "contato@styxx.com.br",
+    "gaferreirainicial@gmail.com",
+    "analuzmira23@gmail.com",
+    "producaocultural@grupoteatralgorki.com",
+  ]; // Lista de usuários permitidos
 
   useEffect(() => {
     // Garante que o código só rode no cliente
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       // Função para verificar o localStorage a cada 2 segundos
       const interval = setInterval(() => {
-        const email = localStorage.getItem('userEmail'); // Atualiza a informação do localStorage
+        const email = localStorage.getItem("userEmail"); // Atualiza a informação do localStorage
 
         // Atualiza o estado do email do usuário
         setUserMail(email);
 
         // Verifica se o email está na lista de permitidos e redireciona se não estiver
-        if (email && !allowedUsers.includes(email) || email == null) {
-          router.push('/home');
+        if ((email && !allowedUsers.includes(email)) || email == null) {
+          router.push("/home");
         }
       }, 1); // A cada 2 segundos
 

@@ -18,7 +18,7 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 
 const NewProponentForm = ({ open, handleClose }) => {
   const [loading, setLoading] = useState(false);
@@ -39,7 +39,7 @@ const NewProponentForm = ({ open, handleClose }) => {
   const [bairroResponsavel, setBairroResponsavel] = useState("");
   const [cidadeResponsavel, setCidadeResponsavel] = useState("");
   const [ufResponsavel, setUfResponsavel] = useState("");
-  const [enablePj, setEnablePj] = useState(false)
+  const [enablePj, setEnablePj] = useState(false);
 
   // Adicionados para Pessoa Jurídica
   const [razaoSocial, setRazaoSocial] = useState("");
@@ -48,13 +48,13 @@ const NewProponentForm = ({ open, handleClose }) => {
 
   const [proponentType, setProponentType] = useState("Pessoa Física"); // Para controle do tipo de proponente
   const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
-  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  const [snackbarMessage, setSnackbarMessage] = useState("");
   const [errors, setErrors] = useState({});
   const router = useRouter();
 
   useEffect(() => {
-    const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+    const userDetails = JSON.parse(localStorage.getItem("userDetails"));
     if (userDetails && userDetails.idCidade === 3842) {
       setEnablePj(true);
     } else {
@@ -71,7 +71,8 @@ const NewProponentForm = ({ open, handleClose }) => {
       if (!cpf.trim()) newErrors.cpf = true;
       if (!rg.trim()) newErrors.rg = true;
       if (!dataNascimento.trim()) newErrors.dataNascimento = true;
-    } else { // Validações de campos para Pessoa Jurídica
+    } else {
+      // Validações de campos para Pessoa Jurídica
       if (!razaoSocial.trim()) newErrors.razaoSocial = true;
       if (!cnpj.trim()) newErrors.cnpj = true;
       if (!nomeFantasia.trim()) newErrors.nomeFantasia = true;
@@ -89,17 +90,16 @@ const NewProponentForm = ({ open, handleClose }) => {
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      setSnackbarSeverity('error');
-      setSnackbarMessage('Por favor, preencha todos os campos obrigatórios.');
+      setSnackbarSeverity("error");
+      setSnackbarMessage("Por favor, preencha todos os campos obrigatórios.");
       setOpenSnackbar(true);
       return;
     }
 
     setLoading(true);
     const url = `https://gorki-fix-proponente.iglgxt.easypanel.host/api/cadastrarProponente`;
-    const token = localStorage.getItem('authToken');
-    const userDetails = JSON.parse(localStorage.getItem('userDetails'))
-
+    const token = localStorage.getItem("authToken");
+    const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
     try {
       const response = await fetch(url, {
@@ -109,41 +109,43 @@ const NewProponentForm = ({ open, handleClose }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          razaoSocial: proponentType === "Pessoa Jurídica" ? (razaoSocial || null) : null,
-          cnpj: proponentType === "Pessoa Jurídica" ? (cnpj || null) : null,
-          nomeFantasia: proponentType === "Pessoa Jurídica" ? (nomeFantasia || null) : null,
-          webSite: webSite || "off@off.com",  // Valor padrão se não preenchido
-          email: email || "off@off.com",  // Valor padrão se não preenchido
-          celular: celular || null,  // Valor padrão se não preenchido
-          telefoneFixo: telefoneFixo || null,  // Valor padrão se não preenchido
-          telefoneOutro: telefoneOutro || null,  // Valor padrão se não preenchido
-          responsavelLegal: nomeCompleto || null,  // Valor padrão se não preenchido
-          cpfResponsavel: cpf || null,  // Valor padrão se não preenchido
-          rgResponsavel: rg || null,  // Valor padrão se não preenchido
-          nomeSocial: nomeSocial || null,  // Valor padrão se não preenchido
-          dataNascimento: dataNascimento || null,  // Valor padrão se não preenchido
-          cargo: null,  // Valor fixo
-          cepResponsavel: cepResponsavel || null,  // Valor padrão se não preenchido
-          logradouroResponsavel: logradouroResponsavel || null,  // Valor padrão se não preenchido
-          numeroResponsavel: Number(numeroResponsavel) || 123,  // Valor padrão se não preenchido, assegurando que é um número
-          complementoResponsavel: complementoResponsavel || null,  // Valor padrão se não preenchido
-          bairroResponsavel: bairroResponsavel || null,  // Valor padrão se não preenchido
-          cidadeResponsavel: cidadeResponsavel || null,  // Valor padrão se não preenchido
-          ufResponsavel: ufResponsavel || null,  // Valor padrão se não preenchido
-          ceppj: null,  // Valor fixo
-          logradouroPJ: null,  // Valor fixo
-          numeroPJ: 123,  // Valor fixo
-          complementoPJ: null,  // Valor fixo
-          bairroPJ: "desabilitado",  // Valor fixo
-          cidadePJ: null,  // Valor fixo
-          ufpj: "of",  // Valor fixo
-          idUsuarioCadastro: userDetails.id
+          razaoSocial:
+            proponentType === "Pessoa Jurídica" ? razaoSocial || null : null,
+          cnpj: proponentType === "Pessoa Jurídica" ? cnpj || null : null,
+          nomeFantasia:
+            proponentType === "Pessoa Jurídica" ? nomeFantasia || null : null,
+          webSite: webSite || "off@off.com", // Valor padrão se não preenchido
+          email: email || "off@off.com", // Valor padrão se não preenchido
+          celular: celular || null, // Valor padrão se não preenchido
+          telefoneFixo: telefoneFixo || null, // Valor padrão se não preenchido
+          telefoneOutro: telefoneOutro || null, // Valor padrão se não preenchido
+          responsavelLegal: nomeCompleto || null, // Valor padrão se não preenchido
+          cpfResponsavel: cpf || null, // Valor padrão se não preenchido
+          rgResponsavel: rg || null, // Valor padrão se não preenchido
+          nomeSocial: nomeSocial || null, // Valor padrão se não preenchido
+          dataNascimento: dataNascimento || null, // Valor padrão se não preenchido
+          cargo: null, // Valor fixo
+          cepResponsavel: cepResponsavel || null, // Valor padrão se não preenchido
+          logradouroResponsavel: logradouroResponsavel || null, // Valor padrão se não preenchido
+          numeroResponsavel: Number(numeroResponsavel) || 123, // Valor padrão se não preenchido, assegurando que é um número
+          complementoResponsavel: complementoResponsavel || null, // Valor padrão se não preenchido
+          bairroResponsavel: bairroResponsavel || null, // Valor padrão se não preenchido
+          cidadeResponsavel: cidadeResponsavel || null, // Valor padrão se não preenchido
+          ufResponsavel: ufResponsavel || null, // Valor padrão se não preenchido
+          ceppj: null, // Valor fixo
+          logradouroPJ: null, // Valor fixo
+          numeroPJ: 123, // Valor fixo
+          complementoPJ: null, // Valor fixo
+          bairroPJ: "desabilitado", // Valor fixo
+          cidadePJ: null, // Valor fixo
+          ufpj: "of", // Valor fixo
+          idUsuarioCadastro: userDetails.id,
         }),
       });
 
       if (response.ok) {
-        setSnackbarSeverity('success');
-        setSnackbarMessage('Proponente cadastrado com sucesso!');
+        setSnackbarSeverity("success");
+        setSnackbarMessage("Proponente cadastrado com sucesso!");
         setOpenSnackbar(true);
         setTimeout(() => {
           setOpenSnackbar(false);
@@ -162,7 +164,7 @@ const NewProponentForm = ({ open, handleClose }) => {
   };
 
   const handleCpfChange = (e) => {
-    let newValue = e.target.value.replace(/[^0-9]/g, '');
+    let newValue = e.target.value.replace(/[^0-9]/g, "");
     if (newValue.length > 11) {
       newValue = newValue.slice(0, 11);
     }
@@ -170,7 +172,7 @@ const NewProponentForm = ({ open, handleClose }) => {
   };
 
   const handleRgChange = (e) => {
-    let newValue = e.target.value.replace(/[^0-9]/g, '');
+    let newValue = e.target.value.replace(/[^0-9]/g, "");
     if (newValue.length > 9) {
       newValue = newValue.slice(0, 9);
     }
@@ -178,7 +180,7 @@ const NewProponentForm = ({ open, handleClose }) => {
   };
 
   const handleCnpjChange = (e) => {
-    let newValue = e.target.value.replace(/[^0-9]/g, '');
+    let newValue = e.target.value.replace(/[^0-9]/g, "");
     if (newValue.length > 14) {
       newValue = newValue.slice(0, 14);
     }
@@ -186,7 +188,7 @@ const NewProponentForm = ({ open, handleClose }) => {
   };
 
   const handleNumFixoChange = (e) => {
-    let newValue = e.target.value.replace(/[^0-9]/g, '');
+    let newValue = e.target.value.replace(/[^0-9]/g, "");
     if (newValue.length > 10) {
       newValue = newValue.slice(0, 10);
     }
@@ -194,7 +196,7 @@ const NewProponentForm = ({ open, handleClose }) => {
   };
 
   const handleNumAltChange = (e) => {
-    let newValue = e.target.value.replace(/[^0-9]/g, '');
+    let newValue = e.target.value.replace(/[^0-9]/g, "");
     if (newValue.length > 11) {
       newValue = newValue.slice(0, 11);
     }
@@ -206,7 +208,7 @@ const NewProponentForm = ({ open, handleClose }) => {
       try {
         let url = `https://viacep.com.br/ws/${cep}/json/`;
         let response = await fetch(url, {
-          method: 'GET'
+          method: "GET",
         });
         let data = await response.json();
         return data;
@@ -217,43 +219,62 @@ const NewProponentForm = ({ open, handleClose }) => {
   };
 
   const handleCepChange = async (e) => {
-    let newValue = e.target.value.replace(/[^0-9]/g, '');
+    let newValue = e.target.value.replace(/[^0-9]/g, "");
     if (newValue.length > 8) {
       newValue = newValue.slice(0, 8);
     }
     setCepResponsavel(newValue);
 
     if (newValue.length === 8) {
-      let cep = await getCep(newValue)
-      setLogradouroResponsavel(cep.logradouro)
-      setBairroResponsavel(cep.bairro)
-      setCidadeResponsavel(cep.localidade)
-      setUfResponsavel(cep.uf)
+      let cep = await getCep(newValue);
+      setLogradouroResponsavel(cep.logradouro);
+      setBairroResponsavel(cep.bairro);
+      setCidadeResponsavel(cep.localidade);
+      setUfResponsavel(cep.uf);
     }
   };
 
-  console.log(enablePj)
+  console.log(enablePj);
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
       <DialogTitle>Novo proponente</DialogTitle>
-      <Alert sx={{ marginBottom: '15px', marginLeft: '20px', marginRight: '20px' }} variant="filled" severity="info">Cadastre 1 proponente por login</Alert>
+      <Alert
+        sx={{ marginBottom: "15px", marginLeft: "20px", marginRight: "20px" }}
+        variant="filled"
+        severity="info"
+      >
+        Cadastre 1 proponente por login
+      </Alert>
 
       <DialogContent>
-        <RadioGroup row value={proponentType} onChange={(e) => {
-          setProponentType(e.target.value);
-          // Limpar campos ao trocar tipo
-          setNomeCompleto("");
-          setCpf("");
-          setRg("");
-          setNomeSocial("");
-          setDataNascimento("");
-          setRazaoSocial("");
-          setCnpj("");
-          setNomeFantasia("");
-        }}>
-          <FormControlLabel value="Pessoa Física" control={<Radio />} label="Pessoa Física" />
-          <FormControlLabel value="Pessoa Jurídica" control={<Radio />} disabled={enablePj} label="Pessoa Jurídica" />
+        <RadioGroup
+          row
+          value={proponentType}
+          onChange={(e) => {
+            setProponentType(e.target.value);
+            // Limpar campos ao trocar tipo
+            setNomeCompleto("");
+            setCpf("");
+            setRg("");
+            setNomeSocial("");
+            setDataNascimento("");
+            setRazaoSocial("");
+            setCnpj("");
+            setNomeFantasia("");
+          }}
+        >
+          <FormControlLabel
+            value="Pessoa Física"
+            control={<Radio />}
+            label="Pessoa Física"
+          />
+          <FormControlLabel
+            value="Pessoa Jurídica"
+            control={<Radio />}
+            disabled={enablePj}
+            label="Pessoa Jurídica"
+          />
         </RadioGroup>
 
         {proponentType === "Pessoa Física" && (
@@ -427,7 +448,9 @@ const NewProponentForm = ({ open, handleClose }) => {
               value={logradouroResponsavel}
               onChange={(e) => setLogradouroResponsavel(e.target.value)}
               error={!!errors.logradouroResponsavel}
-              helperText={errors.logradouroResponsavel ? "Campo obrigatório." : ""}
+              helperText={
+                errors.logradouroResponsavel ? "Campo obrigatório." : ""
+              }
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -499,7 +522,11 @@ const NewProponentForm = ({ open, handleClose }) => {
         autoHideDuration={6000}
         onClose={() => setOpenSnackbar(false)}
       >
-        <Alert onClose={() => setOpenSnackbar(false)} severity={snackbarSeverity} sx={{ width: '100%' }}>
+        <Alert
+          onClose={() => setOpenSnackbar(false)}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
           {snackbarMessage}
         </Alert>
       </Snackbar>

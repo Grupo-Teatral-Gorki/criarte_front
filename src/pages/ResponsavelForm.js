@@ -1,18 +1,31 @@
-import React, { useState } from 'react';
-import { Button, TextField, Box, Typography, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import SaveIcon from '@mui/icons-material/Save';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import CloseIcon from '@mui/icons-material/Close';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import React, { useState } from "react";
+import {
+  Button,
+  TextField,
+  Box,
+  Typography,
+  IconButton,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import SaveIcon from "@mui/icons-material/Save";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import CloseIcon from "@mui/icons-material/Close";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 //import './ResponsavelForm.css';
 
 const ResponsavelForm = () => {
   const [responsaveis, setResponsaveis] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
-  const [nome, setNome] = useState('');
-  const [cpf, setCpf] = useState('');
+  const [nome, setNome] = useState("");
+  const [cpf, setCpf] = useState("");
   const [editIndex, setEditIndex] = useState(null);
 
   const handleAddResponsavel = () => {
@@ -25,8 +38,8 @@ const ResponsavelForm = () => {
       } else {
         setResponsaveis([...responsaveis, { nome, cpf }]);
       }
-      setNome('');
-      setCpf('');
+      setNome("");
+      setCpf("");
       setShowAddForm(false);
     }
   };
@@ -38,8 +51,8 @@ const ResponsavelForm = () => {
   const handleCloseAddForm = () => {
     setShowAddForm(false);
     setEditIndex(null);
-    setNome('');
-    setCpf('');
+    setNome("");
+    setCpf("");
   };
 
   const handleEditResponsavel = (index) => {
@@ -60,13 +73,20 @@ const ResponsavelForm = () => {
           Responsável técnico(a)
         </Typography>
         <Typography variant="body2" className="form-description">
-          Deverá ser indicado(a) responsável técnico(a) para atuar no projeto, podendo esta função, no caso de projeto cadastrado por pessoa física, ser exercida pelo(a) próprio(a) proponente.
+          Deverá ser indicado(a) responsável técnico(a) para atuar no projeto,
+          podendo esta função, no caso de projeto cadastrado por pessoa física,
+          ser exercida pelo(a) próprio(a) proponente.
         </Typography>
         <Box className="form-field">
           <Typography variant="body2" className="required-label">
             * Responsável técnico(a) / artístico(a)
           </Typography>
-          <Button variant="outlined" startIcon={<AddIcon />} onClick={handleShowAddForm} className="add-responsible-button">
+          <Button
+            variant="outlined"
+            startIcon={<AddIcon />}
+            onClick={handleShowAddForm}
+            className="add-responsible-button"
+          >
             Adicionar responsável
           </Button>
         </Box>
@@ -94,8 +114,12 @@ const ResponsavelForm = () => {
               className="form-input"
               margin="normal"
             />
-            <Button variant="contained" color="primary" onClick={handleAddResponsavel}>
-              {editIndex !== null ? 'Salvar Alterações' : 'Adicionar'}
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleAddResponsavel}
+            >
+              {editIndex !== null ? "Salvar Alterações" : "Adicionar"}
             </Button>
           </Box>
         )}
@@ -112,7 +136,9 @@ const ResponsavelForm = () => {
             <TableBody>
               {responsaveis.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={3} className="no-data">Não há dados</TableCell>
+                  <TableCell colSpan={3} className="no-data">
+                    Não há dados
+                  </TableCell>
                 </TableRow>
               ) : (
                 responsaveis.map((responsavel, index) => (
@@ -123,7 +149,9 @@ const ResponsavelForm = () => {
                       <IconButton onClick={() => handleEditResponsavel(index)}>
                         <EditIcon />
                       </IconButton>
-                      <IconButton onClick={() => handleDeleteResponsavel(index)}>
+                      <IconButton
+                        onClick={() => handleDeleteResponsavel(index)}
+                      >
                         <DeleteIcon />
                       </IconButton>
                     </TableCell>
@@ -138,10 +166,18 @@ const ResponsavelForm = () => {
           Necessário ao menos um registro.
         </Typography>
         <Box className="form-actions">
-          <Button variant="contained" startIcon={<ArrowBackIcon />} className="back-button">
+          <Button
+            variant="contained"
+            startIcon={<ArrowBackIcon />}
+            className="back-button"
+          >
             Voltar para o projeto
           </Button>
-          <Button variant="contained" startIcon={<SaveIcon />} className="save-button">
+          <Button
+            variant="contained"
+            startIcon={<SaveIcon />}
+            className="save-button"
+          >
             Salvar alterações
           </Button>
         </Box>
