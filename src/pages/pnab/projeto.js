@@ -60,6 +60,22 @@ function PnabHomeForms() {
       }
     };
 
+    function DocumentLink() {
+      const idCidade = storageUserDetails.idCidade
+
+      switch (idCidade) {
+        case 3798:
+          return "https://criarte.s3.us-east-2.amazonaws.com/public/Edital%2Bde%2BFomento-%2BSanta%2BRita-6-37.pdf"
+          
+        case 3823:
+          return ""
+      
+        default:
+          break;
+      }
+
+    }
+
     if (typeof window !== 'undefined') {
       const userDetails = localStorage.getItem('userDetails');
       if (userDetails) {
@@ -204,6 +220,24 @@ function PnabHomeForms() {
     }
   };
 
+  function DocumentLink() {
+    const idCidade = storageUserDetails.idCidade
+
+    switch (idCidade) {
+      case 3798:
+        return "https://criarte.s3.us-east-2.amazonaws.com/public/Edital%2Bde%2BFomento-%2BSanta%2BRita-6-37.pdf"
+        
+      case 3823:
+        return "https://google.com"
+
+        case 3842:
+          return "https://criarte.s3.us-east-2.amazonaws.com/documents/edital/edital.pdf"
+    
+      default:
+        break;
+    }
+
+  }
 
   return (
     <div>
@@ -283,7 +317,7 @@ function PnabHomeForms() {
                     justifyContent: 'center',
                     padding: '10px',
                   }}>
-                    <a href='https://criarte.s3.us-east-2.amazonaws.com/public/Edital%2Bde%2BFomento-%2BSanta%2BRita-6-37.pdf' target='_blank'>LER OBJETO DO EDITAL</a>
+                    <a href={DocumentLink()} target='_blank'>LER OBJETO DO EDITAL</a>
                     <p></p>
                   </div>
 
@@ -294,22 +328,26 @@ function PnabHomeForms() {
                 </div>
               ) : (
                 <div className="sections">
-                  <div style={{
-                    backgroundColor: 'white',
-                    minHeight: '90px',
-                    display: 'flex',
-                    marginLeft: 'auto',
-                    marginRight: 'auto',
-                    minWidth: '80%',
-                    borderRadius: '8px',
-                    boxShadow: 'rgba(0, 0, 0, 0.2) 0px 2px 1px -1px, rgba(0, 0, 0, 0.14) 0px 1px 1px 0px, rgba(0, 0, 0, 0.12) 0px 1px 3px 0px', // Sombra
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: '10px',
-                  }}>
-                    <a href='https://criarte.s3.us-east-2.amazonaws.com/documents/edital/edital.pdf' target='_blank'>LER OBJETO DO EDITAL</a>
-                    <p></p>
-                  </div>
+                  {
+                    storageUserDetails && storageUserDetails.idCidade == 3823 ? null: (
+                      <div style={{
+                        backgroundColor: 'white',
+                        minHeight: '90px',
+                        display: 'flex',
+                        marginLeft: 'auto',
+                        marginRight: 'auto',
+                        minWidth: '80%',
+                        borderRadius: '8px',
+                        boxShadow: 'rgba(0, 0, 0, 0.2) 0px 2px 1px -1px, rgba(0, 0, 0, 0.14) 0px 1px 1px 0px, rgba(0, 0, 0, 0.12) 0px 1px 3px 0px', // Sombra
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        padding: '10px',
+                      }}>
+                        <a href={DocumentLink()} target='_blank'>LER OBJETO DO EDITAL</a>
+                        <p></p>
+                      </div>
+                    )
+                  }
 
                   <Section title="Proponente" description="Selecione o proponente do projeto" link="../proponente" />
                   <Section title="Informações gerais do projeto" description="Informe o segmento, período previsto e o valor do projeto" link="/InformacoesGerais" />

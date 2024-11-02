@@ -29,6 +29,9 @@ const InformacoesGerais = () => {
 
   const citySantaRitaId = 3798; // ID da cidade de Santa Rita Do Passa Quatro
 
+  const storedUserDetails = localStorage.getItem('userDetails');
+  const userDetails = JSON.parse(storedUserDetails);
+
   // Buscar userID e idCidade ao montar o componente
   useEffect(() => {
     const storedUserDetails = localStorage.getItem('userDetails');
@@ -286,6 +289,49 @@ const InformacoesGerais = () => {
       console.log('Erro ao atualizar a modalidade.');
     }
   };
+
+  function CheckLabels() {
+    switch (userDetails.idCidade) {
+      case 3823:
+        return [
+          { label: 'Resumo do projeto:', key: 'resumo' },
+          { label: 'Relevância e pertinência:', key: 'relevancia' },
+          { label: 'Perfil de público e classificação indicativa:', key: 'perfil' },
+          { label: 'Expectativa da quantidade do público alcançado com o projeto:', key: 'expectativa' },
+          { label: 'Detalhamento da proposta de contrapartida do projeto:', key: 'contrapartida' },
+          { label: 'Plano de Divulgação:', key: 'divulgacao' },
+          { label: 'Medidas de democratização de acesso e acessibilidade', key: 'democratizacao' },
+          { label: 'Outras Informações', key: 'outras' }
+        ]
+
+      case 3798:
+        return [
+          { label: 'Resumo do projeto:', key: 'resumo' },
+          { label: 'Relevância e pertinência:', key: 'relevancia' },
+          { label: 'Perfil de público e classificação indicativa:', key: 'perfil' },
+          { label: 'Expectativa da quantidade do público alcançado com o projeto:', key: 'expectativa' },
+          { label: 'Detalhamento da proposta de contrapartida do projeto:', key: 'contrapartida' },
+          { label: 'Plano de Divulgação:', key: 'divulgacao' },
+          { label: 'Medidas de democratização de acesso e acessibilidade', key: 'democratizacao' },
+          { label: 'Local de realização e justificativa da escolha do local', key: 'local' },
+          { label: 'Outras Informações', key: 'outras' }
+        ]
+
+      default:
+        return [
+          { label: 'Resumo do projeto:', key: 'resumo' },
+          { label: 'Relevância e pertinência:', key: 'relevancia' },
+          { label: 'Perfil de público e classificação indicativa:', key: 'perfil' },
+          { label: 'Expectativa da quantidade do público alcançado com o projeto:', key: 'expectativa' },
+          { label: 'Detalhamento da proposta de contrapartida do projeto:', key: 'contrapartida' },
+          { label: 'Plano de Divulgação:', key: 'divulgacao' },
+          { label: 'Plano de Democratização', key: 'democratizacao' },
+          { label: 'Plano de ações afirmativas', key: 'afirmativas' },
+          { label: 'Local de realização e justificativa da escolha do local', key: 'local' },
+          { label: 'Outras Informações', key: 'outras' }
+        ]
+    }
+  }
 
   return (
     <div>

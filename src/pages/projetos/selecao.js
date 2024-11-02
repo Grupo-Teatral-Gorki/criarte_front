@@ -121,80 +121,80 @@ const MeusProjetos = () => {
     const idUsuario = parsedUserDetails.id;
 
     try {
-        const response = await fetch('https://gorki-api-nome.iglgxt.easypanel.host/api/createProjeto', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                usuario: localStorage.getItem('userEmail'),
-                senha: localStorage.getItem('userPassword'),
-                nomeProjeto: "Nome do seu projeto",
-                idProponente: 0,
-                idArea: 1,
-                dataPrevistaInicio: "2024-01-01",
-                dataPrevistaFim: "2024-12-31",
-                resumoProjeto: "Resumo do projeto",
-                descricao: "Descrição detalhada do projeto",
-                objetivos: "Objetivos do projeto",
-                justificativaProjeto: "Justificativa para o projeto",
-                contrapartidaProjeto: "Contrapartida oferecida pelo projeto",
-                planoDemocratizacao: "Plano de democratização",
-                outrasInformacoes: "Outras informações relevantes",
-                ingresso: false,
-                valorIngresso: 0,
-                idEdital: 1,
-                idModalidade: 1,
-                idUsuario: idUsuario,
-                relevanciaPertinencia: "Relevância e pertinência do projeto",
-                perfilPublico: "Perfil do público-alvo",
-                classificacaoIndicativa: "Livre",
-                qtdPublico: 100,
-                propostaContrapartida: "Proposta de contrapartida detalhada",
-                planoDivulgacao: "Plano de divulgação do projeto",
-                nomeModalidade: ""
-            }),
-        });
+      const response = await fetch('https://gorki-api-nome.iglgxt.easypanel.host/api/createProjeto', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          usuario: localStorage.getItem('userEmail'),
+          senha: localStorage.getItem('userPassword'),
+          nomeProjeto: "Nome do seu projeto",
+          idProponente: 0,
+          idArea: 1,
+          dataPrevistaInicio: "2024-01-01",
+          dataPrevistaFim: "2024-12-31",
+          resumoProjeto: "Resumo do projeto",
+          descricao: "Descrição detalhada do projeto",
+          objetivos: "Objetivos do projeto",
+          justificativaProjeto: "Justificativa para o projeto",
+          contrapartidaProjeto: "Contrapartida oferecida pelo projeto",
+          planoDemocratizacao: "Plano de democratização",
+          outrasInformacoes: "Outras informações relevantes",
+          ingresso: false,
+          valorIngresso: 0,
+          idEdital: 1,
+          idModalidade: 1,
+          idUsuario: idUsuario,
+          relevanciaPertinencia: "Relevância e pertinência do projeto",
+          perfilPublico: "Perfil do público-alvo",
+          classificacaoIndicativa: "Livre",
+          qtdPublico: 100,
+          propostaContrapartida: "Proposta de contrapartida detalhada",
+          planoDivulgacao: "Plano de divulgação do projeto",
+          nomeModalidade: ""
+        }),
+      });
 
-        const data = await response.json();
+      const data = await response.json();
 
-        // Atualizando para acessar corretamente o ID do projeto
-        if (data && data.projeto && data.projeto.id_projeto) {
-            localStorage.setItem('numeroInscricao', data.projeto.id_projeto);
-            router.push('/pnab/projeto');
-        } else {
-            console.error('Erro ao criar projeto:', data);
-            // Enviar log de erro para a API
-            await logError('Erro ao criar projeto: ' + JSON.stringify(data), idUsuario);
-        }
-    } catch (error) {
-        console.error('Erro ao criar projeto:', error);
+      // Atualizando para acessar corretamente o ID do projeto
+      if (data && data.projeto && data.projeto.id_projeto) {
+        localStorage.setItem('numeroInscricao', data.projeto.id_projeto);
+        router.push('/pnab/projeto');
+      } else {
+        console.error('Erro ao criar projeto:', data);
         // Enviar log de erro para a API
-        await logError(error.message, idUsuario);
+        await logError('Erro ao criar projeto: ' + JSON.stringify(data), idUsuario);
+      }
+    } catch (error) {
+      console.error('Erro ao criar projeto:', error);
+      // Enviar log de erro para a API
+      await logError(error.message, idUsuario);
     }
-};
+  };
 
-// Função para enviar log de erro para a API
-async function logError(erro, idUsuario) {
+  // Função para enviar log de erro para a API
+  async function logError(erro, idUsuario) {
     try {
-        const response = await fetch('https://gorki-fix-proponente.iglgxt.easypanel.host/api/logErro', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                erro: erro,
-                numeroProjeto: localStorage.getItem('numeroInscricao') || null, // Pode ser obtido do localStorage se disponível
-                idUsuario: idUsuario,
-            }),
-        });
+      const response = await fetch('https://gorki-fix-proponente.iglgxt.easypanel.host/api/logErro', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          erro: erro,
+          numeroProjeto: localStorage.getItem('numeroInscricao') || null, // Pode ser obtido do localStorage se disponível
+          idUsuario: idUsuario,
+        }),
+      });
 
-        if (!response.ok) {
-            console.error('Falha ao enviar log de erro:', response.statusText);
-        } else {
-            const logResponse = await response.json();
-            console.log('Log de erro registrado com sucesso:', logResponse);
-        }
+      if (!response.ok) {
+        console.error('Falha ao enviar log de erro:', response.statusText);
+      } else {
+        const logResponse = await response.json();
+        console.log('Log de erro registrado com sucesso:', logResponse);
+      }
     } catch (logError) {
-        console.error('Erro ao tentar enviar log para a API:', logError);
+      console.error('Erro ao tentar enviar log para a API:', logError);
     }
-}
+  }
 
 
   const handleEdit = (projeto) => {
@@ -258,7 +258,7 @@ async function logError(erro, idUsuario) {
 
         </div>
         <div className='mp-projects-grid'>
-          <div style={{backgroundColor: 'white'}} className='mp-project-card' >
+          <div style={{ backgroundColor: 'white' }} className='mp-project-card' >
             <div className='mp-project-header'>
               <h1>Fomento</h1>
               <span className={`mp-status`}>
@@ -267,55 +267,58 @@ async function logError(erro, idUsuario) {
             </div>
             <div className='mp-project-body'>
               <p><strong>Os programas de fomento da Secretaria de Cultura e Economia Criativa têm o objetivo de apoiar a realização de projetos culturais, por meio da concessão de incentivos financeiros para artistas, grupos, instituições e coletivos.</strong></p>
-            
+
             </div>
             <div className='mp-project-footer'>
 
             </div>
             <Button
-                size='small'
-                variant="outlined"
-                sx={{marginTop: '30px'}}
-                onClick={handleCreateProject}
-              >
-                Selecionar
-              </Button>
+              size='small'
+              variant="outlined"
+              sx={{ marginTop: '30px' }}
+              onClick={handleCreateProject}
+            >
+              Selecionar
+            </Button>
           </div>
-          <div style={{backgroundColor: 'white'}} className='mp-project-card' >
-            <div className='mp-project-header'>
-              <h1>Premiação de Mestres E Mestras</h1>
-              
-              <span className={`mp-status`}>
-                {
-                  storageUserDetails ? (
-                    (storageUserDetails.idCidade == 3798) ? (
-                      <p>Disponível</p>
-                    ) : (
-                      <p>Não Qualificado</p>
-                    )
-                  ) : (
-                    <p>Carregando...</p>
-                  )
-                }
-              </span>
-            </div>
-            <div className='mp-project-body'>
-              <p><strong>O objeto deste Edital é a Premiação de Mestres e Mestras e Grupos e Coletivos das Culturas Tradicionais e Populares que tenham prestado relevante contribuição ao desenvolvimento artístico ou cultural do Município.</strong></p>
-              <a href='https://criarte.s3.us-east-2.amazonaws.com/documents/santa-rita-p4/edital-mestres-e-mestras/EDITAL-MESTRES-E-MESTRAS-PNAB-2024-assinado.pdf' target='_blank'>LER OBJETO DO EDITAL</a>
-            </div>
-            <div className='mp-project-footer'>
+          {
+            storageUserDetails && storageUserDetails.idCidade == 3798 ? (
+              <div style={{ backgroundColor: 'white' }} className='mp-project-card' >
+                <div className='mp-project-header'>
+                  <h1>Premiação de Mestres E Mestras</h1>
+                  <span className={`mp-status`}>
+                    {
+                      storageUserDetails ? (
+                        (storageUserDetails.idCidade == 3798) ? (
+                          <p>Disponível</p>
+                        ) : (
+                          <p>Não Qualificado</p>
+                        )
+                      ) : (
+                        <p>Carregando...</p>
+                      )
+                    }
+                  </span>
+                </div>
+                <div className='mp-project-body'>
+                  <p><strong>O objeto deste Edital é a Premiação de Mestres e Mestras e Grupos e Coletivos das Culturas Tradicionais e Populares que tenham prestado relevante contribuição ao desenvolvimento artístico ou cultural do Município.</strong></p>
+                  <a href='https://criarte.s3.us-east-2.amazonaws.com/documents/santa-rita-p4/edital-mestres-e-mestras/EDITAL-MESTRES-E-MESTRAS-PNAB-2024-assinado.pdf' target='_blank'>LER OBJETO DO EDITAL</a>
+                </div>
+                <div className='mp-project-footer'>
 
-            </div>
-            <Button
-                size='small'
-                variant="outlined"
-                sx={{marginTop: '30px'}}
-                disabled={storageUserDetails && storageUserDetails.idCidade != 3798}
-                onClick={handleCreateProject2}
-              >
-                Selecionar
-              </Button>
-          </div>
+                </div>
+                <Button
+                  size='small'
+                  variant="outlined"
+                  sx={{ marginTop: '30px' }}
+                  disabled={storageUserDetails && storageUserDetails.idCidade != 3798}
+                  onClick={handleCreateProject2}
+                >
+                  Selecionar
+                </Button>
+              </div>
+            ): null
+          }
 
         </div>
       </div>

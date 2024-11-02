@@ -19,7 +19,7 @@ const Home = () => {
             const userDetails = localStorage.getItem('userDetails');
             if (userDetails) {
                 const parsedUserDetails = JSON.parse(userDetails);
-                
+
                 // Verifica se o usuário está na lista de permitidos
                 if (allowedUsers.includes(parsedUserDetails.usuario)) {
                     if (parsedUserDetails.tipoUsuario <= 1) {
@@ -146,7 +146,7 @@ const Home = () => {
                                         <img className="banner_img" style={{ display: 'flex' }} src="https://www.santaritadopassaquatro.sp.gov.br/portal/wp-content/uploads/2018/03/cropped-brasao_santa_rita_estancia_menor-1.png" alt="ADICIONAR BANNER" />
                                         <h1 style={{ marginTop: '20px' }} className="banner_titulo">Editais Santa Rita Do Passa Quatro</h1>
                                         <p className="banner_paragrafo" style={{ marginTop: '10px' }}>
-                                            
+
                                         </p>
                                         <button onClick={() => window.open("https://criarte.grupogorki.com.br/projetos/selecao")} style={{ marginTop: '20px', minWidth: '100%' }} className="btn-detalhes">
                                             Ver Editais
@@ -161,6 +161,17 @@ const Home = () => {
                                         </p>
                                         <button onClick={() => alert('Indisponível')} disabled style={{ marginTop: '20px', minWidth: '100%' }} className="btn-detalhes">
                                             INDISPONÍVEL
+                                        </button>
+                                    </div>
+                                ) : storageUserDetails.idCidade === 3823 ? (
+                                    <div>
+                                        <img className="banner_img" style={{ display: 'flex', maxWidth: '300px' }} src="https://criarte.s3.us-east-2.amazonaws.com/public/sao-jose-do-rio-pardo/sjrp.png" alt="ADICIONAR BANNER" />
+                                        <h1 style={{ marginTop: '20px' }} className="banner_titulo">Editais São José Do Rio Pardo</h1>
+                                        <p className="banner_paragrafo" style={{ marginTop: '10px' }}>
+
+                                        </p>
+                                        <button onClick={() => window.open("https://criarte.grupogorki.com.br/projetos/selecao")} style={{ marginTop: '20px', minWidth: '100%' }} className="btn-detalhes">
+                                            Ver Editais
                                         </button>
                                     </div>
                                 ) : (
