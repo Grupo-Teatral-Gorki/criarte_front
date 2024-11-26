@@ -9,7 +9,7 @@ import {
   Alert,
 } from "@mui/material";
 import { styled } from "@mui/system";
-import Header from "../../components/Header/Header";
+import Header from "../../components/header/header";
 import PrivateRoute from "../../components/PrivateRoute";
 import Checkbox from "@mui/material/Checkbox";
 import FormGroup from "@mui/material/FormGroup";

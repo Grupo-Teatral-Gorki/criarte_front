@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Header from "../components/Header/Header";
+import Header from "../components/header/header";
 import PrivateRoute from "../components/PrivateRoute";
 import Footer from "../components/Footer/Footer";
 
@@ -64,6 +64,8 @@ const Home = () => {
     3798: "Santa Rita Do Passa Quatro",
     3357: "Brodowski",
     3823: "São José Do Rio Pardo",
+    3398: "Cerquilho",
+    3478: "Guariba"
   };
 
   // Pegando o nome da cidade com base no idCidade
@@ -75,7 +77,7 @@ const Home = () => {
         <Header />
         <div className="cityIdentifierContainer">
           <div style={{ display: "flex" }}>
-            <p>Version: 1.71.3</p>
+            <p>Version: 1.75.2</p>
             <p>
               Cidade:{" "}
               {storageUserDetails
@@ -136,6 +138,18 @@ const Home = () => {
                       >
                         Brodowski
                       </p>
+                      <p
+                        style={{ padding: "5px 0", cursor: "pointer" }}
+                        onClick={() => handleCityChange(3398)}
+                      >
+                        Cerquilho
+                      </p>
+                      <p
+                        style={{ padding: "5px 0", cursor: "pointer" }}
+                        onClick={() => handleCityChange(3478)}
+                      >
+                        Guariba
+                      </p>
                     </ul>
                   )}
                 </div>
@@ -170,7 +184,7 @@ const Home = () => {
             </a>
 
             <div className="container_ajuda">
-              <a href="#" className="opcao_link">
+              <a href="https://wa.me/16981423000" target="_blank" className="opcao_link">
                 <h3>
                   <i className="bi bi-journal-check"></i> Ajuda
                 </h3>
@@ -261,7 +275,29 @@ const Home = () => {
                     INDISPONÍVEL
                   </button>
                 </div>
-              ) : storageUserDetails.idCidade === 3823 ? (
+              ) 
+              : storageUserDetails.idCidade === 3478 ? (
+                <div>
+                     <img
+                    className="banner_img"
+                    style={{ display: "flex", maxWidth: "180px" }}
+                    src="https://guariba.sp.gov.br/pat/Arquitetura/Imagens/logo.png"
+                    alt="ADICIONAR BANNER"
+                  />
+                  <h1 className="banner_titulo">Editais de Guariba</h1>
+                  <button
+                    onClick={() =>
+                      window.open(
+                        "https://criarte.grupogorki.com.br/projetos/selecao",
+                      )
+                    }
+                    style={{ marginTop: "20px", minWidth: "100%" }}
+                    className="btn-detalhes"
+                  >
+                    Ver Editais
+                  </button>
+                </div>
+              ): storageUserDetails.idCidade === 3823 ? (
                 <div>
                   <img
                     className="banner_img"
@@ -271,6 +307,33 @@ const Home = () => {
                   />
                   <h1 style={{ marginTop: "20px" }} className="banner_titulo">
                     Editais São José Do Rio Pardo
+                  </h1>
+                  <p
+                    className="banner_paragrafo"
+                    style={{ marginTop: "10px" }}
+                  ></p>
+                  <button
+                    onClick={() =>
+                      window.open(
+                        "https://criarte.grupogorki.com.br/projetos/selecao",
+                      )
+                    }
+                    style={{ marginTop: "20px", minWidth: "100%" }}
+                    className="btn-detalhes"
+                  >
+                    Ver Editais
+                  </button>
+                </div>
+              ) : storageUserDetails.idCidade === 3398 ? (
+                <div>
+                  <img
+                    className="banner_img"
+                    style={{ display: "flex", maxWidth: "150px" }}
+                    src="https://www.cerquilho.sp.gov.br/admin/globalarq/logo/95e1558d00b80e1d167060696e4dceb1.png"
+                    alt="ADICIONAR BANNER"
+                  />
+                  <h1 style={{ marginTop: "20px" }} className="banner_titulo">
+                    Editais Cerquilho
                   </h1>
                   <p
                     className="banner_paragrafo"

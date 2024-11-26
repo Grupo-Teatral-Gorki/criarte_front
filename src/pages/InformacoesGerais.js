@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import {
   Container,
@@ -12,10 +13,16 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  FormLabel
 } from "@mui/material";
-import Header from "../components/Header/Header";
+import Header from "../components/header/header";
 import PrivateRoute from "../components/PrivateRoute";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+
 require("dotenv").config();
+
 
 const InformacoesGerais = () => {
   const [formData, setFormData] = useState({
@@ -39,11 +46,24 @@ const InformacoesGerais = () => {
   const [category, setCategory] = useState("");
   const [categoryOptions, setCategoryOptions] = useState([]);
   const [userCityId, setUserCityId] = useState("");
+  const [storageUserDetails, setStorageUserDetails] = useState(null);
+  const [idEdital, setIdEdital] = useState(1)
 
-  const citySantaRitaId = 3798; // ID da cidade de Santa Rita Do Passa Quatro
+  const router = useRouter();
 
-  // Buscar userID e idCidade ao montar o componente
+  const [isCotista, setIsCotista] = useState(false); 
+
+  const citySantaRitaId = 3798;
+
+// Buscar userID e idCidade ao montar o componente
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      const userDetails = localStorage.getItem("userDetails");
+      if (userDetails) {
+        setStorageUserDetails(JSON.parse(userDetails));
+      }
+    }
+
     const storedUserDetails = localStorage.getItem("userDetails");
     const userDetails = JSON.parse(storedUserDetails);
     setUserId(userDetails ? userDetails.id : null);
@@ -53,6 +73,7 @@ const InformacoesGerais = () => {
   // Buscar numeroInscricao do localStorage e dados do projeto
   useEffect(() => {
     const storedNumeroInscricao = localStorage.getItem("numeroInscricao");
+
     if (storedNumeroInscricao) {
       setNumeroInscricao(storedNumeroInscricao);
     } else {
@@ -73,7 +94,7 @@ const InformacoesGerais = () => {
             numeroProjeto: localStorage.getItem("numeroInscricao") || null, // Pode ser obtido do localStorage se disponível
             idUsuario: idUsuario,
           }),
-        },
+        }
       );
 
       if (!response.ok) {
@@ -91,6 +112,31 @@ const InformacoesGerais = () => {
     const userDetails = localStorage.getItem("userDetails");
     const parsedUserDetails = JSON.parse(userDetails);
     const idUsuario = parsedUserDetails.id;
+
+    async function atualizarCotistaValue(idProjeto) {
+      try {
+        const response = await fetch(
+          "https://gorki-api-cotista.iglgxt.easypanel.host/projects/cotista/value",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ idProjeto }),
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Erro ao atualizar status de cotista");
+        }
+
+        const data = await response.json(); // Convertendo a resposta para JSON
+        setIsCotista(data.cotista); // Assumindo que 'cotista' seja um campo da resposta
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    atualizarCotistaValue(numeroInscricao);
 
     if (numeroInscricao) {
       const fetchResumoProjeto = async () => {
@@ -114,7 +160,7 @@ const InformacoesGerais = () => {
 
           if (!response.ok) {
             throw new Error(
-              `Erro na requisição: ${response.status} ${response.statusText}`,
+              `Erro na requisição: ${response.status} ${response.statusText}`
             );
           }
 
@@ -131,6 +177,8 @@ const InformacoesGerais = () => {
                 console.warn("Erro ao analisar descrição:", e);
               }
             }
+
+            setIdEdital(projeto.id_edital)
 
             setFormData({
               resumo: projeto.resumo_projeto || "",
@@ -169,8 +217,88 @@ const InformacoesGerais = () => {
 
   // Função para atualizar as opções de categoria
   const updateCategoryOptions = (selectedModule) => {
+    // Categorias específicas para cidade 3823
+    const moduloICategorias = [
+      "Artes Visuais",
+      "Artesanato",
+      "Cultura Popular",
+      "Cultura de Matrizes Africanas",
+      "Cultura LGBTQIAP+",
+      "Cultura Urbana e Arte de Rua",
+      "Moda",
+      "Teatro",
+      "Dança",
+      "Circo",
+      "Música",
+      "Literatura",
+    ];
+
+    const moduloIICategorias = [...moduloICategorias, "Audiovisual"];
+    const moduloIIICategorias = [...moduloICategorias];
+
+    const moduloI_3398_zp_Categorias = [
+      "Artes Visuais",
+      "Artesanato",
+      "Audiovisual",
+      "Circo",
+      "Dança",
+      "Cultura Afro-brasileira e tradições",
+      "Música",
+      "Literatura",
+      "Patrimônio",
+      "Intercâmbio Cultural",
+      "Teatro"
+    ];
+
+    // Categorias específicas para cidade 3398
+    const moduloI_3398_Categorias = [
+      "Circo",
+      "Artes Visuais",
+      "Artesanato",
+      "Audiovisual",
+      "Dança",
+      "Cultura Afro-brasileira e tradições",
+      "Música",
+      "Literatura",
+      "Patrimônio",
+      "Intercâmbio Cultural",
+      "Teatro"
+    ];
+
+    const moduloI_3478_Categorias = [
+      "Música",
+      "Artes Plásticas e Visuais",
+      "Artesanato",
+      "Teatro",
+      "Dança",
+      "Literatura",
+      "Intercâmbio",
+    ];
+
+    const moduloII_3478_Categorias = [
+      "Afro-brasilidades",
+      "Atividades formativas"
+    ];
+
+    const moduloII_3398_Categorias = [
+      "Circo",
+      "Artes Visuais",
+      "Artesanato",
+      "Audiovisual",
+      "Dança",
+      "Cultura Afro-brasileira e tradições",
+      "Música",
+      "Literatura",
+      "Patrimônio",
+      "Intercâmbio Cultural",
+      "Teatro"
+    ];
+
+    const moduloIII_3398_Categorias = ["Indisponível"];
+
+    // Verificar se é a cidade de Santa Rita
     if (userCityId === citySantaRitaId) {
-      const santaRitaOptions = [
+      setCategoryOptions([
         "Artes visuais",
         "Artesanato",
         "Audiovisual",
@@ -181,9 +309,46 @@ const InformacoesGerais = () => {
         "Literatura",
         "Patrimônio",
         "Teatro",
-      ];
-      setCategoryOptions(santaRitaOptions);
-    } else {
+      ]);
+    }
+    // Verificar se é a cidade 3823 e configurar as opções de módulos
+    else if (userCityId === 3823) {
+      if (selectedModule === 1) {
+        setCategoryOptions(moduloICategorias);
+      } else if (selectedModule === 2) {
+        setCategoryOptions(moduloIICategorias);
+      } else if (selectedModule === 3) {
+        setCategoryOptions(moduloIIICategorias);
+      }
+    }
+    // Verificar se é a cidade 3398 e configurar as opções de módulos
+    else if (userCityId === 3398 && idEdital === 1) {
+      if (selectedModule === 1) {
+        setCategoryOptions(moduloI_3398_Categorias);
+      } else if (selectedModule === 2) {
+        setCategoryOptions(moduloII_3398_Categorias);
+      } else if (selectedModule === 3) {
+        setCategoryOptions(moduloIII_3398_Categorias);
+      }
+    }
+
+    else if (userCityId === 3478 && idEdital === 1) {
+      if (selectedModule === 1) {
+        setCategoryOptions(moduloI_3478_Categorias);
+      } else if (selectedModule === 2) {
+        setCategoryOptions(moduloII_3478_Categorias);
+      }
+     
+    }
+
+    else if (userCityId === 3398 && idEdital === 3) {
+      if (selectedModule === 1) {
+        setCategoryOptions(moduloI_3398_zp_Categorias);
+      }
+    }
+
+    // Configurações para outros casos
+    else {
       if (selectedModule === 1) {
         setCategoryOptions([
           "PRODUÇÃO DE EVENTOS",
@@ -208,6 +373,32 @@ const InformacoesGerais = () => {
       [e.target.name]: e.target.value,
     });
   };
+
+  const handleChangeCotista = (value) => {
+    setIsCotista(value); // Atualiza o estado com base no valor do checkbox selecionado
+  };
+
+  async function atualizarCotista(idProjeto, isCotista) {
+    try {
+      const response = await fetch("https://gorki-api-cotista.iglgxt.easypanel.host/projects/cotista", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ idProjeto, isCotista }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao atualizar status de cotista");
+      }
+
+      setIsCotista(isCotista)
+
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao atualizar status de cotista.");
+    }
+  }
 
   const handleModuleChange = (event) => {
     const selectedModule = event.target.value;
@@ -247,7 +438,10 @@ const InformacoesGerais = () => {
         outras: formData.outras,
       },
       idUsuario: userId,
+      cotista: isCotista, // Adicionando a informação do checkbox
     };
+
+    console.log(isCotista);
 
     const url = `https://gorki-api-nome.iglgxt.easypanel.host/api/updateProjeto`;
     const token = localStorage.getItem("authToken");
@@ -343,8 +537,7 @@ const InformacoesGerais = () => {
             key: "perfil",
           },
           {
-            label:
-              "Expectativa da quantidade do público alcançado com o projeto:",
+            label: "Expectativa da quantidade do público alcançado com o projeto:",
             key: "expectativa",
           },
           {
@@ -360,6 +553,58 @@ const InformacoesGerais = () => {
             label: "Local de realização e justificativa da escolha do local",
             key: "local",
           },
+          { label: "Outras Informações", key: "outras" },
+        ];
+
+        case 3478:
+          return [
+            {
+              label: "Apresentação resumida do projeto", key: "resumo"
+            },
+            { label: "Relevância e pertinência", key: "relevancia" },
+            {
+              label: "Perfil de público-alvo e classificação indicativa",
+              key: "perfil",
+            },
+            {
+              label:
+                "Expectativa da quantidade de público alcançado com o projeto",
+              key: "expectativa",
+            },
+            { label: "Plano de divulgação", key: "divulgacao" },
+            {
+              label: "Medidas de democratização de acesso e de acessibilidade",
+              key: "democratizacao",
+            },
+            {
+              label: "Currículo do proponente",
+              key: "outras"
+            }
+          ]
+
+      case 3398:
+        return [
+          { label: "Resumo do projeto:", key: "resumo" },
+          { label: "Relevância e pertinência", key: "relevancia" },
+          {
+            label: "Perfil de público-alvo e classificação indicativa",
+            key: "perfil",
+          },
+          {
+            label: "Detalhamento da proposta de contrapartida",
+            key: "contrapartida",
+          },
+          {
+            label:
+              "Expectativa da quantidade de público alcançado com o projeto",
+            key: "expectativa",
+          },
+          { label: "Plano de divulgação", key: "divulgacao" },
+          {
+            label: "Medidas de democratização de acesso e de acessibilidade",
+            key: "democratizacao",
+          },
+          { label: "Cronograma de execução", key: "cronograma" },
           { label: "Outras Informações", key: "outras" },
         ];
 
@@ -452,11 +697,12 @@ const InformacoesGerais = () => {
                     <InputLabel>Modalidade</InputLabel>
                     <Select value={module} onChange={handleModuleChange}>
                       <MenuItem value={1}>Módulo 1</MenuItem>
-                      <MenuItem value={2}>Módulo 2</MenuItem>
-                      {JSON.parse(localStorage.getItem("userDetails"))
-                        .idCidade !== 3842 && (
-                        <MenuItem value={3}>Módulo 3</MenuItem>
-                      )}
+                      {
+                        idEdital &&
+                        (idEdital != 3) ?(
+                          <MenuItem value={2}>Módulo 2</MenuItem>
+                        ) : null
+                      }
                     </Select>
                   </FormControl>
                 </Grid>
@@ -475,6 +721,58 @@ const InformacoesGerais = () => {
                 </Grid>
 
                 <Grid item xs={12} style={{ marginTop: "20px" }}>
+                  <Grid item xs={12} style={{ marginTop: "20px" }}>
+                    {storageUserDetails &&
+                    (storageUserDetails.idCidade === 3478 ||
+                      storageUserDetails.idCidade === 3398) ? (
+                      <div style={{ marginLeft: "5px", marginBottom: "30px" }}>
+                        <div style={{ display: "flex" }}>
+                          <FormControl>
+                            <FormLabel>
+                              Optante por cota ( Inserir Declaração
+                              Étnico-racial (Anexo VII) e/ou Declaração de
+                              Pessoa com Deficiência (Anexo VIII))
+                            </FormLabel>
+                            <FormGroup row>
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={isCotista === true} // Verifica se o valor de isCotista é verdadeiro
+                                    onChange={(e) => {
+                                      const idProjeto =
+                                        localStorage.getItem("numeroInscricao");
+                                      atualizarCotista(
+                                        idProjeto,
+                                        e.target.checked
+                                      );
+                                    }}
+                                  />
+                                }
+                                label="Sim"
+                              />
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={isCotista === false} // Verifica se o valor de isCotista é falso
+                                    onChange={(e) => {
+                                      const idProjeto =
+                                        localStorage.getItem("numeroInscricao");
+                                      atualizarCotista(
+                                        idProjeto,
+                                        !e.target.checked
+                                      ); // Atualiza com o estado invertido
+                                    }}
+                                  />
+                                }
+                                label="Não"
+                              />
+                            </FormGroup>
+                          </FormControl>
+                        </div>
+                      </div>
+                    ) : null}
+                  </Grid>
+
                   <Button
                     variant="contained"
                     color="primary"

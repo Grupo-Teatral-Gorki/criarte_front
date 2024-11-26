@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Header from "../../components/Header/Header";
+import Header from "../../components/header/header";
 import PrivateRoute from "../../components/PrivateRoute";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -44,7 +44,7 @@ const MeusProjetos = () => {
               Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
             },
-          },
+          }
         );
 
         if (response.ok) {
@@ -62,6 +62,116 @@ const MeusProjetos = () => {
 
     fetchProjectInfo();
   }, []);
+
+  const handleCreateProject3 = async () => {
+    const userDetails = localStorage.getItem("userDetails");
+    const parsedUserDetails = JSON.parse(userDetails);
+    const idUsuario = parsedUserDetails.id;
+
+    try {
+      const response = await fetch(
+        "https://gorki-api-nome.iglgxt.easypanel.host/api/createProjeto",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            usuario: localStorage.getItem("userEmail"),
+            senha: localStorage.getItem("userPassword"),
+            nomeProjeto: "Nome do seu projeto",
+            idProponente: 0,
+            idArea: 1,
+            dataPrevistaInicio: "2024-01-01",
+            dataPrevistaFim: "2024-12-31",
+            resumoProjeto: "Resumo do projeto",
+            descricao: "...",
+            objetivos: "Objetivos do projeto",
+            justificativaProjeto: "Justificativa para o projeto",
+            contrapartidaProjeto: "Contrapartida oferecida pelo projeto",
+            planoDemocratizacao: "Plano de democratização",
+            outrasInformacoes: "...",
+            ingresso: false,
+            valorIngresso: 0,
+            idEdital: 3,
+            idModalidade: 1,
+            idUsuario: idUsuario,
+            relevanciaPertinencia: "Relevância e pertinência do projeto",
+            perfilPublico: "Perfil do público-alvo",
+            classificacaoIndicativa: "Livre",
+            qtdPublico: 100,
+            propostaContrapartida: "Proposta de contrapartida detalhada",
+            planoDivulgacao: "Plano de divulgação do projeto",
+            nomeModalidade: "",
+          }),
+        }
+      );
+
+      const data = await response.json();
+      // Atualizando para acessar corretamente o ID do projeto
+      if (data && data.projeto && data.projeto.id_projeto) {
+        localStorage.setItem("numeroInscricao", data.projeto.id_projeto);
+        router.push("/pnab/projeto");
+      } else {
+        console.error("Erro ao criar projeto:", data);
+      }
+    } catch (error) {
+      console.error("Erro ao criar projeto:", error);
+    }
+  };
+
+  const handleCreateProject4 = async () => {
+    const userDetails = localStorage.getItem("userDetails");
+    const parsedUserDetails = JSON.parse(userDetails);
+    const idUsuario = parsedUserDetails.id;
+
+    try {
+      const response = await fetch(
+        "https://gorki-api-nome.iglgxt.easypanel.host/api/createProjeto",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            usuario: localStorage.getItem("userEmail"),
+            senha: localStorage.getItem("userPassword"),
+            nomeProjeto: "Nome do seu projeto",
+            idProponente: 0,
+            idArea: 1,
+            dataPrevistaInicio: "2024-01-01",
+            dataPrevistaFim: "2024-12-31",
+            resumoProjeto: "Resumo do projeto",
+            descricao: "...",
+            objetivos: "Objetivos do projeto",
+            justificativaProjeto: "Justificativa para o projeto",
+            contrapartidaProjeto: "Contrapartida oferecida pelo projeto",
+            planoDemocratizacao: "Plano de democratização",
+            outrasInformacoes: "...",
+            ingresso: false,
+            valorIngresso: 0,
+            idEdital: 4,
+            idModalidade: 1,
+            idUsuario: idUsuario,
+            relevanciaPertinencia: "Relevância e pertinência do projeto",
+            perfilPublico: "Perfil do público-alvo",
+            classificacaoIndicativa: "Livre",
+            qtdPublico: 100,
+            propostaContrapartida: "Proposta de contrapartida detalhada",
+            planoDivulgacao: "Plano de divulgação do projeto",
+            nomeModalidade: "",
+          }),
+        }
+      );
+
+      const data = await response.json();
+      // Atualizando para acessar corretamente o ID do projeto
+      if (data && data.projeto && data.projeto.id_projeto) {
+        localStorage.setItem("numeroInscricao", data.projeto.id_projeto);
+        router.push("/pnab/projeto");
+      } else {
+        console.error("Erro ao criar projeto:", data);
+      }
+    } catch (error) {
+      console.error("Erro ao criar projeto:", error);
+    }
+  };
 
   const handleCreateProject2 = async () => {
     const userDetails = localStorage.getItem("userDetails");
@@ -102,7 +212,7 @@ const MeusProjetos = () => {
             planoDivulgacao: "Plano de divulgação do projeto",
             nomeModalidade: "",
           }),
-        },
+        }
       );
 
       const data = await response.json();
@@ -157,7 +267,7 @@ const MeusProjetos = () => {
             planoDivulgacao: "Plano de divulgação do projeto",
             nomeModalidade: "",
           }),
-        },
+        }
       );
 
       const data = await response.json();
@@ -171,7 +281,7 @@ const MeusProjetos = () => {
         // Enviar log de erro para a API
         await logError(
           "Erro ao criar projeto: " + JSON.stringify(data),
-          idUsuario,
+          idUsuario
         );
       }
     } catch (error) {
@@ -194,7 +304,7 @@ const MeusProjetos = () => {
             numeroProjeto: localStorage.getItem("numeroInscricao") || null, // Pode ser obtido do localStorage se disponível
             idUsuario: idUsuario,
           }),
-        },
+        }
       );
 
       if (!response.ok) {
@@ -247,7 +357,7 @@ const MeusProjetos = () => {
               senha: localStorage.getItem("userPassword"),
               numeroInscricao: selectedProject.numeroInscricao,
             }),
-          },
+          }
         );
 
         if (response.ok) {
@@ -349,6 +459,150 @@ const MeusProjetos = () => {
                 sx={{ marginTop: "30px" }}
                 disabled={
                   storageUserDetails && storageUserDetails.idCidade != 3798
+                }
+                onClick={handleCreateProject2}
+              >
+                Selecionar
+              </Button>
+            </div>
+          ) : null}
+          {storageUserDetails && storageUserDetails.idCidade == 3398 ? (
+            <div
+              style={{ backgroundColor: "white" }}
+              className="mp-project-card"
+            >
+              <div className="mp-project-header">
+                <h3>Áreas Periféricas</h3>
+                <span className={`mp-status`}>
+                  {storageUserDetails ? (
+                    storageUserDetails.idCidade == 3398 ? (
+                      <p>Disponível</p>
+                    ) : (
+                      <p>Não Qualificado</p>
+                    )
+                  ) : (
+                    <p>Carregando...</p>
+                  )}
+                </span>
+              </div>
+              <div className="mp-project-body">
+                <p>
+                  <strong>
+                    Atividades artísticas voltadas para zonas periféricas
+                  </strong>
+                </p>
+                <a
+                  href="https://www.cerquilho.sp.gov.br/public/admin/globalarq/diario-eletronico/diario/RAw32caA3Z2s2xTA.pdf"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  LER OBJETO DO EDITAL
+                </a>
+              </div>
+              <div className="mp-project-footer"></div>
+              <Button
+                size="small"
+                variant="outlined"
+                sx={{ marginTop: "30px" }}
+                disabled={
+                  storageUserDetails && storageUserDetails.idCidade != 3398
+                }
+                onClick={handleCreateProject3}
+              >
+                Selecionar
+              </Button>
+            </div>
+          ) : null}
+          {storageUserDetails && storageUserDetails.idCidade == 3478 ? (
+            <div
+              style={{ backgroundColor: "white" }}
+              className="mp-project-card"
+            >
+              <div className="mp-project-header">
+                <h3>Subsídio</h3>
+                <span className={`mp-status`}>
+                  {storageUserDetails ? (
+                    storageUserDetails.idCidade == 3478 ? (
+                      <p>Disponível</p>
+                    ) : (
+                      <p>Não Qualificado</p>
+                    )
+                  ) : (
+                    <p>Carregando...</p>
+                  )}
+                </span>
+              </div>
+              <div className="mp-project-body">
+                <p>
+                  <strong>
+                    SELEÇÃO ESPAÇO, AMBIENTES E INICIATIVAS ARTÍSTICO-CULTURAIS
+                    PARA RECEBER SUBSÍDIO PARA MANUTENÇÃO COM RECURSOS DA
+                    POLÍTICA NACIONAL ALDIR BLANC DE FOMENTO À CULTURA – PNAB
+                    (LEI Nº 14.399/2022)
+                  </strong>
+                </p>
+              </div>
+              <div className="mp-project-footer"></div>
+              <Button
+                size="small"
+                variant="outlined"
+                sx={{ marginTop: "30px" }}
+                disabled={
+                  storageUserDetails && storageUserDetails.idCidade != 3478
+                }
+                onClick={handleCreateProject4}
+              >
+                Selecionar
+              </Button>
+            </div>
+          ) : null}
+          {storageUserDetails && storageUserDetails.idCidade == 3823 ? (
+            <div
+              style={{ backgroundColor: "white" }}
+              className="mp-project-card"
+            >
+              <div className="mp-project-header">
+                <h3>
+                  FOMENTO A PROJETOS CONTINUADOS DE PONTOS DE CULTURA (CULTURA
+                  VIVA)
+                </h3>
+                <span className={`mp-status`}>
+                  {storageUserDetails ? (
+                    storageUserDetails.idCidade == 3823 ? (
+                      <p>Disponível</p>
+                    ) : (
+                      <p>Não Qualificado</p>
+                    )
+                  ) : (
+                    <p>Carregando...</p>
+                  )}
+                </span>
+              </div>
+              <div className="mp-project-body">
+                <p>
+                  <strong>
+                    O Município de São José do Rio Pardo - SP torna público o
+                    presente Edital para o desenvolvimento da “REDE MUNICIPAL DE
+                    PONTOS DE CULTURA DE SÃO JOSÉ DO RIO PARDO – SP por meio da
+                    Política Nacional de Cultura Viva (PNCV), instituída pela
+                    Lei nº 13.018, de 22 de julho de 2014.
+                  </strong>
+                </p>
+                <a
+                  href="https://criarte.s3.us-east-2.amazonaws.com/public/sao-jose-do-rio-pardo/cultura-viva/Edital+PNCV_Retificado+-+Cultura+Viva%5B1%5D.pdf"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  LER OBJETO DO EDITAL
+                </a>
+              </div>
+              <div className="mp-project-footer"></div>
+              <Button
+                size="small"
+                variant="outlined"
+                sx={{ marginTop: "30px" }}
+                disabled={
+                  storageUserDetails && storageUserDetails.idCidade != 3823
                 }
                 onClick={handleCreateProject2}
               >

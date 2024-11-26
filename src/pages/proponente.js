@@ -9,8 +9,8 @@ import {
   Alert,
   CircularProgress,
 } from "@mui/material";
-import NewProponentForm from "./NovoProponente";
-import Header from "../components/Header/Header";
+import NewProponentForm from "./novoProponente";
+import Header from "../components/header/header";
 import PrivateRoute from "../components/PrivateRoute";
 import Checkbox from "@mui/material/Checkbox";
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Header from "../components/Header/Header";
+import Header from "../components/header/header";
 import PrivateRoute from "../components/PrivateRoute";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -44,7 +44,7 @@ const MeusProjetos = () => {
               Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
             },
-          },
+          }
         );
 
         if (response.ok) {
@@ -102,7 +102,7 @@ const MeusProjetos = () => {
             planoDivulgacao: "Plano de divulgação do projeto",
             nomeModalidade: "",
           }),
-        },
+        }
       );
 
       const data = await response.json();
@@ -118,7 +118,7 @@ const MeusProjetos = () => {
   };
 
   const handleEdit = (projeto) => {
-    if (projeto.status === "Enviado") {
+    if (projeto.status === "enviado" || projeto.status === "enviado") {
       setEditAlertOpen(true);
     } else {
       localStorage.setItem("numeroInscricao", projeto.numeroInscricao);
@@ -136,6 +136,10 @@ const MeusProjetos = () => {
   };
 
   const handleClickOpenRecurso = (project) => {
+    // Atualiza o numeroInscricao no localStorage
+    localStorage.setItem("numeroInscricao", project.numeroInscricao);
+  
+    // Redireciona para a página de recurso
     router.push("/pnab/recurso");
   };
 
@@ -157,7 +161,7 @@ const MeusProjetos = () => {
               senha: localStorage.getItem("userPassword"),
               numeroInscricao: selectedProject.numeroInscricao,
             }),
-          },
+          }
         );
 
         if (response.ok) {
@@ -286,15 +290,10 @@ const MeusProjetos = () => {
                     size="small"
                     variant="outlined"
                     sx={{ marginRight: "8px" }}
-                    onClick={() => {
-                      projeto.status === "enviado"
-                        ? handleDisabledButtonClick()
-                        : handleClickOpenRecurso(projeto);
-                    }}
+                    onClick={() => handleClickOpenRecurso(projeto)}
                     disabled={
-                      projeto.status === "enviado" ||
-                      projeto.status == "Habilitação" ||
-                      projeto.status == "Recurso"
+                      projeto.status !== "enviado" &&
+                      projeto.status !== "Recurso"
                     }
                   >
                     Recurso
@@ -306,8 +305,8 @@ const MeusProjetos = () => {
                     onClick={() => handleClickOpen(projeto)}
                     disabled={
                       projeto.status === "enviado" ||
-                      projeto.status == "Habilitação" ||
-                      projeto.status == "Recurso"
+                      projeto.status === "Habilitação" ||
+                      projeto.status === "Recurso"
                     }
                   >
                     Excluir
@@ -315,15 +314,11 @@ const MeusProjetos = () => {
                   <Button
                     size="small"
                     variant="outlined"
-                    onClick={() => {
-                      projeto.status === "enviado"
-                        ? handleDisabledButtonClick()
-                        : handleEdit(projeto);
-                    }}
+                    onClick={() => handleEdit(projeto)}
                     disabled={
                       projeto.status === "enviado" ||
-                      projeto.status == "Habilitação" ||
-                      projeto.status == "Recurso"
+                      projeto.status === "Habilitação" ||
+                      projeto.status === "Recurso"
                     }
                   >
                     Editar

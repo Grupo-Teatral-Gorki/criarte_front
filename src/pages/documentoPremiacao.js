@@ -9,7 +9,7 @@ import {
   Alert,
 } from "@mui/material";
 import { styled } from "@mui/system";
-import Header from "../components/Header/Header";
+import Header from "../components/header/header";
 import PrivateRoute from "../components/PrivateRoute";
 
 // Alterado para começar com letra maiúscula
@@ -20,8 +20,18 @@ const DocumentoPremiacao = () => {
   const [files, setFiles] = useState({});
   const [uploadStatus, setUploadStatus] = useState({});
   const [allFilesUploaded, setAllFilesUploaded] = useState(false);
+  const [storageUserDetails, setStorageUserDetails] = useState(null);
+
+  
+
 
   useEffect(() => {
+
+    const userDetails = localStorage.getItem("userDetails");
+      if (userDetails) {
+        setStorageUserDetails(JSON.parse(userDetails));
+      }
+      
     const numeroInscricaoStored = localStorage.getItem("numeroInscricao");
 
     if (numeroInscricaoStored && numeroInscricaoStored.length > 0) {
@@ -60,7 +70,7 @@ const DocumentoPremiacao = () => {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
           },
           body: formData,
-        },
+        }
       );
 
       if (response.ok) {
@@ -78,7 +88,7 @@ const DocumentoPremiacao = () => {
           "Upload error:",
           response.status,
           response.statusText,
-          await response.text(),
+          await response.text()
         );
       }
     } catch (error) {
@@ -100,8 +110,8 @@ const DocumentoPremiacao = () => {
     try {
       await Promise.all(
         Object.keys(files).map((fieldName) =>
-          uploadFile(files[fieldName], fieldName),
-        ),
+          uploadFile(files[fieldName], fieldName)
+        )
       );
       setAllFilesUploaded(true);
 
@@ -116,18 +126,18 @@ const DocumentoPremiacao = () => {
           body: JSON.stringify({
             idProponente: userDetails.id,
           }),
-        },
+        }
       );
 
       if (!updateResponse.ok) {
         throw new Error(
-          `Erro ao atualizar o projeto: ${updateResponse.status} ${updateResponse.statusText}`,
+          `Erro ao atualizar o projeto: ${updateResponse.status} ${updateResponse.statusText}`
         );
       }
 
       console.log(
         "Projeto atualizado com sucesso:",
-        await updateResponse.json(),
+        await updateResponse.json()
       );
     } catch (error) {
       console.error("Error updating project:", error);
@@ -237,24 +247,63 @@ const DocumentoPremiacao = () => {
             <Alert severity="error">{error}</Alert>
           ) : (
             <form onSubmit={handleSubmit}>
-              <UploadField
-                name="form-insc"
-                label="Formulário De Inscrição"
-                exampleLink="https://criarte.s3.us-east-2.amazonaws.com/public/EDITAL-05-ANEXO-2-FORMULARIO-DE-INSCRICAO.docx"
-                exampleText="Baixar exemplo"
-              />
-              <UploadField
-                name="portf"
-                label="Portfólio / Curriculo Artístico"
-              />
-              <UploadField
-                name="dec-rep"
-                label="Declaração De Representação ( Opcional )"
-              />
-              <UploadField
-                name="auto-dec-et"
-                label="Autodeclaração étnico-racial e/ou de pessoa com deficiência"
-              />
+              {/* Verifica se a cidade é 3798 ou 3823 para renderizar diferentes campos */}
+              {storageUserDetails?.idCidade === 3798 ? (
+                <>
+                  {/* Campos para cidade 3798 */}
+                  <UploadField
+                    name="form-insc"
+                    label="Formulário De Inscrição"
+                    exampleLink="https://criarte.s3.us-east-2.amazonaws.com/public/EDITAL-05-ANEXO-2-FORMULARIO-DE-INSCRICAO.docx"
+                    exampleText="Baixar exemplo"
+                  />
+                  <UploadField
+                    name="portf"
+                    label="Portfólio / Curriculo Artístico"
+                  />
+                  <UploadField
+                    name="dec-rep"
+                    label="Declaração De Representação (Opcional)"
+                  />
+                  <UploadField
+                    name="auto-dec-et"
+                    label="Autodeclaração étnico-racial e/ou de pessoa com deficiência"
+                  />
+                </>
+              ) : storageUserDetails?.idCidade === 3823 ? (
+                <>
+                  <UploadField
+                    name="form-insc-sjrp"
+                    label="Formulário de Inscrição (conforme Anexo 03)"
+                    exampleLink="https://criarte.s3.us-east-2.amazonaws.com/public/EDITAL-05-ANEXO-2-FORMULARIO-DE-INSCRICAO.docx"
+                    exampleText="Baixar exemplo"
+                  />
+                  <UploadField
+                    name="plano-de-trabalho-sjrp"
+                    label="Plano de Trabalho (conforme Anexo 04)"
+                  />
+                  <UploadField
+                    name="plano-aplicacao"
+                    label="Plano de Aplicação de Recursos (conforme Anexo 05)"
+                  />
+                  <UploadField
+                    name="material"
+                    label="Material de comprovação das atividades culturais desenvolvidas"
+                  />
+                  <UploadField
+                    name="autodec"
+                    label="Autodeclarações das pessoas negras (pretas ou pardas), pessoas indígenas ou pessoas com deficiência do quadro de dirigentes"
+                  />
+                  <UploadField
+                    name="outros-doc"
+                    label="Outros documentos que a proponente julgar necessário para auxiliar na avaliação do seu projeto"
+                  />
+                </>
+              ) : (
+                <Alert severity="info">
+                  Nenhuma cidade específica selecionada para documentos.
+                </Alert>
+              )}
 
               <Box sx={{ mt: 4, textAlign: "center" }}>
                 <Button variant="contained" type="submit">

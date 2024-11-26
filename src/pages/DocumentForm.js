@@ -9,8 +9,18 @@ import {
   Alert,
 } from "@mui/material";
 import { styled } from "@mui/system";
-import Header from "../components/Header/Header";
+import Header from "../components/header/header";
 import PrivateRoute from "../components/PrivateRoute";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
+import FormGroup from "@mui/material/FormGroup";
+import Checkbox from "@mui/material/Checkbox";
+
+
+
+
+
 
 const DocumentUploadForm = () => {
   const [numeroInscricao, setNumeroInscricao] = useState(null);
@@ -22,6 +32,8 @@ const DocumentUploadForm = () => {
   const [idEdital, setIdEdital] = useState(null); // Estado para armazenar id_edital
   const [storageUserDetails, setStorageUserDetails] = useState(null);
   const [isDownloadSuccessful, setIsDownloadSuccessful] = useState(false);
+  const [isCotista, setIsCotista] = useState(false); 
+
 
   const sanitizeFileName = (fileName) => {
     return fileName
@@ -40,11 +52,36 @@ const DocumentUploadForm = () => {
     }
     const numeroInscricaoStored = localStorage.getItem("numeroInscricao");
 
+    async function atualizarCotistaValue(numeroInscricaoStored) {
+      try {
+        const response = await fetch(
+          "https://gorki-api-cotista.iglgxt.easypanel.host/projects/cotista/value",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ idProjeto: numeroInscricaoStored }),
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Erro ao atualizar status de cotista");
+        }
+
+        const data = await response.json(); // Convertendo a resposta para JSON
+        setIsCotista(data.cotista); // Assumindo que 'cotista' seja um campo da resposta
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    atualizarCotistaValue(numeroInscricaoStored);
+
     const checkDownloadStatus = async () => {
       if (numeroInscricaoStored) {
         try {
           const response = await fetch(
-            `https://gorki-aws-acess-api.iglgxt.easypanel.host/download-zip/3798/${numeroInscricaoStored}`,
+            `https://gorki-aws-acess-api.iglgxt.easypanel.host/download-zip/3798/${numeroInscricaoStored}`
           );
           if (response.status === 200) {
             setIsDownloadSuccessful(true);
@@ -84,7 +121,7 @@ const DocumentUploadForm = () => {
               senha: localStorage.getItem("userPassword"),
               numeroInscricao: localStorage.getItem("numeroInscricao"),
             }),
-          },
+          }
         );
 
         if (!response.ok) {
@@ -102,6 +139,28 @@ const DocumentUploadForm = () => {
 
     fetchIdEdital();
   }, []);
+
+  async function atualizarCotista(idProjeto, isCotista) {
+    try {
+      const response = await fetch("https://gorki-api-cotista.iglgxt.easypanel.host/projects/cotista", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ idProjeto, isCotista }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao atualizar status de cotista");
+      }
+
+      setIsCotista(isCotista)
+
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao atualizar status de cotista.");
+    }
+  }
 
   const handleFileChange = (event, fieldName) => {
     const file = event.target.files[0];
@@ -130,7 +189,7 @@ const DocumentUploadForm = () => {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
           },
           body: formData,
-        },
+        }
       );
 
       if (response.ok) {
@@ -148,7 +207,7 @@ const DocumentUploadForm = () => {
           "Upload error:",
           response.status,
           response.statusText,
-          await response.text(),
+          await response.text()
         );
       }
     } catch (error) {
@@ -170,8 +229,8 @@ const DocumentUploadForm = () => {
     try {
       await Promise.all(
         Object.keys(files).map((fieldName) =>
-          uploadFile(files[fieldName], fieldName),
-        ),
+          uploadFile(files[fieldName], fieldName)
+        )
       );
       setAllFilesUploaded(true);
 
@@ -186,18 +245,18 @@ const DocumentUploadForm = () => {
           body: JSON.stringify({
             idProponente: userDetails.id,
           }),
-        },
+        }
       );
 
       if (!updateResponse.ok) {
         throw new Error(
-          `Erro ao atualizar o projeto: ${updateResponse.status} ${updateResponse.statusText}`,
+          `Erro ao atualizar o projeto: ${updateResponse.status} ${updateResponse.statusText}`
         );
       }
 
       console.log(
         "Projeto atualizado com sucesso:",
-        await updateResponse.json(),
+        await updateResponse.json()
       );
     } catch (error) {
       console.error("Error updating project:", error);
@@ -247,6 +306,7 @@ const DocumentUploadForm = () => {
         {uploadStatus[name] === "error" && (
           <Alert severity="error">Erro ao enviar o arquivo.</Alert>
         )}
+        {uploadStatus[name] === "error" && setAllFilesUploaded(false)}
       </CardContent>
     </Card>
   );
@@ -337,9 +397,210 @@ const DocumentUploadForm = () => {
           { name: "outrosDocumentos", label: "Outros documentos" },
         ];
 
+      case 3478:
+        if (idEdital !== 4) {
+          return [
+            {
+              name: "id-doc",
+              label:
+                "Cópia digitalizada de um único documento com foto do proponente, constando número do CPF e RG (carteira de identidade, CNH, outros...)",
+            },
+            {
+              name: "comp-end-2a",
+              label:
+                "Comprovante de endereço há, pelo menos, 2 (dois) anos no município de Guariba, retroativo a outubro de 2022",
+            },
+            {
+              name: "comp-end",
+              label:
+                "Comprovante de endereço atual, datado a partir de junho de 2024",
+            },
+            {
+              name: "auto-red",
+              label: "Autodeclaração de residência (Anexo II)",
+            },
+            {
+              name: "comp-end",
+              label:
+                "Comprovante de endereço atual, datado a partir de junho de 2024",
+            },
+            {
+              name: "dec-municipio",
+              label: "Declaração de opção de Município (Anexo IX)",
+            },
+            {
+              name: "termos-comp",
+              label:
+                "Termos de Compromissos assinados pelos principais integrantes do projeto (AnexoV)",
+            },
+            {
+              name: "cronograma",
+              label: "Cronograma de execução",
+            },
+            {
+              name: "curriculo",
+              label:
+                "Currículo (texto) do proponente. Caso o proponente seja também o idealizador do projeto, enviar o currículo e o portfólio conforme descrito no item abaixo",
+            },
+            {
+              name: "portfolio",
+              label:
+                "Portfólio do idealizador. O Portfólio deve conter o Currículo (Texto) e COMPROVAÇÕES da atuação do Coletivo, Grupo ou idealizador contendo fotos de eventos, cópias de jornais, panfletos, e-flyers, print de divulgações em redes sociais, links de vídeos ou de páginas de redes sociais ou sites de trabalho, certificados de participação em cursos e/ou atividades diversas de cultura, cartas ou declaração de reconhecimento do trabalho cultural, da pessoa ou coletivo, emitidas por entidades, ONGs, escolas, associações, dentre outros agentes que atestem sua atuação em Cerquilho há pelo menos 1 ano, em um Único arquivo PDF.",
+            },
+            {
+              name: "ficha-tec",
+              label:
+                "Ficha técnica com a relação dos participantes, incluindo a identificação do CPF e a descrição da função no projeto.",
+            },
+            {
+              name: "PJ-id-doc",
+              label:
+                "(PJ) Documento de Identidade ou outro documento com força legal que contenha o número de R.G. e foto do(s) seu(s) representante(s) legal(is)",
+            },
+            {
+              name: "pj-id-doc-2",
+              label:
+                "(PJ) CPF, caso o documento com força legal não contenha o número do CPF do(s) seu(s)representante(s) legal(is)",
+            },
+            {
+              name: "pj-id-doc-3",
+              label:
+                "(PJ) Cartão do CNPJ ou Requerimento de Microempreendedor Individual; d) Comprovante de endereço há, pelo menos, 2 (dois) anos no município de Ribeirão Preto, retroativo a junho de 2022, em nome da Instituição ou do proponente inscrito como M.E.I.",
+            },
+            {
+              name: "pj-id-doc-4",
+              label:
+                "(PJ) Comprovante de endereço atual, datado a partir de julho de 2023",
+            },
+            {
+              name: "pj-id-doc-5",
+              label: "(PJ) Contrato Social ou do Estatuto e demais alterações",
+            },
+            {
+              name: "pj-id-doc-6",
+              label:
+                "(PJ) Ata de eleição e posse da diretoria, quando for o caso",
+            },
+          ];
+        } else if (idEdital === 4) {
+          return [
+            {
+              name: "form-insc",
+              label: "Formulário de inscrição (Anexo II)",
+            },
+            {
+              name: "portf",
+              label: "Portfólio",
+            },
+            {
+              name: "docs-esp",
+              label:
+                "Documentos específicos relacionados na categoria de apoio em que o espaço, ambiente ou iniciativa artístico-cultural será inscrito, quando houver (Anexo I)",
+            },
+            {
+              name: "dec-cnpj1",
+              label: "Declaração de representação, se for um coletivo sem CNPJ (Anexo VI)"
+            },
+            {
+              name: "outros-doc",
+              label: "Outros documentos que o agente cultural julgar necessário para auxiliar na avaliação do mérito cultural do projeto"
+            }
+          ];
+        }
+
+      case 3478 && idEdital != 4:
+        return [
+          {
+            name: "id-doc",
+            label:
+              "Cópia digitalizada de um único documento com foto do proponente, constando número do CPF e RG (carteira de identidade, CNH, outros...)",
+          },
+          {
+            name: "comp-end-2a",
+            label:
+              "Comprovante de endereço há, pelo menos, 2 (dois) anos no município de Guariba, retroativo a outubro de 2022",
+          },
+          {
+            name: "comp-end",
+            label:
+              "Comprovante de endereço atual, datado a partir de junho de 2024",
+          },
+          {
+            name: "auto-red",
+            label: "Autodeclaração de residência (Anexo II)",
+          },
+          {
+            name: "comp-end",
+            label:
+              "Comprovante de endereço atual, datado a partir de junho de 2024",
+          },
+          {
+            name: "dec-municipio",
+            label: "Declaração de opção de Município (Anexo IX)",
+          },
+          {
+            name: "termos-comp",
+            label:
+              "Termos de Compromissos assinados pelos principais integrantes do projeto (AnexoV)",
+          },
+          {
+            name: "cronograma",
+            label: "Cronograma de execução",
+          },
+          {
+            name: "curriculo",
+            label:
+              "Currículo (texto) do proponente. Caso o proponente seja também o idealizador do projeto, enviar o currículo e o portfólio conforme descrito no item abaixo",
+          },
+          {
+            name: "portfolio",
+            label:
+              "Portfólio do idealizador. O Portfólio deve conter o Currículo (Texto) e COMPROVAÇÕES da atuação do Coletivo, Grupo ou idealizador contendo fotos de eventos, cópias de jornais, panfletos, e-flyers, print de divulgações em redes sociais, links de vídeos ou de páginas de redes sociais ou sites de trabalho, certificados de participação em cursos e/ou atividades diversas de cultura, cartas ou declaração de reconhecimento do trabalho cultural, da pessoa ou coletivo, emitidas por entidades, ONGs, escolas, associações, dentre outros agentes que atestem sua atuação em Cerquilho há pelo menos 1 ano, em um Único arquivo PDF.",
+          },
+          {
+            name: "ficha-tec",
+            label:
+              "Ficha técnica com a relação dos participantes, incluindo a identificação do CPF e a descrição da função no projeto.",
+          },
+          {
+            name: "PJ-id-doc",
+            label:
+              "(PJ) Documento de Identidade ou outro documento com força legal que contenha o número de R.G. e foto do(s) seu(s) representante(s) legal(is)",
+          },
+          {
+            name: "pj-id-doc-2",
+            label:
+              "(PJ) CPF, caso o documento com força legal não contenha o número do CPF do(s) seu(s)representante(s) legal(is)",
+          },
+          {
+            name: "pj-id-doc-3",
+            label:
+              "(PJ) Cartão do CNPJ ou Requerimento de Microempreendedor Individual; d) Comprovante de endereço há, pelo menos, 2 (dois) anos no município de Ribeirão Preto, retroativo a junho de 2022, em nome da Instituição ou do proponente inscrito como M.E.I.",
+          },
+          {
+            name: "pj-id-doc-4",
+            label:
+              "(PJ) Comprovante de endereço atual, datado a partir de julho de 2023",
+          },
+          {
+            name: "pj-id-doc-5",
+            label: "(PJ) Contrato Social ou do Estatuto e demais alterações",
+          },
+          {
+            name: "pj-id-doc-6",
+            label:
+              "(PJ) Ata de eleição e posse da diretoria, quando for o caso",
+          },
+        ];
+
       case 3823:
         return [
           { name: "id-doc", label: "*Documento de identidade" },
+          {
+            name: "comp-end-2a",
+            label:
+              "Comprovante de endereço há, pelo menos, 2 (dois) anos no município de Cerquilho, retroativo a outubro de 2022",
+          },
           {
             name: "cart-cnpj",
             label:
@@ -353,10 +614,6 @@ const DocumentUploadForm = () => {
           {
             name: "comp-endereco-atual",
             label: "*Comprovante de endereço atual",
-          },
-          {
-            name: "termoCompromisso",
-            label: "*Termo de compromisso dos participantes",
           },
           {
             name: "contr-social",
@@ -497,6 +754,43 @@ const DocumentUploadForm = () => {
               })}
 
               <Box sx={{ mt: 4, textAlign: "center" }}>
+                <div>
+                <FormControl >
+                  <FormLabel>
+                    Optante por cota ( Inserir Declaração Étnico-racial (Anexo
+                    VII) e/ou Declaração de Pessoa com Deficiência (Anexo VIII))
+                  </FormLabel>
+                  <FormGroup row>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={isCotista === true} // Verifica se o valor de isCotista é verdadeiro
+                          onChange={(e) => {
+                            const idProjeto =
+                              localStorage.getItem("numeroInscricao");
+                            atualizarCotista(idProjeto, e.target.checked);
+                          }}
+                        />
+                      }
+                      label="Sim"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={isCotista === false} // Verifica se o valor de isCotista é falso
+                          onChange={(e) => {
+                            const idProjeto =
+                              localStorage.getItem("numeroInscricao");
+                            atualizarCotista(idProjeto, !e.target.checked); // Atualiza com o estado invertido
+                          }}
+                        />
+                      }
+                      label="Não"
+                    />
+                  </FormGroup>
+                </FormControl>
+                </div>
+             
                 <Button variant="contained" type="submit">
                   SALVAR DOCUMENTOS
                 </Button>
