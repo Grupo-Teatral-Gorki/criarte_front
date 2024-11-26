@@ -12,6 +12,7 @@ const AdminPrivateRoute = ({ children }) => {
     "gaferreirainicial@gmail.com",
     "analuzmira23@gmail.com",
     "producaocultural@grupoteatralgorki.com",
+    "c.frinkaneto@gmail.com",
   ]; // Lista de usuários permitidos
 
   useEffect(() => {

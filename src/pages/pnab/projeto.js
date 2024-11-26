@@ -127,7 +127,7 @@ function PnabHomeForms() {
 
           if (!response.ok) {
             throw new Error(
-              `Erro na requisição: ${response.status} ${response.statusText}`,
+              `Erro na requisição: ${response.status} ${response.statusText}`
             );
           }
 
@@ -173,12 +173,12 @@ function PnabHomeForms() {
             idProjeto: numeroInscricao,
             novoNome: projectName,
           }),
-        },
+        }
       );
 
       if (!response.ok) {
         throw new Error(
-          `Erro ao atualizar o nome do projeto: ${response.status}`,
+          `Erro ao atualizar o nome do projeto: ${response.status}`
         );
       }
 
@@ -186,7 +186,7 @@ function PnabHomeForms() {
       localStorage.setItem("projectName", projectName);
     } catch (error) {
       setError(
-        "Erro ao atualizar o nome do projeto. Tente novamente mais tarde.",
+        "Erro ao atualizar o nome do projeto. Tente novamente mais tarde."
       );
     }
   };

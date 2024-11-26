@@ -11,9 +11,7 @@ import {
 import { styled } from "@mui/system";
 import Header from "../../components/Header/Header";
 import PrivateRoute from "../../components/PrivateRoute";
-import Checkbox from "@mui/material/Checkbox";
 import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
 
 const RecursoForm = () => {
   const [numeroInscricao, setNumeroInscricao] = useState(null);
@@ -22,7 +20,6 @@ const RecursoForm = () => {
   const [files, setFiles] = useState({});
   const [uploadStatus, setUploadStatus] = useState({});
   const [allFilesUploaded, setAllFilesUploaded] = useState(false);
-  const [checkedOption, setCheckedOption] = useState(null); // Para controle de checkbox
   const [isButtonDisabled, setIsButtonDisabled] = useState(true); // Controle do botão
 
   useEffect(() => {
@@ -35,11 +32,6 @@ const RecursoForm = () => {
       setIsLoading(false);
     }
   }, []);
-
-  useEffect(() => {
-    // O botão "Enviar Todos" só será habilitado se um checkbox estiver marcado
-    setIsButtonDisabled(checkedOption === null);
-  }, [checkedOption]);
 
   const handleFileChange = (event, fieldName) => {
     const file = event.target.files[0];
@@ -123,7 +115,7 @@ const RecursoForm = () => {
             usuario: localStorage.getItem("userEmail"),
             senha: localStorage.getItem("userPassword"),
             idProjeto: numeroInscricao,
-            status: "Recurso",
+            status: "Habilitação",
           }),
         }
       );
@@ -232,7 +224,7 @@ const RecursoForm = () => {
             variant="h4"
             sx={{ marginBottom: "1rem", textAlign: "center" }}
           >
-            Recurso
+            Habilitação
           </Typography>
 
           {isLoading ? (
@@ -241,7 +233,9 @@ const RecursoForm = () => {
             <Alert severity="error">{error}</Alert>
           ) : (
             <form onSubmit={handleSubmit}>
-              <UploadField name="argumento" label="*Argumento do recurso" />
+              <UploadField name="cnd_municipal" label="*CND Municipal" />
+              <UploadField name="cnd_estadual" label="*CND Estadual" />
+              <UploadField name="cnd_federal" label="*CND Federal" />
 
               <FormGroup
                 sx={{

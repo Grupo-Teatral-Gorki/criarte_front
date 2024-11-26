@@ -44,7 +44,7 @@ const MeusProjetos = () => {
               Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
             },
-          },
+          }
         );
 
         if (response.ok) {
@@ -102,7 +102,7 @@ const MeusProjetos = () => {
             planoDivulgacao: "Plano de divulgação do projeto",
             nomeModalidade: "",
           }),
-        },
+        }
       );
 
       const data = await response.json();
@@ -135,8 +135,12 @@ const MeusProjetos = () => {
     setOpen(true); // Isso abre o diálogo de confirmação
   };
 
-  const handleClickOpenRecurso = (project) => {
-    router.push("/pnab/recurso");
+  const handleClickOpenRecurso = (project, tipo) => {
+    if (tipo === "recurso") {
+      router.push("/pnab/recurso");
+    } else if (tipo === "habilitacao") {
+      router.push("/pnab/habilitacao");
+    }
   };
 
   const handleClose = () => {
@@ -157,7 +161,7 @@ const MeusProjetos = () => {
               senha: localStorage.getItem("userPassword"),
               numeroInscricao: selectedProject.numeroInscricao,
             }),
-          },
+          }
         );
 
         if (response.ok) {
@@ -285,11 +289,26 @@ const MeusProjetos = () => {
                   <Button
                     size="small"
                     variant="outlined"
-                    sx={{ marginRight: "8px" }}
                     onClick={() => {
                       projeto.status === "enviado"
                         ? handleDisabledButtonClick()
-                        : handleClickOpenRecurso(projeto);
+                        : handleClickOpenRecurso(projeto, "habilitacao");
+                    }}
+                    disabled={
+                      projeto.status === "enviado" ||
+                      projeto.status == "Habilitação" ||
+                      projeto.status == "Recurso"
+                    }
+                  >
+                    Habilitação
+                  </Button>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    onClick={() => {
+                      projeto.status === "enviado"
+                        ? handleDisabledButtonClick()
+                        : handleClickOpenRecurso(projeto, "recurso");
                     }}
                     disabled={
                       projeto.status === "enviado" ||

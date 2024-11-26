@@ -26,7 +26,7 @@ const Home = () => {
             parsedUserDetails.tipoUsuario = 2;
             localStorage.setItem(
               "userDetails",
-              JSON.stringify(parsedUserDetails),
+              JSON.stringify(parsedUserDetails)
             );
             window.location.reload();
           }
@@ -54,7 +54,7 @@ const Home = () => {
 
   const handleButtonClick = () => {
     window.open(
-      "https://criarte.s3.us-east-2.amazonaws.com/documents/edital-1.pdf",
+      "https://criarte.s3.us-east-2.amazonaws.com/documents/edital-1.pdf"
     );
   };
 
@@ -180,11 +180,11 @@ const Home = () => {
 
             {storageUserDetails && storageUserDetails.tipoUsuario > 1 && (
               <div className="container_ajuda">
-                <a href="/admin/painel" className="opcao_link">
+                <a href="/gestao/projetos" className="opcao_link">
                   <h3>
                     <i className="bi bi-journal-check"></i> Gestão
                   </h3>
-                  <p>Acesso a ferramentas de administração</p>
+                  <p>Acesso às ferramentas de administração</p>
                 </a>
               </div>
             )}
@@ -236,7 +236,7 @@ const Home = () => {
                   <button
                     onClick={() =>
                       window.open(
-                        "https://criarte.grupogorki.com.br/projetos/selecao",
+                        "https://criarte.grupogorki.com.br/projetos/selecao"
                       )
                     }
                     style={{ marginTop: "20px", minWidth: "100%" }}
@@ -279,7 +279,7 @@ const Home = () => {
                   <button
                     onClick={() =>
                       window.open(
-                        "https://criarte.grupogorki.com.br/projetos/selecao",
+                        "https://criarte.grupogorki.com.br/projetos/selecao"
                       )
                     }
                     style={{ marginTop: "20px", minWidth: "100%" }}
