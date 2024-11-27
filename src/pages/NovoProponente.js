@@ -9,18 +9,13 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
-  Typography,
   Grid,
-  MenuItem,
-  Select,
-  InputLabel,
-  FormControl,
   Snackbar,
   Alert,
 } from "@mui/material";
 import { useRouter } from "next/router";
 
-const NewProponentForm = ({ open, handleClose }) => {
+const NovoProponente = ({ open, handleClose }) => {
   const [loading, setLoading] = useState(false);
   const [nomeCompleto, setNomeCompleto] = useState("");
   const [cpf, setCpf] = useState("");
@@ -534,4 +529,4 @@ const NewProponentForm = ({ open, handleClose }) => {
   );
 };
 
-export default NewProponentForm;
+export default NovoProponente;
