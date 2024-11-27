@@ -9,7 +9,7 @@ import {
   Alert,
 } from "@mui/material";
 import { styled } from "@mui/system";
-import Header from "../components/Header/Header";
+import Header from "../components/header/header";
 import PrivateRoute from "../components/PrivateRoute";
 
 const DocumentUploadForm = () => {
@@ -174,9 +174,7 @@ const DocumentUploadForm = () => {
                 }}
               >
                 <CardContent>
-                  <a href="https://styxx-public.s3.sa-east-1.amazonaws.com/example-docs/ANEXO+IV+-+MODELO+DE+PLANILHA+OR%C3%87AMENT%C3%81RIA.docx">
-                    Baixar modelo
-                  </a>
+
                   <UploadBox>
                     <Typography variant="body2" sx={{ mb: 1 }}>
                       Selecione o arquivo aqui

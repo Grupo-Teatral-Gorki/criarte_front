@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
 import {
   Button,
@@ -9,9 +10,8 @@ import {
   Alert,
 } from "@mui/material";
 import { styled } from "@mui/system";
-import Header from "../../components/Header/Header";
+import Header from "../../components/header/header";
 import PrivateRoute from "../../components/PrivateRoute";
-import FormGroup from "@mui/material/FormGroup";
 
 const RecursoForm = () => {
   const [numeroInscricao, setNumeroInscricao] = useState(null);
@@ -20,36 +20,32 @@ const RecursoForm = () => {
   const [files, setFiles] = useState({});
   const [uploadStatus, setUploadStatus] = useState({});
   const [allFilesUploaded, setAllFilesUploaded] = useState(false);
-  const [isButtonDisabled, setIsButtonDisabled] = useState(true); // Controle do botão
 
   useEffect(() => {
-    const numeroInscricaoStored = localStorage.getItem("numeroInscricao");
-    if (numeroInscricaoStored && numeroInscricaoStored.length > 0) {
-      setNumeroInscricao(numeroInscricaoStored);
-      setIsLoading(false);
+    const storedNumero = localStorage.getItem("numeroInscricao");
+    if (storedNumero) {
+      setNumeroInscricao(storedNumero);
     } else {
       setError("Número de inscrição não encontrado.");
-      setIsLoading(false);
     }
+    setIsLoading(false);
   }, []);
 
   const handleFileChange = (event, fieldName) => {
     const file = event.target.files[0];
-    setFiles((prevFiles) => ({
-      ...prevFiles,
-      [fieldName]: file,
-    }));
+    setFiles((prev) => ({ ...prev, [fieldName]: file }));
   };
 
   const uploadFile = async (file, fieldName) => {
     if (!numeroInscricao) {
-      throw new Error("Número de inscrição do projeto não encontrado.");
+      console.error("Número de inscrição não encontrado.");
+      return;
     }
 
     const formData = new FormData();
     formData.append("IdProjeto", numeroInscricao);
     formData.append("IdTipo", 1);
-    formData.append("Archive", file, file.name);
+    formData.append("Archive", file);
 
     try {
       const response = await fetch(
@@ -64,53 +60,30 @@ const RecursoForm = () => {
       );
 
       if (response.ok) {
-        setUploadStatus((prevStatus) => ({
-          ...prevStatus,
-          [fieldName]: "success",
-        }));
+        setUploadStatus((prev) => ({ ...prev, [fieldName]: "success" }));
       } else {
-        setUploadStatus((prevStatus) => ({
-          ...prevStatus,
-          [fieldName]: "error",
-        }));
-        console.error(
-          "Upload error:",
-          response.status,
-          response.statusText,
-          await response.text()
-        );
+        throw new Error("Erro ao enviar arquivo.");
       }
-    } catch (error) {
-      setUploadStatus((prevStatus) => ({
-        ...prevStatus,
-        [fieldName]: "error",
-      }));
-      console.error("Upload error:", error.message);
+    } catch (err) {
+      setUploadStatus((prev) => ({ ...prev, [fieldName]: "error" }));
+      console.error(err.message);
     }
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const storedUserDetails = localStorage.getItem("userDetails");
-    const userDetails = JSON.parse(storedUserDetails);
-
     try {
       await Promise.all(
-        Object.keys(files).map((fieldName) =>
-          uploadFile(files[fieldName], fieldName)
-        )
+        Object.keys(files).map((field) => uploadFile(files[field], field))
       );
       setAllFilesUploaded(true);
 
-      // Atualiza o status via API com base no checkbox selecionado
-      const updateResponse = await fetch(
+      const response = await fetch(
         "https://apiv3.styxx.com.br/api/updateStatus",
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             usuario: localStorage.getItem("userEmail"),
             senha: localStorage.getItem("userPassword"),
@@ -120,34 +93,25 @@ const RecursoForm = () => {
         }
       );
 
-      if (!updateResponse.ok) {
-        throw new Error(
-          `Erro ao atualizar o status: ${updateResponse.status} ${updateResponse.statusText}`
-        );
+      if (!response.ok) {
+        throw new Error("Erro ao atualizar status.");
       }
-
-      console.log(
-        "Status atualizado com sucesso:",
-        await updateResponse.json()
-      );
-    } catch (error) {
-      console.error("Erro ao atualizar o status:", error);
+    } catch (err) {
+      console.error(err.message);
     }
   };
 
-  const UploadField = ({ name, label, exampleLink, exampleText }) => (
+  const UploadField = ({ name, label }) => (
     <Card
       sx={{
         padding: "20px",
         borderRadius: "8px",
         boxShadow: 3,
         maxWidth: "700px",
-        width: "800px",
         margin: "auto",
         mb: 2,
       }}
     >
-      {exampleLink && <a href={exampleLink}>{exampleText}</a>}
       <CardContent>
         <Typography variant="h6" sx={{ mb: 2 }}>
           {label}
@@ -182,7 +146,7 @@ const RecursoForm = () => {
     </Card>
   );
 
-  const UploadBox = styled("div")(({ theme }) => ({
+  const UploadBox = styled("div")(() => ({
     border: "2px dashed #ccc",
     padding: "20px",
     textAlign: "center",
@@ -194,17 +158,10 @@ const RecursoForm = () => {
     },
   }));
 
-  const FooterAlert = () => {
-    if (allFilesUploaded) {
-      return (
-        <Alert severity="success">
-          Todos os documentos foram enviados com sucesso!
-        </Alert>
-      );
-    } else {
-      return null;
-    }
-  };
+  const FooterAlert = () =>
+    allFilesUploaded && (
+      <Alert severity="success">Todos os documentos foram enviados!</Alert>
+    );
 
   return (
     <div>
@@ -220,10 +177,7 @@ const RecursoForm = () => {
             backgroundColor: "#f9f9f9",
           }}
         >
-          <Typography
-            variant="h4"
-            sx={{ marginBottom: "1rem", textAlign: "center" }}
-          >
+          <Typography variant="h4" sx={{ mb: "1rem", textAlign: "center" }}>
             Habilitação
           </Typography>
 
@@ -236,22 +190,13 @@ const RecursoForm = () => {
               <UploadField name="cnd_municipal" label="*CND Municipal" />
               <UploadField name="cnd_estadual" label="*CND Estadual" />
               <UploadField name="cnd_federal" label="*CND Federal" />
-
-              <FormGroup
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  flexDirection: "row",
-                }}
-              ></FormGroup>
-
               <Box sx={{ mt: 4, textAlign: "center" }}>
                 <Button
                   variant="contained"
                   type="submit"
-                  disabled={isButtonDisabled}
+                  disabled={Object.keys(files).length < 3}
                 >
-                  Enviar
+                  Enviar Todos
                 </Button>
               </Box>
             </form>

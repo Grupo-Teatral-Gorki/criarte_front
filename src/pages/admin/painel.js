@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import PrivateRoute from "../../components/PrivateRoute";
-import Header from "../../components/Header/Header";
+import Header from "../../components/header/header";
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";

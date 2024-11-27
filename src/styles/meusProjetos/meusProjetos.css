@@ -79,10 +79,9 @@
 
 .mp-project-footer {
   display: flex;
-  width: 100%;
+  gap: 1rem;
   align-items: center;
   justify-content: flex-end;
-  gap: 1rem;
 }
 
 .btn-edit-project {

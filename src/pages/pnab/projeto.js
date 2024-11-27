@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import { useState, useEffect } from "react";
 import {
   CircularProgress,
@@ -13,7 +14,7 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import PrivateRoute from "../../components/PrivateRoute";
-import Header from "../../components/Header/Header";
+import Header from "../../components/header/header";
 import { useRouter } from "next/router";
 
 function PnabHomeForms() {
@@ -31,6 +32,7 @@ function PnabHomeForms() {
   const [projeto, setProjeto] = useState({ status: "" });
   const [hasProponent, setHasProponent] = useState(false);
   const [statusProjeto, setStatusProjeto] = useState("");
+
   const deadline = new Date("2024-12-31T23:59:59");
 
   useEffect(() => {
@@ -71,21 +73,6 @@ function PnabHomeForms() {
         setError("Erro ao verificar proponentes. Tente novamente mais tarde.");
       }
     };
-
-    function DocumentLink() {
-      const idCidade = storageUserDetails.idCidade;
-
-      switch (idCidade) {
-        case 3798:
-          return "https://criarte.s3.us-east-2.amazonaws.com/public/Edital%2Bde%2BFomento-%2BSanta%2BRita-6-37.pdf";
-
-        case 3823:
-          return "";
-
-        default:
-          break;
-      }
-    }
 
     if (typeof window !== "undefined") {
       const userDetails = localStorage.getItem("userDetails");
@@ -249,10 +236,13 @@ function PnabHomeForms() {
         return "https://criarte.s3.us-east-2.amazonaws.com/public/Edital%2Bde%2BFomento-%2BSanta%2BRita-6-37.pdf";
 
       case 3823:
-        return "https://google.com";
+        return "https://criarte.s3.us-east-2.amazonaws.com/public/sao-jose-do-rio-pardo/fomento/EDITAL+RIO+PARDO+PNAB_Retificado+2024+-+Fomento+Cultural%5B1%5D.pdf";
 
       case 3842:
         return "https://criarte.s3.us-east-2.amazonaws.com/documents/edital/edital.pdf";
+
+      case 3398:
+        return "https://www.cerquilho.sp.gov.br/public/admin/globalarq/diario-eletronico/diario/RAw32caA3Z2s2xTA.pdf";
 
       default:
         break;
@@ -279,23 +269,27 @@ function PnabHomeForms() {
                 >
                   Voltar
                 </Button>
-                <TextField
-                  sx={{ minWidth: "400px" }}
-                  id="standard-basic"
-                  label="Nome do projeto"
-                  required
-                  variant="standard"
-                  value={projectName}
-                  onChange={handleProjectNameChange}
-                  onBlur={handleProjectNameBlur}
-                  InputLabelProps={{
-                    sx: {
-                      left: "10px",
-                      top: "5px",
-                      textAlign: "center",
-                    },
-                  }}
-                />
+
+                {idEdital !== 4 && (
+                  <TextField
+                    sx={{ minWidth: "400px" }}
+                    id="standard-basic"
+                    label="Nome do projeto"
+                    required
+                    variant="standard"
+                    value={projectName}
+                    onChange={handleProjectNameChange}
+                    onBlur={handleProjectNameBlur}
+                    InputLabelProps={{
+                      sx: {
+                        left: "10px",
+                        top: "5px",
+                        textAlign: "center",
+                      },
+                    }}
+                  />
+                )}
+
                 <Typography variant="subtitle1" className="project-id">
                   ID: {numeroInscricao}
                 </Typography>
@@ -377,49 +371,42 @@ function PnabHomeForms() {
                     <Section
                       title="Informações gerais do projeto"
                       description="Informe o segmento, período previsto e o valor do projeto"
-                      link="/InformacoesGerais"
+                      link="../informacoesGerais"
                     />
                     <Section
                       title="Documentos do projeto e proponente"
                       description="Importante! Só é possível anexar 01 (um) arquivo por item exigido. Caso necessário, reúna todos os ..."
-                      link="/DocumentForm"
+                      link="/documentForm"
                     />
                     <Section
                       title="Planilha orçamentária"
                       description="O valor total das despesas cadastradas deverá corresponder ao informado no orçamento."
-                      link="/PlanilhaOrc"
+                      link="/planilhaOrc"
                     />
                   </div>
-                ) : (
+                ) : storageUserDetails.idCidade === 3398 ? (
                   <div className="sections">
-                    {storageUserDetails &&
-                    storageUserDetails.idCidade == 3823 ? null : (
-                      <div
-                        style={{
-                          backgroundColor: "white",
-                          minHeight: "90px",
-                          display: "flex",
-                          marginLeft: "auto",
-                          marginRight: "auto",
-                          minWidth: "80%",
-                          borderRadius: "8px",
-                          boxShadow:
-                            "rgba(0, 0, 0, 0.2) 0px 2px 1px -1px, rgba(0, 0, 0, 0.14) 0px 1px 1px 0px, rgba(0, 0, 0, 0.12) 0px 1px 3px 0px", // Sombra
-                          alignItems: "center",
-                          justifyContent: "center",
-                          padding: "10px",
-                        }}
-                      >
-                        <a
-                          href={DocumentLink()}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          LER OBJETO DO EDITAL
-                        </a>
-                        <p></p>
-                      </div>
-                    )}
+                    <div
+                      style={{
+                        backgroundColor: "white",
+                        minHeight: "90px",
+                        display: "flex",
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                        minWidth: "80%",
+                        borderRadius: "8px",
+                        boxShadow:
+                          "rgba(0, 0, 0, 0.2) 0px 2px 1px -1px, rgba(0, 0, 0, 0.14) 0px 1px 1px 0px, rgba(0, 0, 0, 0.12) 0px 1px 3px 0px", // Sombra
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: "10px",
+                      }}
+                    >
+                      <a href={DocumentLink()} target="_blank" rel="noreferrer">
+                        LER OBJETO DO EDITAL
+                      </a>
+                      <p></p>
+                    </div>
 
                     <Section
                       title="Proponente"
@@ -429,25 +416,136 @@ function PnabHomeForms() {
                     <Section
                       title="Informações gerais do projeto"
                       description="Informe o segmento, período previsto e o valor do projeto"
-                      link="/InformacoesGerais"
-                    />
-                    <Section
-                      title="Planilha orçamentária"
-                      description="O valor total das despesas cadastradas deverá corresponder ao informado no orçamento."
-                      link="/PlanilhaOrc"
-                    />
-                    <Section
-                      title="Ficha técnica"
-                      description="Você deve cadastrar o(a)s principais integrantes da ficha técnica do projeto."
-                      link="/FichaTecnicaForm"
+                      link="/informacoesGerais"
                     />
                     <Section
                       title="Documentos do projeto e proponente"
                       description="Importante! Só é possível anexar 01 (um) arquivo por item exigido. Caso necessário, reúna todos os ..."
-                      link="/DocumentForm"
+                      link="/documentForm"
+                    />
+                    <Section
+                      title="Planilha orçamentária"
+                      description="O valor total das despesas cadastradas deverá corresponder ao informado no orçamento."
+                      link="/planilhaOrc"
                     />
                   </div>
-                )}
+                ) : storageUserDetails.idCidade === 3478 && idEdital == 1 ? (
+                  <div className="sections">
+                    <div
+                      style={{
+                        backgroundColor: "white",
+                        minHeight: "90px",
+                        display: "flex",
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                        minWidth: "80%",
+                        borderRadius: "8px",
+                        boxShadow:
+                          "rgba(0, 0, 0, 0.2) 0px 2px 1px -1px, rgba(0, 0, 0, 0.14) 0px 1px 1px 0px, rgba(0, 0, 0, 0.12) 0px 1px 3px 0px", // Sombra
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: "10px",
+                      }}
+                    >
+                      <a href={DocumentLink()} target="_blank" rel="noreferrer">
+                        LER OBJETO DO EDITAL
+                      </a>
+                      <p></p>
+                    </div>
+
+                    <Section
+                      title="Proponente"
+                      description="Selecione o proponente do projeto"
+                      link="../proponente"
+                    />
+                    <Section
+                      title="Informações gerais do projeto"
+                      description="Informe o segmento, período previsto e o valor do projeto"
+                      link="/informacoesGerais"
+                    />
+                    <Section
+                      title="Documentos do projeto e proponente"
+                      description="Importante! Só é possível anexar 01 (um) arquivo por item exigido. Caso necessário, reúna todos os ..."
+                      link="/documentForm"
+                    />
+                    <Section
+                      title="Planilha orçamentária"
+                      description="O valor total das despesas cadastradas deverá corresponder ao informado no orçamento."
+                      link="/planilhaOrc"
+                    />
+                  </div>
+                ) : storageUserDetails.idCidade === 3478 && idEdital == 4 ? (
+                  <div className="sections">
+                    <Section
+                      title="Proponente"
+                      description="Selecione o proponente do projeto"
+                      link="../proponente"
+                    />
+
+                    <Section
+                      title="Documentos do projeto e proponente"
+                      description="Importante! Só é possível anexar 01 (um) arquivo por item exigido. Caso necessário, reúna todos os ..."
+                      link="/documentForm"
+                    />
+                  </div>
+                ) : storageUserDetails.idCidade === 3823 ? (
+                  <div className="sections">
+                    {storageUserDetails &&
+                      storageUserDetails.idCidade == 3823 && (
+                        <div
+                          style={{
+                            backgroundColor: "white",
+                            minHeight: "90px",
+                            display: "flex",
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                            minWidth: "80%",
+                            borderRadius: "8px",
+                            boxShadow:
+                              "rgba(0, 0, 0, 0.2) 0px 2px 1px -1px, rgba(0, 0, 0, 0.14) 0px 1px 1px 0px, rgba(0, 0, 0, 0.12) 0px 1px 3px 0px", // Sombra
+                            alignItems: "center",
+                            justifyContent: "center",
+                            padding: "10px",
+                          }}
+                        >
+                          <a
+                            href={DocumentLink()}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            LER OBJETO DO EDITAL
+                          </a>
+                          <p></p>
+                        </div>
+                      )}
+
+                    <Section
+                      title="Proponente"
+                      description="Selecione o proponente do projeto"
+                      link="../proponente"
+                    />
+                    <Section
+                      title="Informações gerais do projeto"
+                      description="Informe o segmento, período previsto e o valor do projeto"
+                      link="/informacoesGerais"
+                    />
+                    <Section
+                      title="Planilha orçamentária"
+                      description="O valor total das despesas cadastradas deverá corresponder ao informado no orçamento."
+                      link="/planilhaOrc"
+                    />
+                    <Section
+                      title="Ficha técnica"
+                      description="Você deve cadastrar o(a)s principais integrantes da ficha técnica do projeto."
+                      link="/fichaTecnicaForm"
+                    />
+                    <Section
+                      title="Documentos do projeto e proponente"
+                      description="Importante! Só é possível anexar 01 (um) arquivo por item exigido. Caso necessário, reúna todos os ..."
+                      link="/documentForm"
+                    />
+                  </div>
+                ) : null}
 
                 <div className="actions">
                   <Button
@@ -462,7 +560,7 @@ function PnabHomeForms() {
                     onClick={handleSubmit}
                     variant="contained"
                     color="primary"
-                    disabled={statusProjeto === "enviado"}
+                    disabled
                   >
                     Enviar projeto
                   </Button>

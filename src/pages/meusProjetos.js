@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Header from "../components/Header/Header";
+import Header from "../components/header/header";
 import PrivateRoute from "../components/PrivateRoute";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -118,7 +118,7 @@ const MeusProjetos = () => {
   };
 
   const handleEdit = (projeto) => {
-    if (projeto.status === "Enviado") {
+    if (projeto.status === "enviado" || projeto.status === "enviado") {
       setEditAlertOpen(true);
     } else {
       localStorage.setItem("numeroInscricao", projeto.numeroInscricao);
@@ -136,6 +136,8 @@ const MeusProjetos = () => {
   };
 
   const handleClickOpenRecurso = (project, tipo) => {
+    // Atualiza o numeroInscricao no localStorage
+    localStorage.setItem("numeroInscricao", project.numeroInscricao);
     if (tipo === "recurso") {
       router.push("/pnab/recurso");
     } else if (tipo === "habilitacao") {
@@ -289,15 +291,13 @@ const MeusProjetos = () => {
                   <Button
                     size="small"
                     variant="outlined"
-                    onClick={() => {
-                      projeto.status === "enviado"
-                        ? handleDisabledButtonClick()
-                        : handleClickOpenRecurso(projeto, "habilitacao");
-                    }}
+                    sx={{ marginRight: "8px" }}
+                    onClick={() =>
+                      handleClickOpenRecurso(projeto, "habilitacao")
+                    }
                     disabled={
-                      projeto.status === "enviado" ||
-                      projeto.status == "Habilitação" ||
-                      projeto.status == "Recurso"
+                      projeto.status !== "enviado" &&
+                      projeto.status !== "Recurso"
                     }
                   >
                     Habilitação
@@ -305,15 +305,11 @@ const MeusProjetos = () => {
                   <Button
                     size="small"
                     variant="outlined"
-                    onClick={() => {
-                      projeto.status === "enviado"
-                        ? handleDisabledButtonClick()
-                        : handleClickOpenRecurso(projeto, "recurso");
-                    }}
+                    sx={{ marginRight: "8px" }}
+                    onClick={() => handleClickOpenRecurso(projeto, "recurso")}
                     disabled={
-                      projeto.status === "enviado" ||
-                      projeto.status == "Habilitação" ||
-                      projeto.status == "Recurso"
+                      projeto.status !== "enviado" &&
+                      projeto.status !== "Recurso"
                     }
                   >
                     Recurso
@@ -325,8 +321,8 @@ const MeusProjetos = () => {
                     onClick={() => handleClickOpen(projeto)}
                     disabled={
                       projeto.status === "enviado" ||
-                      projeto.status == "Habilitação" ||
-                      projeto.status == "Recurso"
+                      projeto.status === "Habilitação" ||
+                      projeto.status === "Recurso"
                     }
                   >
                     Excluir
@@ -334,15 +330,11 @@ const MeusProjetos = () => {
                   <Button
                     size="small"
                     variant="outlined"
-                    onClick={() => {
-                      projeto.status === "enviado"
-                        ? handleDisabledButtonClick()
-                        : handleEdit(projeto);
-                    }}
+                    onClick={() => handleEdit(projeto)}
                     disabled={
                       projeto.status === "enviado" ||
-                      projeto.status == "Habilitação" ||
-                      projeto.status == "Recurso"
+                      projeto.status === "Habilitação" ||
+                      projeto.status === "Recurso"
                     }
                   >
                     Editar

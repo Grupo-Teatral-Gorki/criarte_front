@@ -13,7 +13,7 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import Header from "../components/Header/Header";
+import Header from "../components/header/header";
 import PrivateRoute from "../components/PrivateRoute";
 require("dotenv").config();
 

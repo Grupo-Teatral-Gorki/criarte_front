@@ -9,10 +9,10 @@ import {
   Alert,
   CircularProgress,
 } from "@mui/material";
-import NewProponentForm from "./NovoProponente";
-import Header from "../components/Header/Header";
+import Header from "../components/header/header";
 import PrivateRoute from "../components/PrivateRoute";
 import Checkbox from "@mui/material/Checkbox";
+import NovoProponente from "./NovoProponente";
 
 const Proponente = () => {
   const [openList, setOpenList] = useState(false);
@@ -123,8 +123,8 @@ const Proponente = () => {
         prevProponentes.map((proponente) =>
           proponente.id_proponente === idProponente
             ? { ...proponente, is_selected: true }
-            : { ...proponente, is_selected: false },
-        ),
+            : { ...proponente, is_selected: false }
+        )
       );
     } catch (error) {
       console.error("Erro ao selecionar o proponente:", error);
@@ -306,7 +306,7 @@ const Proponente = () => {
               </Button>
             </DialogActions>
           </Dialog>
-          <NewProponentForm open={openForm} handleClose={handleCloseForm} />
+          <NovoProponente open={openForm} handleClose={handleCloseForm} />
         </div>
       </PrivateRoute>
     </div>

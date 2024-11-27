@@ -147,6 +147,8 @@ const Register = () => {
                 <MenuItem value="3716">Pontal</MenuItem>
                 <MenuItem value="3478">Guariba</MenuItem>
                 <MenuItem value="3823">São José do Rio Pardo</MenuItem>
+                <MenuItem value="3398">Cerquilho</MenuItem>
+
               </Select>
             </FormControl>
           </div>
