@@ -78,7 +78,10 @@
 }
 
 .mp-project-footer {
-  text-align: right;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .btn-edit-project {

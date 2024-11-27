@@ -135,12 +135,14 @@ const MeusProjetos = () => {
     setOpen(true); // Isso abre o diálogo de confirmação
   };
 
-  const handleClickOpenRecurso = (project) => {
+  const handleClickOpenRecurso = (project, tipo) => {
     // Atualiza o numeroInscricao no localStorage
     localStorage.setItem("numeroInscricao", project.numeroInscricao);
-  
-    // Redireciona para a página de recurso
-    router.push("/pnab/recurso");
+    if (tipo === "recurso") {
+      router.push("/pnab/recurso");
+    } else if (tipo === "habilitacao") {
+      router.push("/pnab/habilitacao");
+    }
   };
 
   const handleClose = () => {
@@ -290,7 +292,21 @@ const MeusProjetos = () => {
                     size="small"
                     variant="outlined"
                     sx={{ marginRight: "8px" }}
-                    onClick={() => handleClickOpenRecurso(projeto)}
+                    onClick={() =>
+                      handleClickOpenRecurso(projeto, "habilitacao")
+                    }
+                    disabled={
+                      projeto.status !== "enviado" &&
+                      projeto.status !== "Recurso"
+                    }
+                  >
+                    Habilitação
+                  </Button>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    sx={{ marginRight: "8px" }}
+                    onClick={() => handleClickOpenRecurso(projeto, "recurso")}
                     disabled={
                       projeto.status !== "enviado" &&
                       projeto.status !== "Recurso"
