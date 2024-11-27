@@ -371,7 +371,7 @@ function PnabHomeForms() {
                     <Section
                       title="Informações gerais do projeto"
                       description="Informe o segmento, período previsto e o valor do projeto"
-                      link="/informacoesGerais"
+                      link="../informacoesGerais"
                     />
                     <Section
                       title="Documentos do projeto e proponente"
