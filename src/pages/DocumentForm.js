@@ -17,11 +17,6 @@ import FormLabel from "@mui/material/FormLabel";
 import FormGroup from "@mui/material/FormGroup";
 import Checkbox from "@mui/material/Checkbox";
 
-
-
-
-
-
 const DocumentUploadForm = () => {
   const [numeroInscricao, setNumeroInscricao] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -32,8 +27,7 @@ const DocumentUploadForm = () => {
   const [idEdital, setIdEdital] = useState(null); // Estado para armazenar id_edital
   const [storageUserDetails, setStorageUserDetails] = useState(null);
   const [isDownloadSuccessful, setIsDownloadSuccessful] = useState(false);
-  const [isCotista, setIsCotista] = useState(false); 
-
+  const [isCotista, setIsCotista] = useState(false);
 
   const sanitizeFileName = (fileName) => {
     return fileName
@@ -142,20 +136,22 @@ const DocumentUploadForm = () => {
 
   async function atualizarCotista(idProjeto, isCotista) {
     try {
-      const response = await fetch("https://gorki-api-cotista.iglgxt.easypanel.host/projects/cotista", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ idProjeto, isCotista }),
-      });
+      const response = await fetch(
+        "https://gorki-api-cotista.iglgxt.easypanel.host/projects/cotista",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ idProjeto, isCotista }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Erro ao atualizar status de cotista");
       }
 
-      setIsCotista(isCotista)
-
+      setIsCotista(isCotista);
     } catch (error) {
       console.error(error);
       alert("Erro ao atualizar status de cotista.");
@@ -425,6 +421,11 @@ const DocumentUploadForm = () => {
                 "Comprovante de endereço atual, datado a partir de junho de 2024",
             },
             {
+              name: "dec-dir-aut",
+              label:
+                "Declaração de opção de cessão de direitos autorais e/ou Declaração negativa de opção de direitos autorais (Anexo III)",
+            },
+            {
               name: "dec-municipio",
               label: "Declaração de opção de Município (Anexo IX)",
             },
@@ -481,6 +482,10 @@ const DocumentUploadForm = () => {
               label:
                 "(PJ) Ata de eleição e posse da diretoria, quando for o caso",
             },
+            {
+              name: "dem-info",
+              label: "Demais informações",
+            },
           ];
         } else if (idEdital === 4) {
           return [
@@ -499,14 +504,17 @@ const DocumentUploadForm = () => {
             },
             {
               name: "dec-cnpj1",
-              label: "Declaração de representação, se for um coletivo sem CNPJ (Anexo VI)"
+              label:
+                "Declaração de representação, se for um coletivo sem CNPJ (Anexo VI)",
             },
             {
               name: "outros-doc",
-              label: "Outros documentos que o agente cultural julgar necessário para auxiliar na avaliação do mérito cultural do projeto"
-            }
+              label:
+                "Outros documentos que o agente cultural julgar necessário para auxiliar na avaliação do mérito cultural do projeto",
+            },
           ];
         }
+        break;
 
       case 3478 && idEdital != 4:
         return [
@@ -755,42 +763,43 @@ const DocumentUploadForm = () => {
 
               <Box sx={{ mt: 4, textAlign: "center" }}>
                 <div>
-                <FormControl >
-                  <FormLabel>
-                    Optante por cota ( Inserir Declaração Étnico-racial (Anexo
-                    VII) e/ou Declaração de Pessoa com Deficiência (Anexo VIII))
-                  </FormLabel>
-                  <FormGroup row>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={isCotista === true} // Verifica se o valor de isCotista é verdadeiro
-                          onChange={(e) => {
-                            const idProjeto =
-                              localStorage.getItem("numeroInscricao");
-                            atualizarCotista(idProjeto, e.target.checked);
-                          }}
-                        />
-                      }
-                      label="Sim"
-                    />
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={isCotista === false} // Verifica se o valor de isCotista é falso
-                          onChange={(e) => {
-                            const idProjeto =
-                              localStorage.getItem("numeroInscricao");
-                            atualizarCotista(idProjeto, !e.target.checked); // Atualiza com o estado invertido
-                          }}
-                        />
-                      }
-                      label="Não"
-                    />
-                  </FormGroup>
-                </FormControl>
+                  <FormControl>
+                    <FormLabel>
+                      Optante por cota ( Inserir Declaração Étnico-racial (Anexo
+                      VII) e/ou Declaração de Pessoa com Deficiência (Anexo
+                      VIII))
+                    </FormLabel>
+                    <FormGroup row>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={isCotista === true} // Verifica se o valor de isCotista é verdadeiro
+                            onChange={(e) => {
+                              const idProjeto =
+                                localStorage.getItem("numeroInscricao");
+                              atualizarCotista(idProjeto, e.target.checked);
+                            }}
+                          />
+                        }
+                        label="Sim"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={isCotista === false} // Verifica se o valor de isCotista é falso
+                            onChange={(e) => {
+                              const idProjeto =
+                                localStorage.getItem("numeroInscricao");
+                              atualizarCotista(idProjeto, !e.target.checked); // Atualiza com o estado invertido
+                            }}
+                          />
+                        }
+                        label="Não"
+                      />
+                    </FormGroup>
+                  </FormControl>
                 </div>
-             
+
                 <Button variant="contained" type="submit">
                   SALVAR DOCUMENTOS
                 </Button>
