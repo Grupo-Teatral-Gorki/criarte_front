@@ -17,9 +17,6 @@ import PrivateRoute from "../../components/PrivateRoute";
 import Header from "../../components/header/header";
 import { useRouter } from "next/router";
 
-// TESTE CI/CD
-console.log('teste')
-console.log('teste2')
 
 function PnabHomeForms() {
   const [numeroInscricao, setNumeroInscricao] = useState(null);
