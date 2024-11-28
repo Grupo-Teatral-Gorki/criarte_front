@@ -13,7 +13,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  FormLabel
+  FormLabel,
 } from "@mui/material";
 import Header from "../components/header/header";
 import PrivateRoute from "../components/PrivateRoute";
@@ -22,7 +22,6 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 
 require("dotenv").config();
-
 
 const InformacoesGerais = () => {
   const [formData, setFormData] = useState({
@@ -47,15 +46,15 @@ const InformacoesGerais = () => {
   const [categoryOptions, setCategoryOptions] = useState([]);
   const [userCityId, setUserCityId] = useState("");
   const [storageUserDetails, setStorageUserDetails] = useState(null);
-  const [idEdital, setIdEdital] = useState(1)
+  const [idEdital, setIdEdital] = useState(1);
 
   const router = useRouter();
 
-  const [isCotista, setIsCotista] = useState(false); 
+  const [isCotista, setIsCotista] = useState(false);
 
   const citySantaRitaId = 3798;
 
-// Buscar userID e idCidade ao montar o componente
+  // Buscar userID e idCidade ao montar o componente
   useEffect(() => {
     if (typeof window !== "undefined") {
       const userDetails = localStorage.getItem("userDetails");
@@ -178,7 +177,7 @@ const InformacoesGerais = () => {
               }
             }
 
-            setIdEdital(projeto.id_edital)
+            setIdEdital(projeto.id_edital);
 
             setFormData({
               resumo: projeto.resumo_projeto || "",
@@ -247,7 +246,7 @@ const InformacoesGerais = () => {
       "Literatura",
       "Patrimônio",
       "Intercâmbio Cultural",
-      "Teatro"
+      "Teatro",
     ];
 
     // Categorias específicas para cidade 3398
@@ -262,7 +261,7 @@ const InformacoesGerais = () => {
       "Literatura",
       "Patrimônio",
       "Intercâmbio Cultural",
-      "Teatro"
+      "Teatro",
     ];
 
     const moduloI_3478_Categorias = [
@@ -277,7 +276,7 @@ const InformacoesGerais = () => {
 
     const moduloII_3478_Categorias = [
       "Afro-brasilidades",
-      "Atividades formativas"
+      "Atividades formativas",
     ];
 
     const moduloII_3398_Categorias = [
@@ -291,7 +290,7 @@ const InformacoesGerais = () => {
       "Literatura",
       "Patrimônio",
       "Intercâmbio Cultural",
-      "Teatro"
+      "Teatro",
     ];
 
     const moduloIII_3398_Categorias = ["Indisponível"];
@@ -330,18 +329,13 @@ const InformacoesGerais = () => {
       } else if (selectedModule === 3) {
         setCategoryOptions(moduloIII_3398_Categorias);
       }
-    }
-
-    else if (userCityId === 3478 && idEdital === 1) {
+    } else if (userCityId === 3478 && idEdital === 1) {
       if (selectedModule === 1) {
         setCategoryOptions(moduloI_3478_Categorias);
       } else if (selectedModule === 2) {
         setCategoryOptions(moduloII_3478_Categorias);
       }
-     
-    }
-
-    else if (userCityId === 3398 && idEdital === 3) {
+    } else if (userCityId === 3398 && idEdital === 3) {
       if (selectedModule === 1) {
         setCategoryOptions(moduloI_3398_zp_Categorias);
       }
@@ -380,20 +374,22 @@ const InformacoesGerais = () => {
 
   async function atualizarCotista(idProjeto, isCotista) {
     try {
-      const response = await fetch("https://gorki-api-cotista.iglgxt.easypanel.host/projects/cotista", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ idProjeto, isCotista }),
-      });
+      const response = await fetch(
+        "https://gorki-api-cotista.iglgxt.easypanel.host/projects/cotista",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ idProjeto, isCotista }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Erro ao atualizar status de cotista");
       }
 
-      setIsCotista(isCotista)
-
+      setIsCotista(isCotista);
     } catch (error) {
       console.error(error);
       alert("Erro ao atualizar status de cotista.");
@@ -537,7 +533,8 @@ const InformacoesGerais = () => {
             key: "perfil",
           },
           {
-            label: "Expectativa da quantidade do público alcançado com o projeto:",
+            label:
+              "Expectativa da quantidade do público alcançado com o projeto:",
             key: "expectativa",
           },
           {
@@ -556,31 +553,36 @@ const InformacoesGerais = () => {
           { label: "Outras Informações", key: "outras" },
         ];
 
-        case 3478:
-          return [
-            {
-              label: "Apresentação resumida do projeto", key: "resumo"
-            },
-            { label: "Relevância e pertinência", key: "relevancia" },
-            {
-              label: "Perfil de público-alvo e classificação indicativa",
-              key: "perfil",
-            },
-            {
-              label:
-                "Expectativa da quantidade de público alcançado com o projeto",
-              key: "expectativa",
-            },
-            { label: "Plano de divulgação", key: "divulgacao" },
-            {
-              label: "Medidas de democratização de acesso e de acessibilidade",
-              key: "democratizacao",
-            },
-            {
-              label: "Currículo do proponente",
-              key: "outras"
-            }
-          ]
+      case 3478:
+        return [
+          {
+            label: "Apresentação resumida do projeto",
+            key: "resumo",
+          },
+          { label: "Relevância e pertinência", key: "relevancia" },
+          {
+            label: "Perfil de público-alvo e classificação indicativa",
+            key: "perfil",
+          },
+          {
+            label:
+              "Expectativa da quantidade de público alcançado com o projeto",
+            key: "expectativa",
+          },
+          {
+            label: "Detalhamento da proposta de contrapartida do projeto:",
+            key: "contrapartida",
+          },
+          { label: "Plano de divulgação", key: "divulgacao" },
+          {
+            label: "Medidas de democratização de acesso e de acessibilidade",
+            key: "democratizacao",
+          },
+          {
+            label: "Currículo do proponente",
+            key: "outras",
+          },
+        ];
 
       case 3398:
         return [
@@ -697,12 +699,9 @@ const InformacoesGerais = () => {
                     <InputLabel>Modalidade</InputLabel>
                     <Select value={module} onChange={handleModuleChange}>
                       <MenuItem value={1}>Módulo 1</MenuItem>
-                      {
-                        idEdital &&
-                        (idEdital != 3) ?(
-                          <MenuItem value={2}>Módulo 2</MenuItem>
-                        ) : null
-                      }
+                      {idEdital && idEdital != 3 ? (
+                        <MenuItem value={2}>Módulo 2</MenuItem>
+                      ) : null}
                     </Select>
                   </FormControl>
                 </Grid>

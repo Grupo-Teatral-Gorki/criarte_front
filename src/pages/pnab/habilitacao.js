@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import {
   Button,
@@ -20,8 +19,7 @@ const RecursoForm = () => {
   const [error, setError] = useState(null);
   const [files, setFiles] = useState({});
   const [uploadStatus, setUploadStatus] = useState({});
-  const [successMessage, setSuccessMessage] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(false);
+  const [allFilesUploaded, setAllFilesUploaded] = useState(false);
 
   useEffect(() => {
     const storedNumero = localStorage.getItem("numeroInscricao");
@@ -35,18 +33,21 @@ const RecursoForm = () => {
 
   const handleFileChange = (event, fieldName) => {
     const file = event.target.files[0];
-    if (file) {
-      setFiles((prev) => ({ ...prev, [fieldName]: file }));
-    }
+    setFiles((prev) => ({ ...prev, [fieldName]: file }));
   };
 
   const uploadFile = async (file, fieldName) => {
-    try {
-      const formData = new FormData();
-      formData.append("IdProjeto", numeroInscricao);
-      formData.append("IdTipo", 1);
-      formData.append("Archive", file);
+    if (!numeroInscricao) {
+      console.error("Número de inscrição não encontrado.");
+      return;
+    }
 
+    const formData = new FormData();
+    formData.append("IdProjeto", numeroInscricao);
+    formData.append("IdTipo", 1);
+    formData.append("Archive", file);
+
+    try {
       const response = await fetch(
         "https://api.grupogorki.com.br/api/docProjeto/Create",
         {
@@ -61,34 +62,24 @@ const RecursoForm = () => {
       if (response.ok) {
         setUploadStatus((prev) => ({ ...prev, [fieldName]: "success" }));
       } else {
-        console.error("Upload failed:", response.status, response.statusText);
-        setUploadStatus((prev) => ({ ...prev, [fieldName]: "error" }));
+        throw new Error("Erro ao enviar arquivo.");
       }
     } catch (err) {
-      console.error("Upload error:", err);
       setUploadStatus((prev) => ({ ...prev, [fieldName]: "error" }));
+      console.error(err.message);
     }
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setErrorMessage(false);
-    setSuccessMessage(false);
-
-    if (!Object.keys(files).length) {
-      setErrorMessage(true);
-      return;
-    }
 
     try {
       await Promise.all(
-        Object.entries(files).map(([fieldName, file]) =>
-          uploadFile(file, fieldName)
-        )
+        Object.keys(files).map((field) => uploadFile(files[field], field))
       );
-      setSuccessMessage(true);
+      setAllFilesUploaded(true);
 
-      const updateResponse = await fetch(
+      const response = await fetch(
         "https://apiv3.styxx.com.br/api/updateStatus",
         {
           method: "POST",
@@ -97,38 +88,51 @@ const RecursoForm = () => {
             usuario: localStorage.getItem("userEmail"),
             senha: localStorage.getItem("userPassword"),
             idProjeto: numeroInscricao,
-            status: "Recurso",
+            status: "Habilitação",
           }),
         }
       );
 
-      if (!updateResponse.ok) {
-        console.error("Failed to update status:", updateResponse.statusText);
-        setErrorMessage(true);
+      if (!response.ok) {
+        throw new Error("Erro ao atualizar status.");
       }
     } catch (err) {
-      console.error("Error during submission:", err);
-      setErrorMessage(true);
+      console.error(err.message);
     }
   };
 
   const UploadField = ({ name, label }) => (
-    <Card sx={{ padding: "20px", marginBottom: 2, boxShadow: 3 }}>
+    <Card
+      sx={{
+        padding: "20px",
+        borderRadius: "8px",
+        boxShadow: 3,
+        maxWidth: "700px",
+        margin: "auto",
+        mb: 2,
+      }}
+    >
       <CardContent>
-        <Typography variant="h6" sx={{ marginBottom: 2 }}>
+        <Typography variant="h6" sx={{ mb: 2 }}>
           {label}
         </Typography>
         <UploadBox>
-          {files[name] && <Typography>{files[name].name}</Typography>}
+          <Typography variant="body2" sx={{ mb: 1 }}>
+            Selecione o arquivo aqui
+          </Typography>
+          {files[name] && <p>{files[name].name}</p>}
+          <Typography variant="caption" sx={{ mb: 2, display: "block" }}>
+            Arquivos Suportados: PDF
+          </Typography>
           <input
             type="file"
-            id={`upload-${name}`}
             onChange={(e) => handleFileChange(e, name)}
             style={{ display: "none" }}
+            id={`upload-${name}`}
           />
           <label htmlFor={`upload-${name}`}>
             <Button variant="outlined" component="span">
-              Selecionar Arquivo
+              SELECIONAR
             </Button>
           </label>
         </UploadBox>
@@ -149,19 +153,32 @@ const RecursoForm = () => {
     borderRadius: "4px",
     backgroundColor: "#f9f9f9",
     cursor: "pointer",
+    "&:hover": {
+      borderColor: "#999",
+    },
   }));
+
+  const FooterAlert = () =>
+    allFilesUploaded && (
+      <Alert severity="success">Todos os documentos foram enviados!</Alert>
+    );
 
   return (
     <div>
       <PrivateRoute />
       <Header />
       <Box sx={{ display: "flex", justifyContent: "center", mt: 5 }}>
-        <Box sx={{ width: "50%", padding: 4, backgroundColor: "#f9f9f9" }}>
-          <Typography
-            variant="h4"
-            sx={{ textAlign: "center", marginBottom: 2 }}
-          >
-            Recurso
+        <Box
+          sx={{
+            width: "50%",
+            border: "1px solid #ddd",
+            padding: "2rem",
+            borderRadius: "8px",
+            backgroundColor: "#f9f9f9",
+          }}
+        >
+          <Typography variant="h4" sx={{ mb: "1rem", textAlign: "center" }}>
+            Habilitação
           </Typography>
 
           {isLoading ? (
@@ -170,22 +187,21 @@ const RecursoForm = () => {
             <Alert severity="error">{error}</Alert>
           ) : (
             <form onSubmit={handleSubmit}>
-              <UploadField name="argumento" label="*Argumento do Recurso" />
-              <Box sx={{ textAlign: "center", marginTop: 4 }}>
-                <Button variant="contained" type="submit">
+              <UploadField name="cnd_municipal" label="*CND Municipal" />
+              <UploadField name="cnd_estadual" label="*CND Estadual" />
+              <UploadField name="cnd_federal" label="*CND Federal" />
+              <Box sx={{ mt: 4, textAlign: "center" }}>
+                <Button
+                  variant="contained"
+                  type="submit"
+                  disabled={Object.keys(files).length < 3}
+                >
                   Enviar Todos
                 </Button>
               </Box>
             </form>
           )}
-          {successMessage && (
-            <Alert severity="success">Documentos enviados com sucesso!</Alert>
-          )}
-          {errorMessage && (
-            <Alert severity="error">
-              Selecione um arquivo antes de enviar.
-            </Alert>
-          )}
+          <FooterAlert />
         </Box>
       </Box>
     </div>
