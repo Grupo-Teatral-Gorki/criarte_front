@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../../components/Header/Header";
 import CardGestao from "../../../components/CardGestao/CardGestao";
 import {
@@ -13,6 +13,8 @@ import {
   Pie,
   Cell,
 } from "recharts";
+import Table from "../../../components/Table/Table";
+import { fetchProjectInfo } from "../../../utils/api";
 
 const data = [
   { date: "16/11/24", rascunho: 25, enviados: 30, amt: 20 },
@@ -34,88 +36,238 @@ const data2 = [
   { name: "Recursos", value: 25 },
 ];
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+const COLORS = ["#1d4a5d", "#00C49F", "#FFBB28", "#FF8042"];
 
 const GestaoProjetos = () => {
-  const municipio = "Santa Rita";
+  const [municipio, setMunicipio] = useState("");
+  const [projetos, setProjetos] = useState();
+
+  useEffect(() => {
+    const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+    setMunicipio(userDetails.idCidade);
+    console.log(municipio);
+  }, []);
+
+  useEffect(() => {
+    const fetchProjectInfo = async () => {
+      const token = localStorage.getItem("authToken");
+      try {
+        const response = await fetch(
+          `https://api.grupogorki.com.br/api/projeto/listaProjetos`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          const formatted = getStatusesCount(data.data);
+          setProjetos(formatted);
+          console.log(formatted);
+        } else {
+          // Handle the case where the response is not OK (optional)
+          console.error("Failed to fetch projects");
+        }
+      } catch (error) {
+        console.error("Erro ao carregar projetos.", error);
+      }
+    };
+
+    fetchProjectInfo();
+  }, []);
+
+  function normalizeStatus(status) {
+    // Return null if status is null, otherwise normalize it (lowercase and remove special characters)
+    if (status === null) return null;
+    return status.toLowerCase().replace(/[^a-z0-9]/g, "");
+  }
+
+  function getStatusesCount(items) {
+    const statusCount = { total: 0 };
+    const statusItems = {};
+
+    items.forEach((item) => {
+      const normalizedStatus = normalizeStatus(item.status);
+
+      statusCount.total++;
+
+      if (normalizedStatus !== null) {
+        if (statusCount[normalizedStatus]) {
+          statusCount[normalizedStatus]++;
+        } else {
+          statusCount[normalizedStatus] = 1;
+        }
+        if (statusItems[normalizedStatus]) {
+          statusItems[normalizedStatus].push(item);
+        } else {
+          statusItems[normalizedStatus] = [item];
+        }
+      }
+    });
+
+    return {
+      countByStatus: statusCount,
+      itemsByStatus: statusItems,
+    };
+  }
+
   return (
-    <div className="container-gestao">
+    <>
       <Header />
-      <h2 className="title-gestao">Projetos de {municipio}</h2>
-      <div className="container-cards-gestao">
-        <CardGestao titulo={"Projetos Enviados"} valor={10} />
-        <CardGestao titulo={"Projetos em Raschunho"} valor={10} />
-        <CardGestao titulo={"Projetos em Recurso"} valor={10} />
-      </div>
-      <div className="container-info-gestao">
-        <div className="container-graficos-gestao">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart
-              width={500}
-              height={300}
-              data={data}
-              margin={{
-                top: 5,
-                right: 30,
-                left: 20,
-                bottom: 5,
-              }}
-            >
-              <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Line
-                type="monotone"
-                dataKey="enviados"
-                stroke="#8884d8"
-                activeDot={{ r: 8 }}
-              />
-              <Line type="monotone" dataKey="rascunho" stroke="#82ca9d" />
-            </LineChart>
-          </ResponsiveContainer>
+      <div style={styles.container}>
+        <h2 style={styles.title}>Gestão de Projetos: {municipio}</h2>
+
+        <div style={styles.cardContainer}>
+          <CardGestao
+            titulo="Projetos Enviados"
+            valor={projetos?.countByStatus.enviado}
+          />
+          <CardGestao
+            titulo="Projetos em Habilitação"
+            valor={projetos?.countByStatus.habilitao}
+          />
+          <CardGestao
+            titulo="Projetos em Rascunho"
+            valor={projetos?.countByStatus.rascunho}
+          />
+          <CardGestao
+            titulo="Projetos em Recurso"
+            valor={projetos?.countByStatus.recurso}
+          />
+          <CardGestao
+            titulo="Total de Projetos"
+            valor={projetos?.countByStatus.total}
+          />
         </div>
-        <div className="container-graficos-gestao">
-          <ResponsiveContainer
-            width="100%"
-            height="100%"
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "column",
-            }}
-          >
-            <PieChart width={400} height={400}>
-              <Tooltip />
-              <Pie
-                data={data2}
-                dataKey="value"
-                nameKey="name"
-                cx="50%"
-                cy="50%"
-                outerRadius={100}
-                fill="#8884d8"
+
+        <div style={styles.chartsContainer}>
+          <div style={styles.chart}>
+            <h3 style={styles.chartTitle}>Projetos por Dia</h3>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart
+                data={data}
+                margin={{
+                  top: 20,
+                  right: 30,
+                  left: 0,
+                  bottom: 5,
+                }}
               >
-                {data2.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))}
-              </Pie>
-              <Legend
-                layout="horizontal"
-                verticalAlign="bottom"
-                align="center"
-              />
-            </PieChart>
-            <p>26-11-2024</p>
-          </ResponsiveContainer>
+                <XAxis dataKey="date" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Line
+                  type="monotone"
+                  dataKey="enviados"
+                  stroke="#1d4a5d"
+                  strokeWidth={2}
+                  activeDot={{ r: 8 }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="rascunho"
+                  stroke="#82ca9d"
+                  strokeWidth={2}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+
+          <div style={styles.chart}>
+            <h3 style={styles.chartTitle}>Resumo de Projetos</h3>
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Tooltip />
+                <Pie
+                  data={data2}
+                  dataKey="value"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={100}
+                  innerRadius={50}
+                  fill="#8884d8"
+                >
+                  {data2.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+                <Legend
+                  layout="horizontal"
+                  verticalAlign="bottom"
+                  align="center"
+                />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        <div style={styles.tableContainer}>
+          <h3 style={styles.tableTitle}>Detalhes dos Projetos</h3>
+          <Table dados={projetos.itemsByStatus} />
         </div>
       </div>
-    </div>
+    </>
   );
+};
+
+const styles = {
+  container: {
+    fontFamily: "Roboto, Arial, sans-serif",
+    padding: "20px",
+    backgroundColor: "#f5f5f5",
+    color: "#1d4a5d",
+  },
+  title: {
+    textAlign: "center",
+    marginBottom: "30px",
+    fontSize: "28px",
+    color: "#1d4a5d",
+  },
+  cardContainer: {
+    display: "flex",
+    justifyContent: "space-around",
+    marginBottom: "40px",
+  },
+  chartsContainer: {
+    display: "flex",
+    justifyContent: "space-around",
+    marginBottom: "40px",
+  },
+  chart: {
+    flex: 1,
+    margin: "0 20px",
+    padding: "20px",
+    backgroundColor: "#ffffff",
+    borderRadius: "8px",
+    boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+  },
+  chartTitle: {
+    textAlign: "center",
+    marginBottom: "20px",
+    fontSize: "20px",
+    color: "#1d4a5d",
+  },
+  tableContainer: {
+    padding: "20px",
+    backgroundColor: "#ffffff",
+    borderRadius: "8px",
+    boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+  },
+  tableTitle: {
+    textAlign: "center",
+    marginBottom: "20px",
+    fontSize: "20px",
+    color: "#1d4a5d",
+  },
 };
 
 export default GestaoProjetos;
