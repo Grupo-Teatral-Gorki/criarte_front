@@ -41,9 +41,22 @@ const GestaoProjetos = () => {
   const [municipio, setMunicipio] = useState("");
   const [projetos, setProjetos] = useState();
 
+  const cityNames = {
+    3842: "Serrana",
+    3798: "Santa Rita Do Passa Quatro",
+    3357: "Brodowski",
+    3823: "São José Do Rio Pardo",
+    3398: "Cerquilho",
+    3478: "Guariba",
+  };
+
+  function getCityName(number) {
+    return cityNames[number];
+  }
+
   useEffect(() => {
     const userDetails = JSON.parse(localStorage.getItem("userDetails"));
-    setMunicipio(userDetails.idCidade);
+    setMunicipio(getCityName(userDetails.idCidade));
   }, []);
 
   useEffect(() => {
@@ -65,7 +78,6 @@ const GestaoProjetos = () => {
           const data = await response.json();
           const formatted = getStatusesCount(data.data);
           setProjetos(formatted);
-          console.log(JSON.stringify(formatted.itemsByStatus));
         }
       } catch (error) {
         console.error("Erro ao carregar projetos.", error);

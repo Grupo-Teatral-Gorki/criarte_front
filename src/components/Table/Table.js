@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 
-// Component for rendering a table with data
 function Table({ dados }) {
   const cellStyle = {
     padding: "20px",
@@ -9,10 +8,6 @@ function Table({ dados }) {
     verticalAlign: "top",
     color: "#1d4a5d",
   };
-
-  useEffect(() => {
-    console.log("data", dados[0]); // Logs the first data item for debugging
-  }, [dados]);
 
   return (
     <div style={{ padding: "40px", fontFamily: "Roboto, Arial, sans-serif" }}>

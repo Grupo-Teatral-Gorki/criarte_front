@@ -65,7 +65,7 @@ const Home = () => {
     3357: "Brodowski",
     3823: "São José Do Rio Pardo",
     3398: "Cerquilho",
-    3478: "Guariba"
+    3478: "Guariba",
   };
 
   // Pegando o nome da cidade com base no idCidade
@@ -184,7 +184,12 @@ const Home = () => {
             </a>
 
             <div className="container_ajuda">
-              <a href="https://wa.me/16981423000" target="_blank" className="opcao_link">
+              <a
+                href="https://wa.me/16981423000"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="opcao_link"
+              >
                 <h3>
                   <i className="bi bi-journal-check"></i> Ajuda
                 </h3>
@@ -275,10 +280,9 @@ const Home = () => {
                     INDISPONÍVEL
                   </button>
                 </div>
-              ) 
-              : storageUserDetails.idCidade === 3478 ? (
+              ) : storageUserDetails.idCidade === 3478 ? (
                 <div>
-                     <img
+                  <img
                     className="banner_img"
                     style={{ display: "flex", maxWidth: "180px" }}
                     src="https://guariba.sp.gov.br/pat/Arquitetura/Imagens/logo.png"
@@ -288,7 +292,7 @@ const Home = () => {
                   <button
                     onClick={() =>
                       window.open(
-                        "https://criarte.grupogorki.com.br/projetos/selecao",
+                        "https://criarte.grupogorki.com.br/projetos/selecao"
                       )
                     }
                     style={{ marginTop: "20px", minWidth: "100%" }}
@@ -297,7 +301,7 @@ const Home = () => {
                     Ver Editais
                   </button>
                 </div>
-              ): storageUserDetails.idCidade === 3823 ? (
+              ) : storageUserDetails.idCidade === 3823 ? (
                 <div>
                   <img
                     className="banner_img"
@@ -342,7 +346,7 @@ const Home = () => {
                   <button
                     onClick={() =>
                       window.open(
-                        "https://criarte.grupogorki.com.br/projetos/selecao",
+                        "https://criarte.grupogorki.com.br/projetos/selecao"
                       )
                     }
                     style={{ marginTop: "20px", minWidth: "100%" }}

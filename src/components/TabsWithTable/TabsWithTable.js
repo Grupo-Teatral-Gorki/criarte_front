@@ -6,6 +6,11 @@ const TabsWithTable = ({ data }) => {
   const [activeTab, setActiveTab] = useState(0);
   const tabLabels = Object.keys(data);
 
+  const formatLabels = (label) => {
+    if (label === "habilitao") {
+      return "habilitação";
+    } else return label;
+  };
   return (
     <div style={styles.container}>
       <div style={styles.tabHeader}>
@@ -19,7 +24,8 @@ const TabsWithTable = ({ data }) => {
             }}
             onClick={() => setActiveTab(index)}
           >
-            {label.charAt(0).toUpperCase() + label.slice(1)}
+            {formatLabels(label).charAt(0).toUpperCase() +
+              formatLabels(label).slice(1)}
           </button>
         ))}
       </div>
