@@ -18,6 +18,7 @@ import Header from "../../components/header/header";
 import { useRouter } from "next/router";
 
 // TESTE CI/CD
+console.log('teste')
 
 function PnabHomeForms() {
   const [numeroInscricao, setNumeroInscricao] = useState(null);
