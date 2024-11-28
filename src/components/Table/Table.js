@@ -37,8 +37,9 @@ const projetos = [
 ];
 
 function ProjetoTable(dados) {
+  //TODO
   //Tipos: enviado, habilitao, rascunho, recurso
-  //Adicionar Tabs de cada tipo e nessas tabs mostrar uma tabela com os itens de tal tipo
+  //Adicionar Tabs de cada tipo e nessas tabs mostrar uma tabela com os itens de tal tipo, adicionar paginação
   return (
     <div style={{ padding: "40px", fontFamily: "Roboto, Arial, sans-serif" }}>
       <table
