@@ -18,6 +18,8 @@ const ProfileForm = () => {
     3798: "Santa Rita Do Passa Quatro",
     3357: "Brodowski",
     3823: "São José Do Rio Pardo",
+    3398: "Cerquilho",
+    3478: "Guariba"
   };
 
   useEffect(() => {
