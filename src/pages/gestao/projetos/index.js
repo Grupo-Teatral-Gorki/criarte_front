@@ -13,8 +13,7 @@ import {
   Pie,
   Cell,
 } from "recharts";
-import Table from "../../../components/Table/Table";
-import { fetchProjectInfo } from "../../../utils/api";
+import TabsWithTable from "../../../components/TabsWithTable/TabsWithTable";
 
 const data = [
   { date: "16/11/24", rascunho: 25, enviados: 30, amt: 20 },
@@ -45,7 +44,6 @@ const GestaoProjetos = () => {
   useEffect(() => {
     const userDetails = JSON.parse(localStorage.getItem("userDetails"));
     setMunicipio(userDetails.idCidade);
-    console.log(municipio);
   }, []);
 
   useEffect(() => {
@@ -67,10 +65,7 @@ const GestaoProjetos = () => {
           const data = await response.json();
           const formatted = getStatusesCount(data.data);
           setProjetos(formatted);
-          console.log(formatted);
-        } else {
-          // Handle the case where the response is not OK (optional)
-          console.error("Failed to fetch projects");
+          console.log(JSON.stringify(formatted.itemsByStatus));
         }
       } catch (error) {
         console.error("Erro ao carregar projetos.", error);
@@ -212,7 +207,7 @@ const GestaoProjetos = () => {
 
         <div style={styles.tableContainer}>
           <h3 style={styles.tableTitle}>Detalhes dos Projetos</h3>
-          <Table dados={projetos.itemsByStatus} />
+          {projetos && <TabsWithTable data={projetos.itemsByStatus} />}
         </div>
       </div>
     </>
