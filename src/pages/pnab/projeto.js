@@ -17,7 +17,7 @@ import PrivateRoute from "../../components/PrivateRoute";
 import Header from "../../components/header/header";
 import { useRouter } from "next/router";
 
-console.log('CI/CD Test')
+console.log("CI/CD Test");
 
 function PnabHomeForms() {
   const [numeroInscricao, setNumeroInscricao] = useState(null);
@@ -371,22 +371,22 @@ function PnabHomeForms() {
                     <Section
                       title="Proponente"
                       description="Selecione o proponente do projeto"
-                      link="../proponente"
+                      link="/proponente"
                     />
                     <Section
                       title="Informações gerais do projeto"
                       description="Informe o segmento, período previsto e o valor do projeto"
-                      link="../informacoesGerais"
+                      link="/InformacoesGerais"
                     />
                     <Section
                       title="Documentos do projeto e proponente"
                       description="Importante! Só é possível anexar 01 (um) arquivo por item exigido. Caso necessário, reúna todos os ..."
-                      link="/documentForm"
+                      link="/DocumentForm"
                     />
                     <Section
                       title="Planilha orçamentária"
                       description="O valor total das despesas cadastradas deverá corresponder ao informado no orçamento."
-                      link="/planilhaOrc"
+                      link="/PlanilhaOrc"
                     />
                   </div>
                 ) : storageUserDetails.idCidade === 3398 ? (

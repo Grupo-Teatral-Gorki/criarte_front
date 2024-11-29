@@ -57,7 +57,7 @@ const Header = () => {
               <a href="/proponente">Meus Proponentes</a>
             </li>
             <li className="links_menu">
-              <a href="/profile">Alterar Meus Dados</a>
+              <a href="/Profile">Alterar Meus Dados</a>
             </li>
             <li className="links_menu">
               <ul className="submenu">
