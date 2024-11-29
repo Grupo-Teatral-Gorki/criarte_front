@@ -13,8 +13,8 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import Header from "../components/header/header";
-import PrivateRoute from "../components/PrivateRoute";
+import Header from "../../components/header/header";
+import PrivateRoute from "../../components/PrivateRoute";
 require("dotenv").config();
 
 const SegmentoArtistico = () => {

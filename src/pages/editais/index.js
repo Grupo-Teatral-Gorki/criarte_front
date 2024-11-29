@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
-import PrivateRoute from "../components/PrivateRoute";
-import Header from "../components/header/header";
+import PrivateRoute from "../../components/PrivateRoute";
+import Header from "../../components/header/header";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 

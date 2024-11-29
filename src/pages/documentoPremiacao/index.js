@@ -9,8 +9,8 @@ import {
   Alert,
 } from "@mui/material";
 import { styled } from "@mui/system";
-import Header from "../components/header/header";
-import PrivateRoute from "../components/PrivateRoute";
+import Header from "../../components/header/header";
+import PrivateRoute from "../../components/PrivateRoute";
 
 // Alterado para começar com letra maiúscula
 const DocumentoPremiacao = () => {
@@ -21,9 +21,6 @@ const DocumentoPremiacao = () => {
   const [uploadStatus, setUploadStatus] = useState({});
   const [allFilesUploaded, setAllFilesUploaded] = useState(false);
   const [storageUserDetails, setStorageUserDetails] = useState(null);
-
-  
-
 
   useEffect(() => {
 

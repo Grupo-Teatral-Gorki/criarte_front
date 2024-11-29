@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 import { useRouter } from "next/router";
-import Footer from "../components/Footer/Footer";
+import Footer from "../../components/Footer/Footer";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import Dialog from "@mui/material/Dialog";

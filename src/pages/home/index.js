@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import Header from "../components/header/header";
-import PrivateRoute from "../components/PrivateRoute";
-import Footer from "../components/Footer/Footer";
+import Header from "../../components/header/header";
+import PrivateRoute from "../../components/PrivateRoute";
+import Footer from "../../components/Footer/Footer";
 
 const allowedUsers = [
   "contato@styxx.com.br",

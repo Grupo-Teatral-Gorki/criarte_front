@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Header from "../components/header/header";
-import PrivateRoute from "../components/PrivateRoute";
+import Header from "../../components/header/header";
+import PrivateRoute from "../../components/PrivateRoute";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";

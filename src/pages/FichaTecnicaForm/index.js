@@ -28,8 +28,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Header from "../components/header/header";
-import PrivateRoute from "../components/PrivateRoute";
+import Header from "../../components/header/header";
+import PrivateRoute from "../../components/PrivateRoute";
 import { useRouter } from "next/router";
 
 const FichaTecnicaForm = () => {

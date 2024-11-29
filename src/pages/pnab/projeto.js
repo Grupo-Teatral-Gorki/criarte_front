@@ -381,12 +381,12 @@ function PnabHomeForms() {
                     <Section
                       title="Documentos do projeto e proponente"
                       description="Importante! Só é possível anexar 01 (um) arquivo por item exigido. Caso necessário, reúna todos os ..."
-                      link="/DocumentForm"
+                      link="/documentForm"
                     />
                     <Section
                       title="Planilha orçamentária"
                       description="O valor total das despesas cadastradas deverá corresponder ao informado no orçamento."
-                      link="/PlanilhaOrc"
+                      link="/planilhaOrc"
                     />
                   </div>
                 ) : storageUserDetails.idCidade === 3398 ? (
@@ -421,7 +421,7 @@ function PnabHomeForms() {
                     <Section
                       title="Informações gerais do projeto"
                       description="Informe o segmento, período previsto e o valor do projeto"
-                      link="/informacoesGerais"
+                      link="/InformacoesGerais"
                     />
                     <Section
                       title="Documentos do projeto e proponente"
@@ -466,7 +466,7 @@ function PnabHomeForms() {
                     <Section
                       title="Informações gerais do projeto"
                       description="Informe o segmento, período previsto e o valor do projeto"
-                      link="/informacoesGerais"
+                      link="/InformacoesGerais"
                     />
                     <Section
                       title="Documentos do projeto e proponente"
@@ -532,7 +532,7 @@ function PnabHomeForms() {
                     <Section
                       title="Informações gerais do projeto"
                       description="Informe o segmento, período previsto e o valor do projeto"
-                      link="/informacoesGerais"
+                      link="/InformacoesGerais"
                     />
                     <Section
                       title="Planilha orçamentária"
