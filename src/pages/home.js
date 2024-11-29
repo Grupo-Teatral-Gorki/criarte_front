@@ -197,7 +197,7 @@ const Home = () => {
               </a>
             </div>
 
-            {storageUserDetails && storageUserDetails.tipoUsuario > 1 && (
+            {/* {storageUserDetails && storageUserDetails.tipoUsuario > 1 && (
               <div className="container_ajuda">
                 <a href="/gestao/projetos" className="opcao_link">
                   <h3>
@@ -206,7 +206,7 @@ const Home = () => {
                   <p>Acesso às ferramentas de administração</p>
                 </a>
               </div>
-            )}
+            )} */}
           </section>
 
           <section className="container_banner">
