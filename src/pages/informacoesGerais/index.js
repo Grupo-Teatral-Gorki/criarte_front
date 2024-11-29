@@ -21,7 +21,7 @@ import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 
-require("dotenv").config();
+require("dotenv").config()
 
 const InformacoesGerais = () => {
   const [formData, setFormData] = useState({

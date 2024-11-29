@@ -229,7 +229,7 @@ function PnabHomeForms() {
     } catch (error) {
       setError("Erro ao enviar o projeto. Tente novamente mais tarde.");
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
   };
 
@@ -376,7 +376,7 @@ function PnabHomeForms() {
                     <Section
                       title="Informações gerais do projeto"
                       description="Informe o segmento, período previsto e o valor do projeto"
-                      link="/InformacoesGerais"
+                      link="/informacoesGerais"
                     />
                     <Section
                       title="Documentos do projeto e proponente"
@@ -421,7 +421,7 @@ function PnabHomeForms() {
                     <Section
                       title="Informações gerais do projeto"
                       description="Informe o segmento, período previsto e o valor do projeto"
-                      link="/InformacoesGerais"
+                      link="/informacoesGerais"
                     />
                     <Section
                       title="Documentos do projeto e proponente"
@@ -466,7 +466,7 @@ function PnabHomeForms() {
                     <Section
                       title="Informações gerais do projeto"
                       description="Informe o segmento, período previsto e o valor do projeto"
-                      link="/InformacoesGerais"
+                      link="/informacoesGerais"
                     />
                     <Section
                       title="Documentos do projeto e proponente"
@@ -532,7 +532,7 @@ function PnabHomeForms() {
                     <Section
                       title="Informações gerais do projeto"
                       description="Informe o segmento, período previsto e o valor do projeto"
-                      link="/InformacoesGerais"
+                      link="/informacoesGerais"
                     />
                     <Section
                       title="Planilha orçamentária"
