@@ -150,6 +150,11 @@ function PnabHomeForms() {
   };
 
   const handleProjectNameBlur = async () => {
+    const requestBody = JSON.stringify({
+      idProjeto: numeroInscricao,
+      novoNome: projectName,
+    });
+
     try {
       const response = await fetch(
         "https://gorki-api-nome.iglgxt.easypanel.host/api/updateProjectName",
@@ -158,10 +163,7 @@ function PnabHomeForms() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            idProjeto: numeroInscricao,
-            novoNome: projectName,
-          }),
+          body: requestBody,
         }
       );
 
@@ -172,6 +174,7 @@ function PnabHomeForms() {
       }
 
       console.log("Nome do projeto atualizado com sucesso");
+      console.log(requestBody);
       localStorage.setItem("projectName", projectName);
     } catch (error) {
       setError(

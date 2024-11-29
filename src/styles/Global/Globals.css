@@ -8,6 +8,7 @@
 }
 
 .menu-mobile-all {
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1004,4 +1005,77 @@ input[type="range"] {
 
 .filter-button button:active {
   transform: scale(0.95);
+}
+
+.container-gestao {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  width: 100%;
+}
+
+.title-gestao {
+  font-size: 2.5rem;
+}
+
+.container-cards-gestao {
+  display: flex;
+  gap: 2rem;
+  justify-content: space-around;
+}
+
+.container-info-gestao {
+  width: 100%;
+  display: flex;
+  gap: 2rem;
+}
+
+.container-graficos-gestao {
+  width: 90%;
+  height: 30vh;
+  display: flex;
+  gap: 2rem;
+  padding: 0 4rem;
+
+  p {
+    font-weight: bold;
+    font-size: 18px;
+  }
+}
+
+.card-gestao {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff; /* Card background */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow:
+    0 4px 6px rgba(0, 0, 0, 0.1),
+    0 1px 3px rgba(0, 0, 0, 0.06); /* Soft shadows */
+  padding: 2rem; /* Inner spacing */
+  width: 350px; /* Optional: control card width */
+  transition: box-shadow 0.2s ease; /* Smooth hover effect */
+  cursor: pointer;
+
+  p {
+    font-size: 1.4rem;
+  }
+
+  span {
+    margin-top: 0.5rem;
+    font-size: 2.5rem;
+  }
+}
+.card-gestao:hover {
+  box-shadow:
+    0 10px 15px rgba(0, 0, 0, 0.2),
+    0 4px 6px rgba(0, 0, 0, 0.1); /* Slightly stronger shadow on hover */
+}
+
+.container-lista-gestao {
+  width: 100%;
+  padding: 4rem;
 }
