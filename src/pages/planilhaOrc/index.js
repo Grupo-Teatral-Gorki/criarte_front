@@ -9,8 +9,8 @@ import {
   Alert,
 } from "@mui/material";
 import { styled } from "@mui/system";
-import Header from "../components/header/header";
-import PrivateRoute from "../components/PrivateRoute";
+import Header from "../../components/header/header";
+import PrivateRoute from "../../components/PrivateRoute";
 
 const DocumentUploadForm = () => {
   const [numeroInscricao, setNumeroInscricao] = useState(null);
@@ -38,7 +38,7 @@ const DocumentUploadForm = () => {
 
         if (!response.ok) {
           throw new Error(
-            `Erro na requisição: ${response.status} ${response.statusText}`,
+            `Erro na requisição: ${response.status} ${response.statusText}`
           );
         }
 
@@ -93,7 +93,7 @@ const DocumentUploadForm = () => {
           "Upload error:",
           response.status,
           response.statusText,
-          await response.text(),
+          await response.text()
         );
       }
     } catch (error) {
@@ -174,7 +174,6 @@ const DocumentUploadForm = () => {
                 }}
               >
                 <CardContent>
-
                   <UploadBox>
                     <Typography variant="body2" sx={{ mb: 1 }}>
                       Selecione o arquivo aqui

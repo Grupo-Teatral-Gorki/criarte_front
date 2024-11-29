@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Container, Box, TextField, Button, Link, Alert } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
-import PrivateRoute from "../components/PrivateRoute";
-import Header from "../components/header/header";
+import Header from "../../components/header/header";
+import PrivateRoute from "../../components/PrivateRoute";
 
 const ProfileForm = () => {
   const [userEmail, setUserEmail] = useState("");
