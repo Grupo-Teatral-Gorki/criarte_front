@@ -20,4 +20,6 @@ const GoogleTag = () => {
   return null;
 };
 
+console.log('G-ON')
+
 export default GoogleTag;
