@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Header from "../../../components/Header/Header";
 import CardGestao from "../../../components/CardGestao/CardGestao";
 import {
   LineChart,
@@ -14,6 +13,7 @@ import {
   Cell,
 } from "recharts";
 import TabsWithTable from "../../../components/TabsWithTable/TabsWithTable";
+import Header from "../../../components/header/header";
 
 const data = [
   { date: "16/11/24", rascunho: 25, enviados: 30, amt: 20 },
