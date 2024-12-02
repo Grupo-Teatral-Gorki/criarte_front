@@ -750,9 +750,10 @@ const DocumentUploadForm = () => {
             <Alert severity="error">{error}</Alert>
           ) : (
             <form onSubmit={handleSubmit}>
-              {CheckRequiredDocs().map((item) => {
+              {CheckRequiredDocs().map((item, index) => {
                 return (
                   <UploadField
+                    key={index}
                     name={item.name}
                     label={item.label}
                     exampleLink={item.exampleLink ? item.exampleLink : null}
@@ -762,44 +763,6 @@ const DocumentUploadForm = () => {
               })}
 
               <Box sx={{ mt: 4, textAlign: "center" }}>
-                <div>
-                  <FormControl>
-                    <FormLabel>
-                      Optante por cota ( Inserir Declaração Étnico-racial (Anexo
-                      VII) e/ou Declaração de Pessoa com Deficiência (Anexo
-                      VIII))
-                    </FormLabel>
-                    <FormGroup row>
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={isCotista === true} // Verifica se o valor de isCotista é verdadeiro
-                            onChange={(e) => {
-                              const idProjeto =
-                                localStorage.getItem("numeroInscricao");
-                              atualizarCotista(idProjeto, e.target.checked);
-                            }}
-                          />
-                        }
-                        label="Sim"
-                      />
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={isCotista === false} // Verifica se o valor de isCotista é falso
-                            onChange={(e) => {
-                              const idProjeto =
-                                localStorage.getItem("numeroInscricao");
-                              atualizarCotista(idProjeto, !e.target.checked); // Atualiza com o estado invertido
-                            }}
-                          />
-                        }
-                        label="Não"
-                      />
-                    </FormGroup>
-                  </FormControl>
-                </div>
-
                 <Button variant="contained" type="submit">
                   SALVAR DOCUMENTOS
                 </Button>
