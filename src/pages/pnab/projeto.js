@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/react-in-jsx-scope */
 import { useState, useEffect } from "react";
 import {
@@ -229,7 +231,7 @@ function PnabHomeForms() {
     } catch (error) {
       setError("Erro ao enviar o projeto. Tente novamente mais tarde.");
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
   };
 
@@ -565,7 +567,7 @@ function PnabHomeForms() {
                     onClick={handleSubmit}
                     variant="contained"
                     color="primary"
-                    disabled
+                    disabled={statusProjeto === "enviado"}
                   >
                     Enviar projeto
                   </Button>
