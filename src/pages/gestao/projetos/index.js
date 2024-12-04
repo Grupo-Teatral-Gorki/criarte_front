@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import CardGestao from "../../../components/CardGestao/CardGestao";
 import {
-  LineChart,
+  /*  LineChart,
   Line,
   XAxis,
-  YAxis,
+  YAxis, */
   Tooltip,
   Legend,
   ResponsiveContainer,
@@ -15,7 +15,7 @@ import {
 import TabsWithTable from "../../../components/TabsWithTable/TabsWithTable";
 import Header from "../../../components/header/header";
 
-const data = [
+/* const data = [
   { date: "16/11/24", rascunho: 25, enviados: 30, amt: 20 },
   { date: "17/11/24", rascunho: 18, enviados: 22, amt: 19 },
   { date: "18/11/24", rascunho: 10, enviados: 15, amt: 12 },
@@ -26,14 +26,7 @@ const data = [
   { date: "23/11/24", rascunho: 28, enviados: 34, amt: 30 },
   { date: "24/11/24", rascunho: 15, enviados: 23, amt: 17 },
   { date: "25/11/24", rascunho: 12, enviados: 19, amt: 14 },
-];
-
-const data2 = [
-  { name: "Rascunhos", value: 30 },
-  { name: "Enviados", value: 20 },
-  { name: "Habilitados", value: 25 },
-  { name: "Recursos", value: 25 },
-];
+]; */
 
 const COLORS = ["#1d4a5d", "#00C49F", "#FFBB28", "#FF8042"];
 
@@ -50,6 +43,33 @@ const GestaoProjetos = () => {
     3478: "Guariba",
   };
 
+  const data2 = [
+    {
+      name: "Rascunhos",
+      value: projetos.countByStatus.rascunho
+        ? projetos.countByStatus.rascunho
+        : 0,
+    },
+    {
+      name: "Enviados",
+      value: projetos.countByStatus.enviado
+        ? projetos.countByStatus.enviado
+        : 0,
+    },
+    {
+      name: "Habilitados",
+      value: projetos.countByStatus.habilitao
+        ? projetos.countByStatus.habilitao
+        : 0,
+    },
+    {
+      name: "Recursos",
+      value: projetos.countByStatus.recurso
+        ? projetos.countByStatus.recurso
+        : 0,
+    },
+  ];
+
   function getCityName(number) {
     return cityNames[number];
   }
@@ -60,23 +80,28 @@ const GestaoProjetos = () => {
   }, []);
 
   useEffect(() => {
+    const userDetails = JSON.parse(localStorage.getItem("userDetails"));
     const fetchProjectInfo = async () => {
       const token = localStorage.getItem("authToken");
       try {
         const response = await fetch(
-          `https://api.grupogorki.com.br/api/projeto/listaProjetos`,
+          `https://gorki-api-p-view-resumo.iglgxt.easypanel.host/project/view/resumo`,
           {
-            method: "GET",
+            method: "POST",
             headers: {
               Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
             },
+            body: JSON.stringify({
+              idCidade: userDetails.idCidade,
+            }),
           }
         );
 
         if (response.ok) {
           const data = await response.json();
-          const formatted = getStatusesCount(data.data);
+          const formatted = getStatusesCount(data);
+          console.log("formatted", formatted);
           setProjetos(formatted);
         }
       } catch (error) {
@@ -88,7 +113,6 @@ const GestaoProjetos = () => {
   }, []);
 
   function normalizeStatus(status) {
-    // Return null if status is null, otherwise normalize it (lowercase and remove special characters)
     if (status === null) return null;
     return status.toLowerCase().replace(/[^a-z0-9]/g, "");
   }
@@ -130,29 +154,29 @@ const GestaoProjetos = () => {
 
         <div style={styles.cardContainer}>
           <CardGestao
-            titulo="Projetos Enviados"
-            valor={projetos?.countByStatus.enviado}
-          />
-          <CardGestao
-            titulo="Projetos em Habilitação"
-            valor={projetos?.countByStatus.habilitao}
-          />
-          <CardGestao
             titulo="Projetos em Rascunho"
-            valor={projetos?.countByStatus.rascunho}
+            valor={projetos?.countByStatus.rascunho || "0"}
+          />
+          <CardGestao
+            titulo="Projetos Enviados"
+            valor={projetos?.countByStatus.enviado || "0"}
           />
           <CardGestao
             titulo="Projetos em Recurso"
-            valor={projetos?.countByStatus.recurso}
+            valor={projetos?.countByStatus.recurso || "0"}
+          />
+          <CardGestao
+            titulo="Projetos em Habilitação"
+            valor={projetos?.countByStatus.habilitao || "0"}
           />
           <CardGestao
             titulo="Total de Projetos"
-            valor={projetos?.countByStatus.total}
+            valor={projetos?.countByStatus.total || "0"}
           />
         </div>
 
         <div style={styles.chartsContainer}>
-          <div style={styles.chart}>
+          {/* <div style={styles.chart}>
             <h3 style={styles.chartTitle}>Projetos por Dia</h3>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart
@@ -183,7 +207,7 @@ const GestaoProjetos = () => {
                 />
               </LineChart>
             </ResponsiveContainer>
-          </div>
+          </div> */}
 
           <div style={styles.chart}>
             <h3 style={styles.chartTitle}>Resumo de Projetos</h3>
