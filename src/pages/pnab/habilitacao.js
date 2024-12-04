@@ -21,11 +21,47 @@ const RecursoForm = () => {
   const [uploadStatus, setUploadStatus] = useState({});
   const [allFilesUploaded, setAllFilesUploaded] = useState(false);
   const [userDetails, setUserDetails] = useState({});
+  const [idEdital, setIdEdital] = useState();
 
   useEffect(() => {
     const storedUserDetails = localStorage.getItem("userDetails");
     setUserDetails(JSON.parse(storedUserDetails) || {}); // Ensure parsing is done to retrieve proper object
-    console.log("dets", userDetails);
+  }, []);
+
+  useEffect(() => {
+    const fetchIdEdital = async () => {
+      try {
+        const response = await fetch(
+          "https://gorki-api-nome.iglgxt.easypanel.host/api/getProjeto",
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              usuario: localStorage.getItem("userEmail"),
+              senha: localStorage.getItem("userPassword"),
+              numeroInscricao: localStorage.getItem("numeroInscricao"),
+            }),
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`Erro ao buscar projeto: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        setIdEdital(data.projeto.id_edital); // Aqui coletamos o idEdital
+        console.log("edital", data.projeto.id_edital);
+        setIsLoading(false);
+      } catch (error) {
+        setError("Erro ao buscar o projeto.");
+        setIsLoading(false);
+      }
+    };
+
+    fetchIdEdital();
   }, []);
 
   useEffect(() => {
@@ -195,9 +231,14 @@ const RecursoForm = () => {
             <Alert severity="error">{error}</Alert>
           ) : (
             <form onSubmit={handleSubmit}>
-              <UploadField name="cnd_municipal" label="*CND Municipal" />
-              <UploadField name="cnd_estadual" label="*CND Estadual" />
-              <UploadField name="cnd_federal" label="*CND Federal" />
+              {userDetails.idCidade === 3798 && idEdital === 2 ? null : (
+                <>
+                  <UploadField name="cnd_municipal" label="*CND Municipal" />
+                  <UploadField name="cnd_estadual" label="*CND Estadual" />
+                  <UploadField name="cnd_federal" label="*CND Federal" />
+                </>
+              )}
+
               {userDetails.idCidade === 3798 && (
                 <span>
                   <UploadField
