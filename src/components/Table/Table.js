@@ -1,7 +1,17 @@
-import React from "react";
-import PropTypes from "prop-types";
+/* eslint-disable react/prop-types */
+import React, { useState } from "react";
 
 function Table({ dados }) {
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  const totalPages = Math.ceil(dados.length / itemsPerPage);
+
+  const currentData = dados.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   const cellStyle = {
     padding: "20px",
     borderBottom: "1px solid #ddd",
@@ -9,8 +19,31 @@ function Table({ dados }) {
     color: "#1d4a5d",
   };
 
+  const paginationStyle = {
+    display: "flex",
+    justifyContent: "center",
+    marginTop: "20px",
+    gap: "10px",
+  };
+
+  const buttonStyle = {
+    padding: "10px 15px",
+    border: "1px solid #1d4a5d",
+    backgroundColor: "#e9f4f8",
+    color: "#1d4a5d",
+    cursor: "pointer",
+    fontWeight: "bold",
+    transition: "background-color 0.3s",
+  };
+
+  const activeButtonStyle = {
+    ...buttonStyle,
+    backgroundColor: "#1d4a5d",
+    color: "white",
+  };
+
   return (
-    <div style={{ padding: "40px", fontFamily: "Roboto, Arial, sans-serif" }}>
+    <div style={{ fontFamily: "Roboto, Arial, sans-serif" }}>
       <table
         style={{
           width: "100%",
@@ -22,10 +55,10 @@ function Table({ dados }) {
         <thead>
           <tr style={{ backgroundColor: "#1d4a5d", color: "white" }}>
             {[
-              "Data Inicial",
-              "Nome do Proejto",
-              "Número de Inscrição",
-              "Proponente",
+              "ID do Projeto",
+              "Nome do Projeto",
+              "Modalidade",
+              "Resumo do Projeto",
             ].map((header) => (
               <th
                 key={header}
@@ -42,10 +75,10 @@ function Table({ dados }) {
           </tr>
         </thead>
         <tbody>
-          {Array.isArray(dados) && dados.length > 0 ? (
-            dados.map((item, index) => (
+          {currentData.length > 0 ? (
+            currentData.map((item, index) => (
               <tr
-                key={item.numeroInscricao}
+                key={item.id_projeto}
                 style={{
                   backgroundColor: index % 2 === 0 ? "#e9f4f8" : "#ffffff",
                   borderBottom: "1px solid #ddd",
@@ -60,10 +93,10 @@ function Table({ dados }) {
                     index % 2 === 0 ? "#e9f4f8" : "#ffffff")
                 }
               >
-                <td style={cellStyle}>{item.dataInicial}</td>
-                <td style={cellStyle}>{item.Projeto}</td>
-                <td style={cellStyle}>{item.numeroInscricao}</td>
-                <td style={cellStyle}>{item.proponente}</td>
+                <td style={cellStyle}>{item.id_projeto}</td>
+                <td style={cellStyle}>{item.nome_projeto}</td>
+                <td style={cellStyle}>{item.nome_modalidade}</td>
+                <td style={cellStyle}>{item.resumo_projeto}</td>
               </tr>
             ))
           ) : (
@@ -75,20 +108,45 @@ function Table({ dados }) {
           )}
         </tbody>
       </table>
+
+      {/* Pagination */}
+      <div style={paginationStyle}>
+        <button
+          style={
+            currentPage === 1
+              ? { ...buttonStyle, cursor: "not-allowed", opacity: 0.6 }
+              : buttonStyle
+          }
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+        >
+          Anterior
+        </button>
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button
+            key={index + 1}
+            style={currentPage === index + 1 ? activeButtonStyle : buttonStyle}
+            onClick={() => setCurrentPage(index + 1)}
+          >
+            {index + 1}
+          </button>
+        ))}
+        <button
+          style={
+            currentPage === totalPages
+              ? { ...buttonStyle, cursor: "not-allowed", opacity: 0.6 }
+              : buttonStyle
+          }
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+          }
+          disabled={currentPage === totalPages}
+        >
+          Próximo
+        </button>
+      </div>
     </div>
   );
 }
-
-// PropTypes validation
-Table.propTypes = {
-  dados: PropTypes.arrayOf(
-    PropTypes.shape({
-      dataInicial: PropTypes.string.isRequired,
-      nomeProjeto: PropTypes.string.isRequired,
-      numeroInscricao: PropTypes.string.isRequired,
-      proponente: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-};
 
 export default Table;

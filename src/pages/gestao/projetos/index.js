@@ -15,26 +15,6 @@ import {
 import TabsWithTable from "../../../components/TabsWithTable/TabsWithTable";
 import Header from "../../../components/header/header";
 
-const data = [
-  { date: "16/11/24", rascunho: 25, enviados: 30, amt: 20 },
-  { date: "17/11/24", rascunho: 18, enviados: 22, amt: 19 },
-  { date: "18/11/24", rascunho: 10, enviados: 15, amt: 12 },
-  { date: "19/11/24", rascunho: 30, enviados: 35, amt: 28 },
-  { date: "20/11/24", rascunho: 22, enviados: 29, amt: 25 },
-  { date: "21/11/24", rascunho: 14, enviados: 20, amt: 18 },
-  { date: "22/11/24", rascunho: 19, enviados: 26, amt: 21 },
-  { date: "23/11/24", rascunho: 28, enviados: 34, amt: 30 },
-  { date: "24/11/24", rascunho: 15, enviados: 23, amt: 17 },
-  { date: "25/11/24", rascunho: 12, enviados: 19, amt: 14 },
-];
-
-const data2 = [
-  { name: "Rascunhos", value: 30 },
-  { name: "Enviados", value: 20 },
-  { name: "Habilitados", value: 25 },
-  { name: "Recursos", value: 25 },
-];
-
 const COLORS = ["#1d4a5d", "#00C49F", "#FFBB28", "#FF8042"];
 
 const GestaoProjetos = () => {
@@ -50,6 +30,75 @@ const GestaoProjetos = () => {
     3478: "Guariba",
   };
 
+  const data = [
+    {
+      date: "Rascunhos",
+      Projetos:
+        projetos && projetos.countByStatus.rascunho
+          ? projetos.countByStatus.rascunho
+          : 0,
+    },
+    {
+      date: "Enviados",
+      Projetos:
+        projetos && projetos.countByStatus.enviado
+          ? projetos.countByStatus.enviado
+          : 0,
+    },
+    {
+      date: "Recurso",
+      Projetos:
+        projetos && projetos.countByStatus.recurso
+          ? projetos.countByStatus.recurso
+          : 0,
+    },
+    {
+      date: "Habilitação",
+      Projetos:
+        projetos && projetos.countByStatus.habilitao
+          ? projetos.countByStatus.habilitao
+          : 0,
+    },
+    {
+      date: "Total",
+      Projetos:
+        projetos && projetos.countByStatus.total
+          ? projetos.countByStatus.total
+          : 0,
+    },
+  ];
+
+  const data2 = [
+    {
+      name: "Rascunhos",
+      value:
+        projetos && projetos.countByStatus.rascunho
+          ? projetos.countByStatus.rascunho
+          : 0,
+    },
+    {
+      name: "Enviados",
+      value:
+        projetos && projetos.countByStatus.enviado
+          ? projetos.countByStatus.enviado
+          : 0,
+    },
+    {
+      name: "Habilitados",
+      value:
+        projetos && projetos.countByStatus.habilitao
+          ? projetos.countByStatus.habilitao
+          : 0,
+    },
+    {
+      name: "Recursos",
+      value:
+        projetos && projetos.countByStatus.recurso
+          ? projetos.countByStatus.recurso
+          : 0,
+    },
+  ];
+
   function getCityName(number) {
     return cityNames[number];
   }
@@ -60,23 +109,28 @@ const GestaoProjetos = () => {
   }, []);
 
   useEffect(() => {
+    const userDetails = JSON.parse(localStorage.getItem("userDetails"));
     const fetchProjectInfo = async () => {
       const token = localStorage.getItem("authToken");
       try {
         const response = await fetch(
-          `https://api.grupogorki.com.br/api/projeto/listaProjetos`,
+          `https://gorki-api-p-view-resumo.iglgxt.easypanel.host/project/view/resumo`,
           {
-            method: "GET",
+            method: "POST",
             headers: {
               Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
             },
+            body: JSON.stringify({
+              idCidade: userDetails.idCidade,
+            }),
           }
         );
 
         if (response.ok) {
           const data = await response.json();
-          const formatted = getStatusesCount(data.data);
+          const formatted = getStatusesCount(data);
+          console.log("formatted", formatted);
           setProjetos(formatted);
         }
       } catch (error) {
@@ -88,7 +142,6 @@ const GestaoProjetos = () => {
   }, []);
 
   function normalizeStatus(status) {
-    // Return null if status is null, otherwise normalize it (lowercase and remove special characters)
     if (status === null) return null;
     return status.toLowerCase().replace(/[^a-z0-9]/g, "");
   }
@@ -130,30 +183,29 @@ const GestaoProjetos = () => {
 
         <div style={styles.cardContainer}>
           <CardGestao
-            titulo="Projetos Enviados"
-            valor={projetos?.countByStatus.enviado}
-          />
-          <CardGestao
-            titulo="Projetos em Habilitação"
-            valor={projetos?.countByStatus.habilitao}
-          />
-          <CardGestao
             titulo="Projetos em Rascunho"
-            valor={projetos?.countByStatus.rascunho}
+            valor={projetos?.countByStatus.rascunho || "0"}
+          />
+          <CardGestao
+            titulo="Projetos Enviados"
+            valor={projetos?.countByStatus.enviado || "0"}
           />
           <CardGestao
             titulo="Projetos em Recurso"
-            valor={projetos?.countByStatus.recurso}
+            valor={projetos?.countByStatus.recurso || "0"}
+          />
+          <CardGestao
+            titulo="Projetos em Habilitação"
+            valor={projetos?.countByStatus.habilitao || "0"}
           />
           <CardGestao
             titulo="Total de Projetos"
-            valor={projetos?.countByStatus.total}
+            valor={projetos?.countByStatus.total || "0"}
           />
         </div>
 
         <div style={styles.chartsContainer}>
           <div style={styles.chart}>
-            <h3 style={styles.chartTitle}>Projetos por Dia</h3>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart
                 data={data}
@@ -170,14 +222,7 @@ const GestaoProjetos = () => {
                 <Legend />
                 <Line
                   type="monotone"
-                  dataKey="enviados"
-                  stroke="#1d4a5d"
-                  strokeWidth={2}
-                  activeDot={{ r: 8 }}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="rascunho"
+                  dataKey="Projetos"
                   stroke="#82ca9d"
                   strokeWidth={2}
                 />
