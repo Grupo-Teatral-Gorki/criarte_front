@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import CardGestao from "../../../components/CardGestao/CardGestao";
 import {
-  /*  LineChart,
+  LineChart,
   Line,
   XAxis,
-  YAxis, */
+  YAxis,
   Tooltip,
   Legend,
   ResponsiveContainer,
@@ -14,19 +14,6 @@ import {
 } from "recharts";
 import TabsWithTable from "../../../components/TabsWithTable/TabsWithTable";
 import Header from "../../../components/header/header";
-
-/* const data = [
-  { date: "16/11/24", rascunho: 25, enviados: 30, amt: 20 },
-  { date: "17/11/24", rascunho: 18, enviados: 22, amt: 19 },
-  { date: "18/11/24", rascunho: 10, enviados: 15, amt: 12 },
-  { date: "19/11/24", rascunho: 30, enviados: 35, amt: 28 },
-  { date: "20/11/24", rascunho: 22, enviados: 29, amt: 25 },
-  { date: "21/11/24", rascunho: 14, enviados: 20, amt: 18 },
-  { date: "22/11/24", rascunho: 19, enviados: 26, amt: 21 },
-  { date: "23/11/24", rascunho: 28, enviados: 34, amt: 30 },
-  { date: "24/11/24", rascunho: 15, enviados: 23, amt: 17 },
-  { date: "25/11/24", rascunho: 12, enviados: 19, amt: 14 },
-]; */
 
 const COLORS = ["#1d4a5d", "#00C49F", "#FFBB28", "#FF8042"];
 
@@ -43,30 +30,72 @@ const GestaoProjetos = () => {
     3478: "Guariba",
   };
 
+  const data = [
+    {
+      date: "Rascunhos",
+      Projetos:
+        projetos && projetos.countByStatus.rascunho
+          ? projetos.countByStatus.rascunho
+          : 0,
+    },
+    {
+      date: "Enviados",
+      Projetos:
+        projetos && projetos.countByStatus.enviado
+          ? projetos.countByStatus.enviado
+          : 0,
+    },
+    {
+      date: "Recurso",
+      Projetos:
+        projetos && projetos.countByStatus.recurso
+          ? projetos.countByStatus.recurso
+          : 0,
+    },
+    {
+      date: "Habilitação",
+      Projetos:
+        projetos && projetos.countByStatus.habilitao
+          ? projetos.countByStatus.habilitao
+          : 0,
+    },
+    {
+      date: "Total",
+      Projetos:
+        projetos && projetos.countByStatus.total
+          ? projetos.countByStatus.total
+          : 0,
+    },
+  ];
+
   const data2 = [
     {
       name: "Rascunhos",
-      value: projetos.countByStatus.rascunho
-        ? projetos.countByStatus.rascunho
-        : 0,
+      value:
+        projetos && projetos.countByStatus.rascunho
+          ? projetos.countByStatus.rascunho
+          : 0,
     },
     {
       name: "Enviados",
-      value: projetos.countByStatus.enviado
-        ? projetos.countByStatus.enviado
-        : 0,
+      value:
+        projetos && projetos.countByStatus.enviado
+          ? projetos.countByStatus.enviado
+          : 0,
     },
     {
       name: "Habilitados",
-      value: projetos.countByStatus.habilitao
-        ? projetos.countByStatus.habilitao
-        : 0,
+      value:
+        projetos && projetos.countByStatus.habilitao
+          ? projetos.countByStatus.habilitao
+          : 0,
     },
     {
       name: "Recursos",
-      value: projetos.countByStatus.recurso
-        ? projetos.countByStatus.recurso
-        : 0,
+      value:
+        projetos && projetos.countByStatus.recurso
+          ? projetos.countByStatus.recurso
+          : 0,
     },
   ];
 
@@ -176,8 +205,7 @@ const GestaoProjetos = () => {
         </div>
 
         <div style={styles.chartsContainer}>
-          {/* <div style={styles.chart}>
-            <h3 style={styles.chartTitle}>Projetos por Dia</h3>
+          <div style={styles.chart}>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart
                 data={data}
@@ -194,20 +222,13 @@ const GestaoProjetos = () => {
                 <Legend />
                 <Line
                   type="monotone"
-                  dataKey="enviados"
-                  stroke="#1d4a5d"
-                  strokeWidth={2}
-                  activeDot={{ r: 8 }}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="rascunho"
+                  dataKey="Projetos"
                   stroke="#82ca9d"
                   strokeWidth={2}
                 />
               </LineChart>
             </ResponsiveContainer>
-          </div> */}
+          </div>
 
           <div style={styles.chart}>
             <h3 style={styles.chartTitle}>Resumo de Projetos</h3>
