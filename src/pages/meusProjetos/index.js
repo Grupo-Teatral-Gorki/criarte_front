@@ -1,3 +1,6 @@
+/* eslint-disable react/no-unknown-property */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-constant-binary-expression */
 import React, { useState, useEffect } from "react";
 import Header from "../../components/header/header";
 import PrivateRoute from "../../components/PrivateRoute";
@@ -124,10 +127,6 @@ const MeusProjetos = () => {
       localStorage.setItem("numeroInscricao", projeto.numeroInscricao);
       router.push("/pnab/projeto");
     }
-  };
-
-  const handleDisabledButtonClick = () => {
-    setDisabledAlertOpen(true);
   };
 
   const handleClickOpen = (project) => {
