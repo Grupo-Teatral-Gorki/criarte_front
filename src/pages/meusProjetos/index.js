@@ -296,8 +296,10 @@ const MeusProjetos = () => {
                       handleClickOpenRecurso(projeto, "habilitacao")
                     }
                     disabled={
-                      projeto.status !== "enviado" &&
-                      projeto.status !== "Recurso"
+                      !(
+                        storageUserDetails.idCidade === 3842 ||
+                        storageUserDetails.idCidade === 3798
+                      )
                     }
                   >
                     Habilitação
