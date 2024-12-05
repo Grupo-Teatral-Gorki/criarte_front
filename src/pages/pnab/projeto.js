@@ -567,7 +567,11 @@ function PnabHomeForms() {
                     onClick={handleSubmit}
                     variant="contained"
                     color="primary"
-                    disabled={statusProjeto === "enviado"}
+                    disabled={
+                      statusProjeto === "enviado" ||
+                      (storageUserDetails &&
+                        storageUserDetails.idCidade === 3823)
+                    }
                   >
                     Enviar projeto
                   </Button>

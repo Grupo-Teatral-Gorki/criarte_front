@@ -213,6 +213,9 @@ const MeusProjetos = () => {
                 router.push("/projetos/selecao");
               }}
               variant="contained"
+              disabled={
+                storageUserDetails && storageUserDetails.idCidade === 3823
+              }
             >
               Criar Projeto
             </Button>
@@ -318,12 +321,7 @@ const MeusProjetos = () => {
                     variant="outlined"
                     sx={{ marginRight: "8px" }}
                     onClick={() => handleClickOpenRecurso(projeto, "recurso")}
-                    disabled={
-                      !(
-                        storageUserDetails.idCidade === 3398 ||
-                        storageUserDetails.idCidade === 3798
-                      )
-                    }
+                    disabled={!(storageUserDetails.idCidade === 3823)}
                   >
                     Recurso
                   </Button>

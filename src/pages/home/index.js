@@ -12,11 +12,18 @@ const allowedUsers = [
 
 const Home = () => {
   const [storageUserDetails, setStorageUserDetails] = useState(null);
+  const [storageUserEmail, setStorageUserEmail] = useState(null);
   const [showDropdown, setShowDropdown] = useState(false); // Controla a visibilidade do dropdown
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const userDetails = localStorage.getItem("userDetails");
+      const userEmail = localStorage.getItem("userEmail");
+
+      if (userEmail) {
+        setStorageUserEmail(storageUserEmail);
+      }
+
       if (userDetails) {
         const parsedUserDetails = JSON.parse(userDetails);
 
@@ -197,16 +204,17 @@ const Home = () => {
               </a>
             </div>
 
-            {/* {storageUserDetails && storageUserDetails.tipoUsuario > 1 && (
-              <div className="container_ajuda">
-                <a href="/gestao/projetos" className="opcao_link">
-                  <h3>
-                    <i className="bi bi-journal-check"></i> Gestão
-                  </h3>
-                  <p>Acesso às ferramentas de administração</p>
-                </a>
-              </div>
-            )} */}
+            {storageUserDetails &&
+              storageUserDetails.usuario === "emersonabud@hotmail.com" && (
+                <div className="container_ajuda">
+                  <a href="/gestao/projetos" className="opcao_link">
+                    <h3>
+                      <i className="bi bi-journal-check"></i> Gestão
+                    </h3>
+                    <p>Acesso às ferramentas de administração</p>
+                  </a>
+                </div>
+              )}
           </section>
 
           <section className="container_banner">
