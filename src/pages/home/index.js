@@ -77,6 +77,11 @@ const Home = () => {
 
   // Pegando o nome da cidade com base no idCidade
   const cityName = storageUserDetails && cityNames[storageUserDetails.idCidade];
+  const isSecretario = [
+    "emersonabud@hotmail.com",
+    "axlnascimento@gmail.com",
+    "c.frinkaneto@gmail.com",
+  ].includes(storageUserDetails?.usuario);
 
   return (
     <PrivateRoute>
@@ -204,17 +209,16 @@ const Home = () => {
               </a>
             </div>
 
-            {storageUserDetails &&
-              storageUserDetails.usuario === "emersonabud@hotmail.com" && (
-                <div className="container_ajuda">
-                  <a href="/gestao/projetos" className="opcao_link">
-                    <h3>
-                      <i className="bi bi-journal-check"></i> Gestão
-                    </h3>
-                    <p>Acesso às ferramentas de administração</p>
-                  </a>
-                </div>
-              )}
+            {isSecretario && (
+              <div className="container_ajuda">
+                <a href="/gestao/projetos" className="opcao_link">
+                  <h3>
+                    <i className="bi bi-journal-check"></i> Gestão
+                  </h3>
+                  <p>Acesso às ferramentas de administração</p>
+                </a>
+              </div>
+            )}
           </section>
 
           <section className="container_banner">
