@@ -1,5 +1,5 @@
-/* eslint-disable react/no-unknown-property */
 /* eslint-disable no-unused-vars */
+/* eslint-disable react/no-unknown-property */
 /* eslint-disable no-constant-binary-expression */
 import React, { useState, useEffect } from "react";
 import Header from "../../components/header/header";
@@ -25,6 +25,12 @@ const MeusProjetos = () => {
   const [storageUserDetails, setStorageUserDetails] = useState(null);
 
   const router = useRouter();
+
+  useEffect(() => {
+    const userDetails = localStorage.getItem("userDetails");
+    setStorageUserDetails(userDetails);
+    console.log("user", JSON.parse(userDetails));
+  }, []);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -127,6 +133,10 @@ const MeusProjetos = () => {
       localStorage.setItem("numeroInscricao", projeto.numeroInscricao);
       router.push("/pnab/projeto");
     }
+  };
+
+  const handleDisabledButtonClick = () => {
+    setDisabledAlertOpen(true);
   };
 
   const handleClickOpen = (project) => {
@@ -296,7 +306,7 @@ const MeusProjetos = () => {
                     }
                     disabled={
                       !(
-                        storageUserDetails.idCidade === 3842 ||
+                        storageUserDetails.idCidade === 3398 ||
                         storageUserDetails.idCidade === 3798
                       )
                     }
@@ -309,8 +319,10 @@ const MeusProjetos = () => {
                     sx={{ marginRight: "8px" }}
                     onClick={() => handleClickOpenRecurso(projeto, "recurso")}
                     disabled={
-                      projeto.status !== "enviado" &&
-                      projeto.status !== "Recurso"
+                      !(
+                        storageUserDetails.idCidade === 3398 ||
+                        storageUserDetails.idCidade === 3798
+                      )
                     }
                   >
                     Recurso
