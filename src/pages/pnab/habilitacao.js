@@ -228,50 +228,40 @@ const RecursoForm = () => {
     );
 
   const handleRenderForm = () => {
-    if (userDetails.idCidade === 3798) {
-      if (idEdital && idEdital === 2) {
-        return (
-          <span>
-            <UploadField
-              name="doc_com_foto"
-              label="Cópia digitalizada de um único documento com foto do proponente, constando número do CPF e RG (carteira de identidade, CNH, outros..)"
-            />
-            <UploadField
-              name="comprov_endereco_retro"
-              label="Comprovante de endereço  retroativo "
-            />
-            <UploadField
-              name="comprov_endereco_atual"
-              label="Comprovante de endereço atual"
-            />
-            <UploadField
-              name="dec_cessao_direitos_autorais"
-              label="Declaração de opção de cessão de direitos autorais e/ou Declaração negativa de opção de direitos autorais, conforme Anexo III"
-            />
-            <UploadField
-              name="cop_auto_declaracao"
-              label="Cópia digitalizada da autodeclaração (anexo II) devidamente preenchida e assinada"
-            />
-            <UploadField
-              name="dec_rep_coletivo"
-              label="Nos casos de coletivos sem constituição jurídica, declaração de Representação do Grupo/Coletivo, conforme Anexo IV, assinada por todos os integrantes do coletivo;"
-            />
-            <UploadField
-              name="dec_opc_municipio"
-              label="Declaração de opção de Município, conforme Anexo IX."
-            />
-          </span>
-        );
-      } else if (!idEdital) {
-        return (
-          <>
-            <UploadField name="cnd_municipal" label="*CND Municipal" />
-            <UploadField name="cnd_estadual" label="*CND Estadual" />
-            <UploadField name="cnd_federal" label="*CND Federal" />
-          </>
-        );
-      }
-    } else
+    if (userDetails.idCidade === 3798 && idEdital === 2) {
+      return (
+        <span>
+          <UploadField
+            name="doc_com_foto"
+            label="Cópia digitalizada de um único documento com foto do proponente, constando número do CPF e RG (carteira de identidade, CNH, outros..)"
+          />
+          <UploadField
+            name="comprov_endereco_retro"
+            label="Comprovante de endereço retroativo "
+          />
+          <UploadField
+            name="comprov_endereco_atual"
+            label="Comprovante de endereço atual"
+          />
+          <UploadField
+            name="dec_cessao_direitos_autorais"
+            label="Declaração de opção de cessão de direitos autorais e/ou Declaração negativa de opção de direitos autorais, conforme Anexo III"
+          />
+          <UploadField
+            name="cop_auto_declaracao"
+            label="Cópia digitalizada da autodeclaração (anexo II) devidamente preenchida e assinada"
+          />
+          <UploadField
+            name="dec_rep_coletivo"
+            label="Nos casos de coletivos sem constituição jurídica, declaração de Representação do Grupo/Coletivo, conforme Anexo IV, assinada por todos os integrantes do coletivo;"
+          />
+          <UploadField
+            name="dec_opc_municipio"
+            label="Declaração de opção de Município, conforme Anexo IX."
+          />
+        </span>
+      );
+    } else {
       return (
         <>
           <UploadField name="cnd_municipal" label="*CND Municipal" />
@@ -279,6 +269,7 @@ const RecursoForm = () => {
           <UploadField name="cnd_federal" label="*CND Federal" />
         </>
       );
+    }
   };
 
   return (
