@@ -118,27 +118,47 @@ const RecursoForm = () => {
     event.preventDefault();
 
     try {
+      // Track whether all files are uploaded successfully
+      let allUploaded = true;
+
+      // Upload each file and check for errors
       await Promise.all(
-        Object.keys(files).map((field) => uploadFile(files[field], field))
+        Object.keys(files).map(async (field) => {
+          try {
+            await uploadFile(files[field], field);
+          } catch (error) {
+            console.error(`Error uploading file for field ${field}:`, error);
+            allUploaded = false; // Set to false if any file upload fails
+          }
+        })
       );
-      setAllFilesUploaded(true);
 
-      const response = await fetch(
-        "https://apiv3.styxx.com.br/api/updateStatus",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            usuario: localStorage.getItem("userEmail"),
-            senha: localStorage.getItem("userPassword"),
-            idProjeto: numeroInscricao,
-            status: "Habilitação",
-          }),
+      // Only set setAllFilesUploaded to true if all uploads were successful
+      if (allUploaded) {
+        setAllFilesUploaded(true);
+      }
+
+      // Perform the API request if files are successfully uploaded
+      if (allUploaded) {
+        const response = await fetch(
+          "https://apiv3.styxx.com.br/api/updateStatus",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              usuario: localStorage.getItem("userEmail"),
+              senha: localStorage.getItem("userPassword"),
+              idProjeto: numeroInscricao,
+              status: "Habilitação",
+            }),
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Erro ao atualizar status.");
         }
-      );
-
-      if (!response.ok) {
-        throw new Error("Erro ao atualizar status.");
+      } else {
+        throw new Error("Not all files were uploaded successfully.");
       }
     } catch (err) {
       console.error(err.message);

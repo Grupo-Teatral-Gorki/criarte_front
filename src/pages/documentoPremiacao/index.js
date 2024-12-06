@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
 import {
   Button,
@@ -23,12 +25,11 @@ const DocumentoPremiacao = () => {
   const [storageUserDetails, setStorageUserDetails] = useState(null);
 
   useEffect(() => {
-
     const userDetails = localStorage.getItem("userDetails");
-      if (userDetails) {
-        setStorageUserDetails(JSON.parse(userDetails));
-      }
-      
+    if (userDetails) {
+      setStorageUserDetails(JSON.parse(userDetails));
+    }
+
     const numeroInscricaoStored = localStorage.getItem("numeroInscricao");
 
     if (numeroInscricaoStored && numeroInscricaoStored.length > 0) {
@@ -105,37 +106,58 @@ const DocumentoPremiacao = () => {
     const userDetails = JSON.parse(storedUserDetails);
 
     try {
+      // Track whether all files are uploaded successfully
+      let allUploaded = true;
+
+      // Upload each file and check for errors
       await Promise.all(
-        Object.keys(files).map((fieldName) =>
-          uploadFile(files[fieldName], fieldName)
-        )
-      );
-      setAllFilesUploaded(true);
-
-      const updateResponse = await fetch(
-        "https://api.grupogorki.com.br/api/projeto/updateProjeto",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            idProponente: userDetails.id,
-          }),
-        }
+        Object.keys(files).map(async (fieldName) => {
+          try {
+            await uploadFile(files[fieldName], fieldName);
+          } catch (error) {
+            console.error(
+              `Error uploading file for field ${fieldName}:`,
+              error
+            );
+            allUploaded = false; // Set to false if any file upload fails
+          }
+        })
       );
 
-      if (!updateResponse.ok) {
-        throw new Error(
-          `Erro ao atualizar o projeto: ${updateResponse.status} ${updateResponse.statusText}`
-        );
+      // Only set setAllFilesUploaded to true if all uploads were successful
+      if (allUploaded) {
+        setAllFilesUploaded(true);
       }
 
-      console.log(
-        "Projeto atualizado com sucesso:",
-        await updateResponse.json()
-      );
+      // Perform the API request if files are successfully uploaded
+      if (allUploaded) {
+        const updateResponse = await fetch(
+          "https://api.grupogorki.com.br/api/projeto/updateProjeto",
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              idProponente: userDetails.id,
+            }),
+          }
+        );
+
+        if (!updateResponse.ok) {
+          throw new Error(
+            `Erro ao atualizar o projeto: ${updateResponse.status} ${updateResponse.statusText}`
+          );
+        }
+
+        console.log(
+          "Projeto atualizado com sucesso:",
+          await updateResponse.json()
+        );
+      } else {
+        throw new Error("Not all files were uploaded successfully.");
+      }
     } catch (error) {
       console.error("Error updating project:", error);
     }
