@@ -130,7 +130,6 @@ const GestaoProjetos = () => {
         if (response.ok) {
           const data = await response.json();
           const formatted = getStatusesCount(data);
-          console.log("formatted", formatted);
           setProjetos(formatted);
         }
       } catch (error) {
@@ -142,7 +141,7 @@ const GestaoProjetos = () => {
   }, []);
 
   function normalizeStatus(status) {
-    if (status === null) return null;
+    if (status === null) return "rascunho";
     return status.toLowerCase().replace(/[^a-z0-9]/g, "");
   }
 

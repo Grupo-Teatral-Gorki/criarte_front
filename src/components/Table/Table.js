@@ -52,11 +52,20 @@ function Table({ dados }) {
           fontSize: "18px",
         }}
       >
+        <colgroup>
+          <col style={{ width: "10%" }} />
+          <col style={{ width: "20%" }} />
+          <col style={{ width: "30%" }} />{" "}
+          {/* Adjusted width for nome_proponente */}
+          <col style={{ width: "20%" }} />
+          <col style={{ width: "20%" }} />
+        </colgroup>
         <thead>
           <tr style={{ backgroundColor: "#1d4a5d", color: "white" }}>
             {[
               "ID do Projeto",
               "Nome do Projeto",
+              "Nome do Proponente",
               "Modalidade",
               "Resumo do Projeto",
             ].map((header) => (
@@ -95,13 +104,16 @@ function Table({ dados }) {
               >
                 <td style={cellStyle}>{item.id_projeto}</td>
                 <td style={cellStyle}>{item.nome_projeto}</td>
+                <td style={{ ...cellStyle, minWidth: "100px" }}>
+                  {item.nome_proponente}
+                </td>
                 <td style={cellStyle}>{item.nome_modalidade}</td>
                 <td style={cellStyle}>{item.resumo_projeto}</td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan={4} style={{ textAlign: "center", padding: "20px" }}>
+              <td colSpan={5} style={{ textAlign: "center", padding: "20px" }}>
                 Nenhum dado disponível
               </td>
             </tr>
