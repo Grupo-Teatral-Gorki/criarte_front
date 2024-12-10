@@ -81,6 +81,8 @@ const Home = () => {
     "emersonabud@hotmail.com",
     "axlnascimento@gmail.com",
     "c.frinkaneto@gmail.com",
+    "analuzmira23@gmail.com",
+    "producaocultural@grupoteatralgorki.com",
   ].includes(storageUserDetails?.usuario);
 
   return (
