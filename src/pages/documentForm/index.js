@@ -44,10 +44,14 @@ const DocumentUploadForm = () => {
     if (typeof window !== "undefined") {
       const userDetails = localStorage.getItem("userDetails");
       if (userDetails) {
-        setStorageUserDetails(JSON.parse(userDetails));
+        const parsedDetails = JSON.parse(userDetails);
+        parsedDetails.idCidade = parsedDetails.idCidade ?? 0;
+        setStorageUserDetails(parsedDetails);
       }
     }
+  
     const numeroInscricaoStored = localStorage.getItem("numeroInscricao");
+    const cityIdStored = storageUserDetails?.idCidade ?? 0; 
 
     async function atualizarCotistaValue(numeroInscricaoStored) {
       try {
@@ -66,8 +70,8 @@ const DocumentUploadForm = () => {
           throw new Error("Erro ao atualizar status de cotista");
         }
 
-        const data = await response.json(); // Convertendo a resposta para JSON
-        setIsCotista(data.cotista); // Assumindo que 'cotista' seja um campo da resposta
+        const data = await response.json();
+        setIsCotista(data.cotista);
       } catch (error) {
         console.error(error);
       }
@@ -78,7 +82,7 @@ const DocumentUploadForm = () => {
       if (numeroInscricaoStored) {
         try {
           const response = await fetch(
-            `https://gorki-aws-acess-api.iglgxt.easypanel.host/download-zip/3798/${numeroInscricaoStored}`
+            `https://gorki-aws-acess-api.iglgxt.easypanel.host/download-zip/${cityIdStored}/${numeroInscricaoStored}`
           );
           if (response.status === 200) {
             setIsDownloadSuccessful(true);
@@ -431,7 +435,7 @@ const DocumentUploadForm = () => {
                 "Comprovante de endereço há, pelo menos, 2 (dois) anos no município de Guariba, retroativo a outubro de 2022",
             },
             {
-              name: "comp-end",
+              name: "comp-end5",
               label:
                 "Comprovante de endereço atual, datado a partir de junho de 2024",
             },
@@ -440,7 +444,7 @@ const DocumentUploadForm = () => {
               label: "Autodeclaração de residência (Anexo II)",
             },
             {
-              name: "comp-end",
+              name: "comp-end2",
               label:
                 "Comprovante de endereço atual, datado a partir de junho de 2024",
             },
@@ -449,10 +453,7 @@ const DocumentUploadForm = () => {
               label:
                 "Declaração de opção de cessão de direitos autorais e/ou Declaração negativa de opção de direitos autorais (Anexo III)",
             },
-            {
-              name: "dec-municipio",
-              label: "Declaração de opção de Município (Anexo IX)",
-            },
+
             {
               name: "termos-comp",
               label:
@@ -553,7 +554,7 @@ const DocumentUploadForm = () => {
               "Comprovante de endereço há, pelo menos, 2 (dois) anos no município de Guariba, retroativo a outubro de 2022",
           },
           {
-            name: "comp-end",
+            name: "comp-end3",
             label:
               "Comprovante de endereço atual, datado a partir de junho de 2024",
           },
@@ -562,14 +563,11 @@ const DocumentUploadForm = () => {
             label: "Autodeclaração de residência (Anexo II)",
           },
           {
-            name: "comp-end",
+            name: "comp-end4",
             label:
               "Comprovante de endereço atual, datado a partir de junho de 2024",
           },
-          {
-            name: "dec-municipio",
-            label: "Declaração de opção de Município (Anexo IX)",
-          },
+
           {
             name: "termos-comp",
             label:
