@@ -287,7 +287,9 @@ const RecursoForm = () => {
           }}
         >
           <Typography variant="h4" sx={{ mb: "1rem", textAlign: "center" }}>
-            Habilitação
+            {userDetails.idCidade === 3842
+              ? "Recurso em Habilitação"
+              : "Habilitação"}
           </Typography>
 
           {isLoading ? (

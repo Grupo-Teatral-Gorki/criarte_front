@@ -310,11 +310,14 @@ const MeusProjetos = () => {
                     disabled={
                       !(
                         storageUserDetails.idCidade === 3398 ||
-                        storageUserDetails.idCidade === 3798
+                        storageUserDetails.idCidade === 3798 ||
+                        storageUserDetails.idCidade === 3842
                       )
                     }
                   >
-                    Habilitação
+                    {storageUserDetails.idCidade === 3842
+                      ? "Recurso em Habilitação"
+                      : "Habilitação "}
                   </Button>
                   <Button
                     size="small"
