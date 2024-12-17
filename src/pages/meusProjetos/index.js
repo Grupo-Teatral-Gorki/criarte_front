@@ -59,6 +59,7 @@ const MeusProjetos = () => {
         if (response.ok) {
           const data = await response.json();
           setProjetos(data.data || []);
+          console.log("data", data.data);
         } else {
           setError("Nenhum projeto foi encontrado.");
         }
@@ -308,13 +309,7 @@ const MeusProjetos = () => {
                     onClick={() =>
                       handleClickOpenRecurso(projeto, "habilitacao")
                     }
-                    disabled={
-                      !(
-                        storageUserDetails.idCidade === 3398 ||
-                        storageUserDetails.idCidade === 3798 ||
-                        storageUserDetails.idCidade === 3842
-                      )
-                    }
+                    disabled={!(storageUserDetails.idCidade === 3823)}
                   >
                     {storageUserDetails.idCidade === 3842
                       ? "Recurso em Habilitação"
