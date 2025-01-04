@@ -84,7 +84,7 @@ const Proponente = () => {
     setOpenForm(false);
   };
 
-  const handleSelectProponente = async (idProponente) => {
+  const handleSelectProponente = async (proponente, idProponente) => {
     setLoading(true);
     const url = `https://gorki-fix-proponente.iglgxt.easypanel.host/api/selectProponente`;
     const token = localStorage.getItem("authToken");
@@ -107,10 +107,14 @@ const Proponente = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          id_proponente: idProponente,
+          id_proponente: proponente.id_proponente,
           id_usuario: idUsuario,
         }),
       });
+      localStorage.setItem(
+        "tipoProponente",
+        proponente.cpf_responsavel ? "PF" : "PJ"
+      );
 
       if (!response.ok) {
         throw new Error("Erro ao selecionar o proponente");
@@ -165,7 +169,10 @@ const Proponente = () => {
                     <Checkbox
                       checked={proponente.is_selected}
                       onChange={() =>
-                        handleSelectProponente(proponente.id_proponente)
+                        handleSelectProponente(
+                          proponente,
+                          proponente.id_proponente
+                        )
                       }
                       sx={{ color: "blue" }}
                     />
@@ -252,7 +259,10 @@ const Proponente = () => {
                     <Checkbox
                       checked={proponente.is_selected}
                       onChange={() =>
-                        handleSelectProponente(proponente.id_proponente)
+                        handleSelectProponente(
+                          proponente,
+                          proponente.id_proponente
+                        )
                       }
                       sx={{ color: "blue" }}
                     />

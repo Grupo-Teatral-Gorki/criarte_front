@@ -67,6 +67,7 @@ function PnabHomeForms() {
         });
 
         const data = await response.json();
+        console.log("res", response);
         if (response.ok && data.proponentes && data.proponentes.length > 0) {
           setHasProponent(true); // Habilita o envio do projeto
         } else {
@@ -495,36 +496,29 @@ function PnabHomeForms() {
                       link="/documentForm"
                     />
                   </div>
-                ) : storageUserDetails.idCidade === 3823 ? (
+                ) : storageUserDetails.idCidade === 3716 ? (
                   <div className="sections">
-                    {storageUserDetails &&
-                      storageUserDetails.idCidade == 3823 && (
-                        <div
-                          style={{
-                            backgroundColor: "white",
-                            minHeight: "90px",
-                            display: "flex",
-                            marginLeft: "auto",
-                            marginRight: "auto",
-                            minWidth: "80%",
-                            borderRadius: "8px",
-                            boxShadow:
-                              "rgba(0, 0, 0, 0.2) 0px 2px 1px -1px, rgba(0, 0, 0, 0.14) 0px 1px 1px 0px, rgba(0, 0, 0, 0.12) 0px 1px 3px 0px", // Sombra
-                            alignItems: "center",
-                            justifyContent: "center",
-                            padding: "10px",
-                          }}
-                        >
-                          <a
-                            href={DocumentLink()}
-                            target="_blank"
-                            rel="noreferrer"
-                          >
-                            LER OBJETO DO EDITAL
-                          </a>
-                          <p></p>
-                        </div>
-                      )}
+                    <div
+                      style={{
+                        backgroundColor: "white",
+                        minHeight: "90px",
+                        display: "flex",
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                        minWidth: "80%",
+                        borderRadius: "8px",
+                        boxShadow:
+                          "rgba(0, 0, 0, 0.2) 0px 2px 1px -1px, rgba(0, 0, 0, 0.14) 0px 1px 1px 0px, rgba(0, 0, 0, 0.12) 0px 1px 3px 0px", // Sombra
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: "10px",
+                      }}
+                    >
+                      <a href={DocumentLink()} target="_blank" rel="noreferrer">
+                        LER OBJETO DO EDITAL
+                      </a>
+                      <p></p>
+                    </div>
 
                     <Section
                       title="Proponente"
@@ -537,19 +531,14 @@ function PnabHomeForms() {
                       link="/informacoesGerais"
                     />
                     <Section
-                      title="Planilha orçamentária"
-                      description="O valor total das despesas cadastradas deverá corresponder ao informado no orçamento."
-                      link="/planilhaOrc"
-                    />
-                    <Section
-                      title="Ficha técnica"
-                      description="Você deve cadastrar o(a)s principais integrantes da ficha técnica do projeto."
-                      link="/fichaTecnicaForm"
-                    />
-                    <Section
                       title="Documentos do projeto e proponente"
                       description="Importante! Só é possível anexar 01 (um) arquivo por item exigido. Caso necessário, reúna todos os ..."
                       link="/documentForm"
+                    />
+                    <Section
+                      title="Planilha orçamentária"
+                      description="O valor total das despesas cadastradas deverá corresponder ao informado no orçamento."
+                      link="/planilhaOrc"
                     />
                   </div>
                 ) : null}
@@ -571,13 +560,10 @@ function PnabHomeForms() {
                       statusProjeto === "enviado" ||
                       (storageUserDetails &&
                         storageUserDetails.idCidade === 3823) ||
-                      (
-                        storageUserDetails &&
-                        storageUserDetails.idCidade === 3478
-                      )(
-                        storageUserDetails &&
-                          storageUserDetails.idCidade === 3398
-                      )
+                      (storageUserDetails &&
+                        storageUserDetails.idCidade === 3478) ||
+                      (storageUserDetails &&
+                        storageUserDetails.idCidade === 3398)
                     }
                   >
                     Enviar projeto

@@ -26,7 +26,7 @@ const Register = () => {
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!passwordRegex.test(password)) {
       alert(
-        "A senha deve ter pelo menos 8 caracteres, incluindo letras maiúsculas, minúsculas, números e um símbolo. Exemplo: Senha@1234",
+        "A senha deve ter pelo menos 8 caracteres, incluindo letras maiúsculas, minúsculas, números e um símbolo. Exemplo: Senha@1234"
       );
       return;
     }
@@ -44,7 +44,7 @@ const Register = () => {
             senha: password,
             idCidade: city,
           }),
-        },
+        }
       );
 
       if (!response.ok) {
@@ -148,7 +148,7 @@ const Register = () => {
                 <MenuItem value="3478">Guariba</MenuItem>
                 <MenuItem value="3823">São José do Rio Pardo</MenuItem>
                 <MenuItem value="3398">Cerquilho</MenuItem>
-
+                <MenuItem value="3716">Pontal</MenuItem>
               </Select>
             </FormControl>
           </div>

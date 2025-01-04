@@ -28,6 +28,7 @@ const GestaoProjetos = () => {
     3823: "São José Do Rio Pardo",
     3398: "Cerquilho",
     3478: "Guariba",
+    3716: "Pontal",
   };
 
   const data = [

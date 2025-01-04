@@ -297,6 +297,28 @@ const InformacoesGerais = () => {
 
     const moduloIII_3398_Categorias = ["Indisponível"];
 
+    const moduloI_3716_Categorias = [
+      "Música - Bandas Ou Grupos",
+      "Música - Duplas Ou Trios",
+      "Música - Artista Vocal E/Ou Instrumental Solo",
+      "Artes Plásticas",
+      "Fotografia",
+      "Artesanato",
+      "Teatro",
+      "Dança",
+      "Cultura Afro-Brasileira E Tradição",
+      "Literatura",
+      "Eventos Culturais - Mostra",
+      "Eventos Culturais - Festival",
+      "Contação De Histórias",
+    ];
+
+    const moduloII_3716_Categorias = [
+      "Atividades Formativas - Oficinas",
+      "Atividades Formativas - Cursos",
+      "Intercâmbio",
+    ];
+
     // Verificar se é a cidade de Santa Rita
     if (userCityId === citySantaRitaId) {
       setCategoryOptions([
@@ -340,6 +362,12 @@ const InformacoesGerais = () => {
     } else if (userCityId === 3398 && idEdital === 3) {
       if (selectedModule === 1) {
         setCategoryOptions(moduloI_3398_zp_Categorias);
+      }
+    } else if (userCityId === 3716) {
+      if (selectedModule === 1) {
+        setCategoryOptions(moduloI_3716_Categorias);
+      } else if (selectedModule === 2) {
+        setCategoryOptions(moduloII_3716_Categorias);
       }
     }
 
@@ -613,6 +641,38 @@ const InformacoesGerais = () => {
           { label: "Outras Informações", key: "outras" },
         ];
 
+      case 3716:
+        return [
+          {
+            label: "Apresentação resumida do projeto",
+            key: "apresentacaoResumida",
+          },
+          { label: "Relevância e pertinência", key: "relevanciaPertinencia" },
+          {
+            label: "Perfil de público-alvo e classificação indicativa",
+            key: "perfilPublicoAlvo",
+          },
+          {
+            label:
+              "Expectativa da quantidade de público alcançado com o projeto",
+            key: "expectativaPublico",
+          },
+          { label: "Plano de divulgação", key: "planoDivulgacao" },
+          {
+            label: "Plano de acessibilidade e democratização de acesso",
+            key: "planoAcessibilidade",
+          },
+          {
+            label:
+              "Plano de ações afirmativas, em atenção ao item 5 deste edital, a fim de cumprir o art. 18 da IN nº 10 do MinC",
+            key: "planoAcoesAfirmativas",
+          },
+          {
+            label: "Detalhamento da proposta de contrapartida",
+            key: "detalhamentoContrapartida",
+          },
+        ];
+
       default:
         return [
           { label: "Resumo do projeto:", key: "resumo" },
@@ -712,13 +772,24 @@ const InformacoesGerais = () => {
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
                     <InputLabel>Categoria</InputLabel>
-                    <Select value={category} onChange={handleCategoryChange}>
-                      {categoryOptions.map((option) => (
-                        <MenuItem key={option} value={option}>
-                          {option}
-                        </MenuItem>
-                      ))}
-                    </Select>
+                    {storageUserDetails &&
+                    storageUserDetails.idCidade === 3716 ? (
+                      <Select value={category} onChange={handleCategoryChange}>
+                        {categoryOptions.map((option) => (
+                          <MenuItem key={option} value={option}>
+                            {option}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    ) : (
+                      <Select value={category} onChange={handleCategoryChange}>
+                        {categoryOptions.map((option) => (
+                          <MenuItem key={option} value={option}>
+                            {option}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    )}
                   </FormControl>
                 </Grid>
 
@@ -726,7 +797,8 @@ const InformacoesGerais = () => {
                   <Grid item xs={12} style={{ marginTop: "20px" }}>
                     {storageUserDetails &&
                     (storageUserDetails.idCidade === 3478 ||
-                      storageUserDetails.idCidade === 3398) ? (
+                      storageUserDetails.idCidade === 3398 ||
+                      storageUserDetails.idCidade === 3716) ? (
                       <div style={{ marginLeft: "5px", marginBottom: "30px" }}>
                         <div style={{ display: "flex" }}>
                           <FormControl>
