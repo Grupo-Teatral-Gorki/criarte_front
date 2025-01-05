@@ -73,6 +73,7 @@ const Home = () => {
     3823: "São José Do Rio Pardo",
     3398: "Cerquilho",
     3478: "Guariba",
+    3716: "Pontal",
   };
 
   // Pegando o nome da cidade com base no idCidade
@@ -163,6 +164,12 @@ const Home = () => {
                         onClick={() => handleCityChange(3478)}
                       >
                         Guariba
+                      </p>
+                      <p
+                        style={{ padding: "5px 0", cursor: "pointer" }}
+                        onClick={() => handleCityChange(3716)}
+                      >
+                        Pontal
                       </p>
                     </ul>
                   )}
@@ -352,6 +359,33 @@ const Home = () => {
                   />
                   <h1 style={{ marginTop: "20px" }} className="banner_titulo">
                     Editais Cerquilho
+                  </h1>
+                  <p
+                    className="banner_paragrafo"
+                    style={{ marginTop: "10px" }}
+                  ></p>
+                  <button
+                    onClick={() =>
+                      window.open(
+                        "https://criarte.grupogorki.com.br/projetos/selecao"
+                      )
+                    }
+                    style={{ marginTop: "20px", minWidth: "100%" }}
+                    className="btn-detalhes"
+                  >
+                    Ver Editais
+                  </button>
+                </div>
+              ) : storageUserDetails.idCidade === 3716 ? (
+                <div>
+                  <img
+                    className="banner_img"
+                    style={{ display: "flex", maxWidth: "150px" }}
+                    src=""
+                    alt="Banne Município"
+                  />
+                  <h1 style={{ marginTop: "20px" }} className="banner_titulo">
+                    Editais Pontal
                   </h1>
                   <p
                     className="banner_paragrafo"
