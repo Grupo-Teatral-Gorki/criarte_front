@@ -32,6 +32,150 @@ const DocumentUploadForm = () => {
   const [isDownloadSuccessful, setIsDownloadSuccessful] = useState(false);
   const [isCotista, setIsCotista] = useState(false);
 
+  const pontalPF = [
+    {
+      name: "doc-photo-id-1",
+      label:
+        "Cópia digitalizada de um único documento com foto do proponente, constando número do CPF e RG (carteira de identidade, CNH, outros...).",
+      required: true,
+    },
+    {
+      name: "proof-address-pontal-2",
+      label:
+        "Comprovante de endereço há, pelo menos, 2 (dois) anos no município de Pontal, retroativo a outubro de 2022.",
+      required: true,
+    },
+    {
+      name: "proof-address-current-3",
+      label: "Comprovante de endereço atual, datado a partir de junho de 2024.",
+      required: true,
+    },
+    {
+      name: "self-declaration-residence-4",
+      label: "Autodeclaração de residência (Anexo II).",
+    },
+    {
+      name: "curriculum-proponente",
+      label: "Currículo do proponente",
+      required: true,
+    },
+    {
+      name: "curriculum-portfolio-collective",
+      label: "Currículo ou portfólio de Coletivo ou idealizador",
+      required: true,
+    },
+    {
+      name: "technical-sheet-participants",
+      label:
+        "Ficha técnica com a relação dos participantes, incluindo a identificação do CPF e a descrição da função no projeto.",
+      required: true,
+    },
+    {
+      name: "commitment-terms",
+      label:
+        "Termos de Compromissos assinados pelos principais integrantes do projeto (Anexo V)",
+      required: true,
+    },
+    {
+      name: "copyright-declaration",
+      label:
+        "Declaração de opção de cessão de direitos autorais e/ou Declaração negativa de opção de direitos autorais (Anexo III)",
+      required: true,
+    },
+  ];
+
+  const pontalPJ = [
+    {
+      name: "id-representative-1",
+      label:
+        "Documento de Identidade ou outro documento com força legal que contenha o número de R.G. e foto do(s) seu(s) representante(s) legal(is).",
+      required: true,
+    },
+    {
+      name: "cpf-representative-2",
+      label:
+        "CPF, caso o documento com força legal não contenha o número do CPF do(s) seu(s) representante(s) legal(is).",
+      required: true,
+    },
+    {
+      name: "cnpj-mei-card-3",
+      label: "Cartão do CNPJ ou Requerimento de Microempreendedor Individual.",
+      required: true,
+    },
+    {
+      name: "address-proof-ribeirao-4",
+      label:
+        "Comprovante de endereço há, pelo menos, 2 (dois) anos no município de Pontal, retroativo a Dezembro de 2022, em nome da Instituição ou do proponente inscrito como M.E.I.",
+      required: true,
+    },
+    {
+      name: "current-address-proof-5",
+      label:
+        "Comprovante de endereço atual, datado a partir de Dezembro de 2024.",
+      required: true,
+    },
+    {
+      name: "social-contract-6",
+      label: "Contrato Social ou do Estatuto e demais alterações.",
+      required: true,
+    },
+    {
+      name: "election-minutes-7",
+      label: "Ata de eleição e posse da diretoria, quando for o caso.",
+    },
+    {
+      name: "curriculum-proponente",
+      label: "Currículo do proponente",
+      required: true,
+    },
+    {
+      name: "curriculum-portfolio-collective",
+      label: "Currículo ou portfólio de Coletivo ou idealizador",
+      required: true,
+    },
+    {
+      name: "technical-sheet-participants",
+      label:
+        "Ficha técnica com a relação dos participantes, incluindo a identificação do CPF e a descrição da função no projeto.",
+      required: true,
+    },
+    {
+      name: "commitment-terms",
+      label:
+        "Termos de Compromissos assinados pelos principais integrantes do projeto (Anexo V)",
+      required: true,
+    },
+    {
+      name: "copyright-declaration",
+      label:
+        "Declaração de opção de cessão de direitos autorais e/ou Declaração negativa de opção de direitos autorais (Anexo III)",
+      required: true,
+    },
+  ];
+
+  const pontalProjeto = [
+    {
+      name: "execution-schedule",
+      label: "Cronograma de execução",
+      required: true,
+    },
+    {
+      name: "ethnic-declaration",
+      label:
+        "Quando for o caso inserir Declaração Étnico-racial (Anexo VII) e/ou Declaração de Pessoa com Deficiência (Anexo VIII)",
+    },
+    {
+      name: "representation-declaration",
+      label:
+        "Declaração de representação, se for um coletivo sem CNPJ (Anexo VI)",
+    },
+    {
+      name: "other-documents",
+      label:
+        "Outros documentos que o agente cultural julgar necessário para auxiliar na avaliação do mérito cultural do projeto",
+    },
+  ];
+
   const sanitizeFileName = (fileName) => {
     return fileName
       .normalize("NFD") // Normaliza caracteres latinos com acento
@@ -784,13 +928,13 @@ const DocumentUploadForm = () => {
             {
               name: "address-proof-ribeirao-4",
               label:
-                "Comprovante de endereço há, pelo menos, 2 (dois) anos no município de Ribeirão Preto, retroativo a junho de 2022, em nome da Instituição ou do proponente inscrito como M.E.I.",
+                "Comprovante de endereço há, pelo menos, 2 (dois) anos no município de Pontal, retroativo a Dezembro de 2022, em nome da Instituição ou do proponente inscrito como M.E.I.",
               required: true,
             },
             {
               name: "current-address-proof-5",
               label:
-                "Comprovante de endereço atual, datado a partir de julho de 2023.",
+                "Comprovante de endereço atual, datado a partir de Dezembro de 2024.",
               required: true,
             },
             {
@@ -833,11 +977,6 @@ const DocumentUploadForm = () => {
             {
               name: "execution-schedule",
               label: "Cronograma de execução",
-              required: true,
-            },
-            {
-              name: "additional-information",
-              label: "Demais informações",
               required: true,
             },
             {
@@ -922,6 +1061,57 @@ const DocumentUploadForm = () => {
     }
   }
 
+  const DocPontal = () => {
+    return (
+      <>
+        {localStorage.getItem("tipoProponente") === "PF" && (
+          <>
+            <h2 style={{ marginBottom: "1rem" }}>Documentos Pessoa Física</h2>
+            {pontalPF.map((item, index) => {
+              return (
+                <UploadField
+                  key={item.name}
+                  name={item.name}
+                  label={item.label}
+                  exampleLink={item.exampleLink ? item.exampleLink : null}
+                  exampleText="Baixar Exemplo"
+                />
+              );
+            })}
+          </>
+        )}
+        {localStorage.getItem("tipoProponente") === "PJ" && (
+          <>
+            <h2 style={{ marginBottom: "1rem" }}>Documentos Pessoa Jurídica</h2>
+            {pontalPJ.map((item, index) => {
+              return (
+                <UploadField
+                  key={item.name}
+                  name={item.name}
+                  label={item.label}
+                  exampleLink={item.exampleLink ? item.exampleLink : null}
+                  exampleText="Baixar Exemplo"
+                />
+              );
+            })}
+          </>
+        )}
+        <h2 style={{ marginBottom: "1rem" }}>Documentos Projeto</h2>
+        {pontalProjeto.map((item, index) => {
+          return (
+            <UploadField
+              key={item.name}
+              name={item.name}
+              label={item.label}
+              exampleLink={item.exampleLink ? item.exampleLink : null}
+              exampleText="Baixar Exemplo"
+            />
+          );
+        })}
+      </>
+    );
+  };
+
   return (
     <div>
       <PrivateRoute />
@@ -959,17 +1149,21 @@ const DocumentUploadForm = () => {
             <Alert severity="error">{error}</Alert>
           ) : (
             <form onSubmit={handleSubmit}>
-              {CheckRequiredDocs().map((item, index) => {
-                return (
-                  <UploadField
-                    key={item.name}
-                    name={item.name}
-                    label={item.label}
-                    exampleLink={item.exampleLink ? item.exampleLink : null}
-                    exampleText="Baixar Exemplo"
-                  />
-                );
-              })}
+              {storageUserDetails.idCidade === 3716 ? (
+                <DocPontal />
+              ) : (
+                CheckRequiredDocs().map((item, index) => {
+                  return (
+                    <UploadField
+                      key={item.name}
+                      name={item.name}
+                      label={item.label}
+                      exampleLink={item.exampleLink ? item.exampleLink : null}
+                      exampleText="Baixar Exemplo"
+                    />
+                  );
+                })
+              )}
 
               <Box sx={{ mt: 4, textAlign: "center" }}>
                 <Button variant="contained" type="submit">

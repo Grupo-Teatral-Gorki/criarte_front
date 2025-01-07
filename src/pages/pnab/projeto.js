@@ -252,6 +252,9 @@ function PnabHomeForms() {
       case 3398:
         return "https://www.cerquilho.sp.gov.br/public/admin/globalarq/diario-eletronico/diario/RAw32caA3Z2s2xTA.pdf";
 
+      case 3716:
+        return "https://styxx-public.s3.sa-east-1.amazonaws.com/editalPontal.pdf";
+
       default:
         break;
     }

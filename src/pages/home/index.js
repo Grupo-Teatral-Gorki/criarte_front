@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Header from "../../components/header/header";
 import PrivateRoute from "../../components/PrivateRoute";
 import Footer from "../../components/Footer/Footer";
+import pontal from "../../assets/pontal.png";
 
 const allowedUsers = [
   "contato@styxx.com.br",
@@ -381,8 +382,8 @@ const Home = () => {
                   <img
                     className="banner_img"
                     style={{ display: "flex", maxWidth: "150px" }}
-                    src=""
-                    alt="Banne Município"
+                    src={pontal}
+                    alt="Banner Município"
                   />
                   <h1 style={{ marginTop: "20px" }} className="banner_titulo">
                     Editais Pontal
