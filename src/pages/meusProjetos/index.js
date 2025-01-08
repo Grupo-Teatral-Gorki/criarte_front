@@ -326,9 +326,7 @@ const MeusProjetos = () => {
                     variant="outlined"
                     sx={{ marginRight: "8px" }}
                     onClick={() => handleClickOpenRecurso(projeto, "recurso")}
-                    disabled={
-                      ![3478, 3398].includes(storageUserDetails.idCidade)
-                    }
+                    disabled={![3478].includes(storageUserDetails.idCidade)}
                   >
                     Recurso
                   </Button>
