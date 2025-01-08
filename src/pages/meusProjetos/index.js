@@ -310,7 +310,12 @@ const MeusProjetos = () => {
                     onClick={() =>
                       handleClickOpenRecurso(projeto, "habilitacao")
                     }
-                    disabled={!(storageUserDetails.idCidade === 3823)}
+                    disabled={
+                      !(
+                        storageUserDetails.idCidade === 3823 ||
+                        storageUserDetails.idCidade === 3398
+                      )
+                    }
                   >
                     {storageUserDetails.idCidade === 3842
                       ? "Recurso em Habilitação"

@@ -177,11 +177,17 @@ const DocumentUploadForm = () => {
   ];
 
   const sanitizeFileName = (fileName) => {
-    return fileName
-      .normalize("NFD") // Normaliza caracteres latinos com acento
-      .replace(/[\u0300-\u036f]/g, "") // Remove os acentos
-      .replace(/[^a-zA-Z0-9]/g, "") // Remove caracteres especiais
-      .slice(0, 20); // Limita a 20 caracteres
+    const dotIndex = fileName.lastIndexOf(".");
+    const baseName = dotIndex !== -1 ? fileName.slice(0, dotIndex) : fileName;
+    const extension = dotIndex !== -1 ? fileName.slice(dotIndex) : "";
+
+    const sanitizedBaseName = baseName
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-zA-Z0-9]/g, "")
+      .slice(0, 20);
+
+    return sanitizedBaseName + extension;
   };
 
   useEffect(() => {

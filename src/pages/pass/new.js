@@ -14,7 +14,6 @@ import { styled } from "@mui/system";
 import clsx from "clsx";
 
 const ResetPassword = () => {
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -31,7 +30,7 @@ const ResetPassword = () => {
 
     if (!passwordRegex.test(password)) {
       setErrorMessage(
-        "A senha deve ter pelo menos 8 caracteres, incluindo letras maiúsculas, minúsculas, números e um símbolo. Exemplo: Senha@1234",
+        "A senha deve ter pelo menos 8 caracteres, incluindo letras maiúsculas, minúsculas, números e um símbolo. Exemplo: Senha@1234"
       );
       setOpenDialog(true);
       return;
@@ -57,7 +56,7 @@ const ResetPassword = () => {
             email: localStorage.getItem("userEmail"),
             newPassword: password,
           }),
-        },
+        }
       );
 
       if (!response.ok) {
@@ -195,7 +194,7 @@ const StyledInput = styled(Input)(
       box-shadow: 0 0 0 3px ${theme.palette.mode === "dark" ? blue[600] : blue[200]};
     }
   }
-`,
+`
 );
 
 const Label = styled(({ children, className }) => {
