@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import {
   Container,
@@ -24,19 +23,7 @@ import Checkbox from "@mui/material/Checkbox";
 require("dotenv").config();
 
 const InformacoesGerais = () => {
-  const [formData, setFormData] = useState({
-    resumo: "",
-    relevancia: "",
-    perfil: "",
-    expectativa: "",
-    cronograma: "",
-    contrapartida: "",
-    divulgacao: "",
-    democratizacao: "",
-    afirmativas: "",
-    local: "",
-    outras: "",
-  });
+  const [formData, setFormData] = useState({});
 
   const [numeroInscricao, setNumeroInscricao] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -48,8 +35,6 @@ const InformacoesGerais = () => {
   const [userCityId, setUserCityId] = useState("");
   const [storageUserDetails, setStorageUserDetails] = useState(null);
   const [idEdital, setIdEdital] = useState(1);
-
-  const router = useRouter();
 
   const [isCotista, setIsCotista] = useState(false);
 
@@ -391,12 +376,18 @@ const InformacoesGerais = () => {
     }
   };
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
+
+  useEffect(() => {
+    console.log("formData has changed:", formData);
+  }, [formData]);
 
   const handleChangeCotista = (value) => {
     setIsCotista(value); // Atualiza o estado com base no valor do checkbox selecionado
@@ -443,32 +434,18 @@ const InformacoesGerais = () => {
       return;
     }
 
-    const { resumo, ...rest } = formData;
-
     let userEmail = localStorage.getItem("userEmail");
     let userPassword = localStorage.getItem("userPassword");
+    const { resumo, ...descricaoSemResumo } = formData;
 
     // Cria o corpo da requisição com o formato correto
     const body = {
       idProjeto: numeroInscricao,
       resumoProjeto: resumo,
-      descricao: {
-        relevancia: formData.relevancia,
-        perfil: formData.perfil,
-        expectativa: formData.expectativa,
-        contrapartida: formData.contrapartida,
-        divulgacao: formData.divulgacao,
-        cronograma: formData.cronograma,
-        democratizacao: formData.democratizacao,
-        afirmativas: formData.afirmativas,
-        local: formData.local,
-        outras: formData.outras,
-      },
+      descricao: descricaoSemResumo,
       idUsuario: userId,
       cotista: isCotista, // Adicionando a informação do checkbox
     };
-
-    console.log(isCotista);
 
     const url = `https://gorki-api-nome.iglgxt.easypanel.host/api/updateProjeto`;
     const token = localStorage.getItem("authToken");
@@ -645,31 +622,31 @@ const InformacoesGerais = () => {
         return [
           {
             label: "Apresentação resumida do projeto",
-            key: "apresentacaoResumida",
+            key: "resumo",
           },
-          { label: "Relevância e pertinência", key: "relevanciaPertinencia" },
+          { label: "Relevância e pertinência", key: "relevancia" },
           {
             label: "Perfil de público-alvo e classificação indicativa",
-            key: "perfilPublicoAlvo",
+            key: "perfil",
           },
           {
             label:
               "Expectativa da quantidade de público alcançado com o projeto",
-            key: "expectativaPublico",
+            key: "expectativa",
           },
-          { label: "Plano de divulgação", key: "planoDivulgacao" },
+          { label: "Plano de divulgação", key: "divulgacao" },
           {
             label: "Plano de acessibilidade e democratização de acesso",
-            key: "planoAcessibilidade",
+            key: "democratizacao",
           },
           {
             label:
               "Plano de ações afirmativas, em atenção ao item 5 deste edital, a fim de cumprir o art. 18 da IN nº 10 do MinC",
-            key: "planoAcoesAfirmativas",
+            key: "afirmativas",
           },
           {
             label: "Detalhamento da proposta de contrapartida",
-            key: "detalhamentoContrapartida",
+            key: "contrapartida",
           },
         ];
 
@@ -751,7 +728,7 @@ const InformacoesGerais = () => {
                       minRows={5}
                       variant="outlined"
                       name={field.key}
-                      value={formData[field.key]}
+                      value={formData[field.key] || ""}
                       onChange={handleChange}
                     />
                   </Grid>
