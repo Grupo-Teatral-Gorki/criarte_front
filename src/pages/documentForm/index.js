@@ -31,6 +31,50 @@ const DocumentUploadForm = () => {
   const [storageUserDetails, setStorageUserDetails] = useState(null);
   const [isDownloadSuccessful, setIsDownloadSuccessful] = useState(false);
   const [isCotista, setIsCotista] = useState(false);
+  const [tipoProponente, setTipoProponente] = useState(null);
+
+  useEffect(() => {
+    const fetchProponentes = async () => {
+      const url = `https://gorki-fix-proponente.iglgxt.easypanel.host/api/getProponenteByUser`;
+      const token = localStorage.getItem("authToken");
+      const userDetails = localStorage.getItem("userDetails");
+      const parsedUserDetails = userDetails ? JSON.parse(userDetails) : null;
+      const idUsuario = parsedUserDetails ? parsedUserDetails.id : null;
+
+      if (!idUsuario) {
+        console.error("ID de usuário não encontrado em localStorage");
+        setError("Erro ao encontrar o usuário.");
+        return;
+      }
+
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ idUsuario }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Nenhum proponente encontrado");
+        }
+
+        const data = await response.json();
+        console.log("Dados recebidos com sucesso:", data);
+        localStorage.setItem(
+          "tipoProponente",
+          data.proponentes[0].cpf_responsavel ? "PF" : "PJ"
+        );
+      } catch (error) {
+        console.error("Erro ao receber os proponentes:", error);
+        setError(error.message);
+      }
+    };
+
+    fetchProponentes();
+  }, []);
 
   const pontalPF = [
     {
@@ -1070,50 +1114,55 @@ const DocumentUploadForm = () => {
   const DocPontal = () => {
     return (
       <>
-        {localStorage.getItem("tipoProponente") === "PF" && (
-          <>
-            <h2 style={{ marginBottom: "1rem" }}>Documentos Pessoa Física</h2>
-            {pontalPF.map((item, index) => {
-              return (
-                <UploadField
-                  key={item.name}
-                  name={item.name}
-                  label={item.label}
-                  exampleLink={item.exampleLink ? item.exampleLink : null}
-                  exampleText="Baixar Exemplo"
-                />
-              );
-            })}
-          </>
-        )}
-        {localStorage.getItem("tipoProponente") === "PJ" && (
-          <>
-            <h2 style={{ marginBottom: "1rem" }}>Documentos Pessoa Jurídica</h2>
-            {pontalPJ.map((item, index) => {
-              return (
-                <UploadField
-                  key={item.name}
-                  name={item.name}
-                  label={item.label}
-                  exampleLink={item.exampleLink ? item.exampleLink : null}
-                  exampleText="Baixar Exemplo"
-                />
-              );
-            })}
-          </>
-        )}
+        {localStorage.getItem("tipoProponente") &&
+          localStorage.getItem("tipoProponente") === "PF" && (
+            <>
+              <h2 style={{ marginBottom: "1rem" }}>Documentos Pessoa Física</h2>
+              {pontalPF.map((item, index) => {
+                return (
+                  <UploadField
+                    key={item.name}
+                    name={item.name}
+                    label={item.label}
+                    exampleLink={item.exampleLink ? item.exampleLink : null}
+                    exampleText="Baixar Exemplo"
+                  />
+                );
+              })}
+            </>
+          )}
+        {localStorage.getItem("tipoProponente") &&
+          localStorage.getItem("tipoProponente") === "PJ" && (
+            <>
+              <h2 style={{ marginBottom: "1rem" }}>
+                Documentos Pessoa Jurídica
+              </h2>
+              {pontalPJ.map((item, index) => {
+                return (
+                  <UploadField
+                    key={item.name}
+                    name={item.name}
+                    label={item.label}
+                    exampleLink={item.exampleLink ? item.exampleLink : null}
+                    exampleText="Baixar Exemplo"
+                  />
+                );
+              })}
+            </>
+          )}
         <h2 style={{ marginBottom: "1rem" }}>Documentos Projeto</h2>
-        {pontalProjeto.map((item, index) => {
-          return (
-            <UploadField
-              key={item.name}
-              name={item.name}
-              label={item.label}
-              exampleLink={item.exampleLink ? item.exampleLink : null}
-              exampleText="Baixar Exemplo"
-            />
-          );
-        })}
+        {localStorage.getItem("tipoProponente") &&
+          pontalProjeto.map((item, index) => {
+            return (
+              <UploadField
+                key={item.name}
+                name={item.name}
+                label={item.label}
+                exampleLink={item.exampleLink ? item.exampleLink : null}
+                exampleText="Baixar Exemplo"
+              />
+            );
+          })}
       </>
     );
   };
