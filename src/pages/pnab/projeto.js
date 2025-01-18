@@ -688,9 +688,9 @@ function Section({ title, description, link }) {
 
   const handleClick = (e) => {
     const tipoProponente = localStorage.getItem("tipoProponente");
-    if (!tipoProponente) {
+    if (link === "/documentForm" && !tipoProponente) {
       e.preventDefault();
-      alert("Você deve cadastrar um proponente antes de enviar o projeto.");
+      alert("Você deve cadastrar um proponente primeiro.");
     } else {
       router.push(link);
     }
