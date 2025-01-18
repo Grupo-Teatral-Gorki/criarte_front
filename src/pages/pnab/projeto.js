@@ -148,6 +148,49 @@ function PnabHomeForms() {
     }
   }, []);
 
+  useEffect(() => {
+    const fetchProponentes = async () => {
+      const url = `https://gorki-fix-proponente.iglgxt.easypanel.host/api/getProponenteByUser`;
+      const token = localStorage.getItem("authToken");
+      const userDetails = localStorage.getItem("userDetails");
+      const parsedUserDetails = userDetails ? JSON.parse(userDetails) : null;
+      const idUsuario = parsedUserDetails ? parsedUserDetails.id : null;
+
+      if (!idUsuario) {
+        console.error("ID de usuário não encontrado em localStorage");
+        setError("Erro ao encontrar o usuário.");
+        return;
+      }
+
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ idUsuario }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Nenhum proponente encontrado");
+        }
+
+        const data = await response.json();
+        console.log("Dados recebidos com sucesso:", data);
+        localStorage.setItem(
+          "tipoProponente",
+          data.proponentes[0].cpf_responsavel ? "PF" : "PJ"
+        );
+      } catch (error) {
+        console.error("Erro ao receber os proponentes:", error);
+        setError(error.message);
+      }
+    };
+
+    fetchProponentes();
+  }, []);
+
   const handleProjectNameChange = (event) => {
     setProjectName(event.target.value);
   };
@@ -641,17 +684,89 @@ function PnabHomeForms() {
 }
 
 function Section({ title, description, link }) {
+  const router = useRouter();
+
+  const handleClick = (e) => {
+    const tipoProponente = localStorage.getItem("tipoProponente");
+    if (!tipoProponente) {
+      e.preventDefault();
+      alert("Você deve cadastrar um proponente antes de enviar o projeto.");
+    } else {
+      router.push(link);
+    }
+  };
+
   return (
-    <Link href={link} passHref>
-      <div className="section">
-        <div className="section-icon">?</div>
-        <div className="section-content">
-          <h3>{title}</h3>
-          <p>{description}</p>
-        </div>
-        <div className="section-arrow">&gt;</div>
+    <div
+      className="section"
+      onClick={handleClick}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        padding: "16px",
+        margin: "8px 0",
+        border: "1px solid #ccc",
+        borderRadius: "8px",
+        cursor: "pointer",
+        backgroundColor: "#f9f9f9",
+        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+        transition: "background-color 0.3s",
+      }}
+      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#e6f7ff")}
+      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#f9f9f9")}
+    >
+      <div
+        className="section-icon"
+        style={{
+          width: "40px",
+          height: "40px",
+          marginRight: "16px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: "#ddd",
+          borderRadius: "50%",
+          fontWeight: "bold",
+          fontSize: "18px",
+        }}
+      >
+        ?
       </div>
-    </Link>
+      <div
+        className="section-content"
+        style={{
+          flexGrow: 1,
+        }}
+      >
+        <h3
+          style={{
+            margin: "0",
+            fontSize: "18px",
+            color: "#333",
+          }}
+        >
+          {title}
+        </h3>
+        <p
+          style={{
+            margin: "4px 0 0",
+            fontSize: "14px",
+            color: "#666",
+          }}
+        >
+          {description}
+        </p>
+      </div>
+      <div
+        className="section-arrow"
+        style={{
+          fontSize: "18px",
+          color: "#888",
+        }}
+      >
+        &gt;
+      </div>
+    </div>
   );
 }
 
