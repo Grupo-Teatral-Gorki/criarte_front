@@ -22,6 +22,7 @@ const RecursoForm = () => {
   const [allFilesUploaded, setAllFilesUploaded] = useState(false);
   const [userDetails, setUserDetails] = useState({});
   const [idEdital, setIdEdital] = useState();
+  const [hasUploadError, setHasUploadError] = useState(false);
 
   useEffect(() => {
     const storedUserDetails = localStorage.getItem("userDetails");
@@ -106,6 +107,7 @@ const RecursoForm = () => {
       if (response.ok) {
         setUploadStatus((prev) => ({ ...prev, [fieldName]: "success" }));
       } else {
+        setHasUploadError(true);
         throw new Error("Erro ao enviar arquivo.");
       }
     } catch (err) {
@@ -118,8 +120,7 @@ const RecursoForm = () => {
     event.preventDefault();
 
     try {
-      // Track whether all files are uploaded successfully
-      let allUploaded = true;
+      let allUploaded = true; // Initially assume all files will upload successfully
 
       // Upload each file and check for errors
       await Promise.all(
@@ -133,12 +134,16 @@ const RecursoForm = () => {
         })
       );
 
-      // Only set setAllFilesUploaded to true if all uploads were successful
+      // Only proceed with further logic if all uploads were successful
       if (allUploaded) {
         setAllFilesUploaded(true);
+        setError(null); // Clear any previous error messages
+      } else {
+        setError("Erro ao enviar os arquivos. Tente novamente."); // Show error if not all files are uploaded successfully
+        setAllFilesUploaded(false); // Ensure success message is hidden if upload fails
       }
 
-      // Perform the API request if files are successfully uploaded
+      // If all uploads were successful, update the status in the API
       if (allUploaded) {
         const response = await fetch(
           "https://apiv3.styxx.com.br/api/updateStatus",
@@ -157,11 +162,11 @@ const RecursoForm = () => {
         if (!response.ok) {
           throw new Error("Erro ao atualizar status.");
         }
-      } else {
-        throw new Error("Not all files were uploaded successfully.");
       }
     } catch (err) {
       console.error(err.message);
+      setError("Erro ao enviar os arquivos. Tente novamente.");
+      setAllFilesUploaded(false); // Ensure success message is hidden if upload fails
     }
   };
 
@@ -223,9 +228,11 @@ const RecursoForm = () => {
   }));
 
   const FooterAlert = () =>
-    allFilesUploaded && (
+    allFilesUploaded && !hasUploadError ? (
       <Alert severity="success">Todos os documentos foram enviados!</Alert>
-    );
+    ) : error ? (
+      <Alert severity="error">{error}</Alert>
+    ) : null;
 
   const handleRenderForm = () => {
     if (userDetails.idCidade === 3798 && idEdital === 2) {

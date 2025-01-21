@@ -18,8 +18,8 @@ const RecursoForm = () => {
   const [numeroInscricao, setNumeroInscricao] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [files, setFiles] = useState({});
-  const [uploadStatus, setUploadStatus] = useState({});
+  const [file, setFile] = useState(null);
+  const [uploadStatus, setUploadStatus] = useState(null);
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
 
@@ -33,14 +33,16 @@ const RecursoForm = () => {
     setIsLoading(false);
   }, []);
 
-  const handleFileChange = (event, fieldName) => {
-    const file = event.target.files[0];
-    if (file) {
-      setFiles((prev) => ({ ...prev, [fieldName]: file }));
+  const handleFileChange = (event) => {
+    const newFile = event.target.files[0];
+    if (newFile) {
+      setFile(newFile);
     }
   };
 
-  const uploadFile = async (file, fieldName) => {
+  const uploadFile = async () => {
+    if (!file) return;
+
     try {
       const formData = new FormData();
       formData.append("IdProjeto", numeroInscricao);
@@ -59,14 +61,16 @@ const RecursoForm = () => {
       );
 
       if (response.ok) {
-        setUploadStatus((prev) => ({ ...prev, [fieldName]: "success" }));
+        setUploadStatus("success");
+        setSuccessMessage(true);
       } else {
-        console.error("Upload failed:", response.status, response.statusText);
-        setUploadStatus((prev) => ({ ...prev, [fieldName]: "error" }));
+        setUploadStatus("error");
+        setSuccessMessage(false);
       }
     } catch (err) {
       console.error("Upload error:", err);
-      setUploadStatus((prev) => ({ ...prev, [fieldName]: "error" }));
+      setUploadStatus("error");
+      setSuccessMessage(false);
     }
   };
 
@@ -75,41 +79,12 @@ const RecursoForm = () => {
     setErrorMessage(false);
     setSuccessMessage(false);
 
-    if (!Object.keys(files).length) {
+    if (!file) {
       setErrorMessage(true);
       return;
     }
 
-    try {
-      await Promise.all(
-        Object.entries(files).map(([fieldName, file]) =>
-          uploadFile(file, fieldName)
-        )
-      );
-      setSuccessMessage(true);
-
-      const updateResponse = await fetch(
-        "https://apiv3.styxx.com.br/api/updateStatus",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            usuario: localStorage.getItem("userEmail"),
-            senha: localStorage.getItem("userPassword"),
-            idProjeto: numeroInscricao,
-            status: "Recurso",
-          }),
-        }
-      );
-
-      if (!updateResponse.ok) {
-        console.error("Failed to update status:", updateResponse.statusText);
-        setErrorMessage(true);
-      }
-    } catch (err) {
-      console.error("Error during submission:", err);
-      setErrorMessage(true);
-    }
+    await uploadFile();
   };
 
   const UploadField = ({ name, label }) => (
@@ -119,11 +94,11 @@ const RecursoForm = () => {
           {label}
         </Typography>
         <UploadBox>
-          {files[name] && <Typography>{files[name].name}</Typography>}
+          {file && <Typography>{file.name}</Typography>}
           <input
             type="file"
             id={`upload-${name}`}
-            onChange={(e) => handleFileChange(e, name)}
+            onChange={handleFileChange}
             style={{ display: "none" }}
           />
           <label htmlFor={`upload-${name}`}>
@@ -132,10 +107,10 @@ const RecursoForm = () => {
             </Button>
           </label>
         </UploadBox>
-        {uploadStatus[name] === "success" && (
+        {uploadStatus === "success" && (
           <Alert severity="success">Arquivo enviado com sucesso!</Alert>
         )}
-        {uploadStatus[name] === "error" && (
+        {uploadStatus === "error" && (
           <Alert severity="error">Erro ao enviar o arquivo.</Alert>
         )}
       </CardContent>
@@ -173,13 +148,13 @@ const RecursoForm = () => {
               <UploadField name="argumento" label="*Argumento do Recurso" />
               <Box sx={{ textAlign: "center", marginTop: 4 }}>
                 <Button variant="contained" type="submit">
-                  Enviar Todos
+                  Enviar
                 </Button>
               </Box>
             </form>
           )}
           {successMessage && (
-            <Alert severity="success">Documentos enviados com sucesso!</Alert>
+            <Alert severity="success">Documento enviado com sucesso!</Alert>
           )}
           {errorMessage && (
             <Alert severity="error">
