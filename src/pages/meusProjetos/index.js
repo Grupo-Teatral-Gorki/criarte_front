@@ -314,8 +314,9 @@ const MeusProjetos = () => {
                       ![3823, 3398, 3478].includes(storageUserDetails.idCidade)
                     }
                   >
-                    {storageUserDetails.idCidade === 3842
-                      ? "Recurso em Habilitação"
+                    {storageUserDetails.idCidade === 3842 ||
+                    storageUserDetails.idCidade === 3478
+                      ? "Recurso da Habilitação"
                       : "Habilitação "}
                   </Button>
                   <Button
