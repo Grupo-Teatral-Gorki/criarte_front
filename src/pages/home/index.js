@@ -193,6 +193,7 @@ const Home = () => {
             )}
           </div>
         </div>
+
         <section className="container_opcoes_banner">
           <section className="container_opcoes">
             <a href="/meusProjetos" className="opcao_link">

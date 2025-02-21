@@ -82,7 +82,7 @@ const Login = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ usuario: email, senha: password }),
-        },
+        }
       );
 
       if (!response.ok) {
@@ -128,6 +128,25 @@ const Login = () => {
         alt="Logo Criarte"
       />
       <div className="login-container">
+        <div
+          style={{
+            backgroundColor: "#ffcc00",
+            color: "#000",
+            padding: "10px",
+            textAlign: "center",
+            fontWeight: "bold",
+            position: "fixed",
+            width: "100%",
+            top: 0,
+            left: 0,
+            zIndex: 1000,
+          }}
+        >
+          ⚠️ Nosso sistema passará por manutenção no domingo, 25 de fevereiro de
+          2024, a partir das 20h, e retornará na segunda-feira, 26 de fevereiro
+          de 2024, às 5h. O sistema ficará indisponíveis. Pedimos desculpas pelo
+          transtorno.
+        </div>
         <form onSubmit={handleSubmit}>
           <div>
             <label>Email:</label>
