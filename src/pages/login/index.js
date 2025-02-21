@@ -144,7 +144,7 @@ const Login = () => {
         >
           ⚠️ Nosso sistema passará por manutenção no domingo, 25 de fevereiro de
           2024, a partir das 20h, e retornará na segunda-feira, 26 de fevereiro
-          de 2024, às 5h. O sistema ficará indisponíveis. Pedimos desculpas pelo
+          de 2024, às 5h. O sistema ficará indisponível. Pedimos desculpas pelo
           transtorno.
         </div>
         <form onSubmit={handleSubmit}>
