@@ -142,9 +142,9 @@ const Login = () => {
             zIndex: 1000,
           }}
         >
-          ⚠️ Nosso sistema será atualizado no domingo, 25 de fevereiro de 2024,
-          a partir das 20h, com previsão de retorno na segunda-feira, 26 de
-          fevereiro de 2024, às 5h. Durante esse período, o sistema estará
+          ⚠️ Nosso sistema será atualizado no domingo, 23 de fevereiro de 2025,
+          a partir das 20h, com previsão de retorno na segunda-feira, 24 de
+          fevereiro de 2025, às 5h. Durante esse período, o sistema estará
           indisponível. Para mais informações, entre em contato pelo e-mail
           criarte@grupogorki.com.br.
         </div>
