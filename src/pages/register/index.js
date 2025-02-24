@@ -33,16 +33,17 @@ const Register = () => {
 
     try {
       const response = await fetch(
-        "https://api.grupogorki.com.br/api/usuarios/createuser",
+        "https://apiv3.grupogorki.com.br/auth/register",
         {
-          method: "PUT",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            usuario: email,
-            senha: password,
-            idCidade: city,
+            email,
+            password,
+            idCidade: parseInt(city),
+            tipoUsuario: 1,
           }),
         }
       );
@@ -53,7 +54,7 @@ const Register = () => {
       }
 
       const textResponse = await response.text();
-      if (textResponse === "Usuario cadastrado com sucesso.") {
+      if (response.ok == true) {
         console.log("Cadastro realizado com sucesso:", textResponse);
         alert("Cadastro realizado com sucesso");
         router.push("/login");

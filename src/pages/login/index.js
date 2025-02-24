@@ -75,13 +75,13 @@ const Login = () => {
 
     try {
       const response = await fetch(
-        "https://api.grupogorki.com.br/api/usuarios/authenticate",
+        "http://apiv3.grupogorki.com.br/auth/login",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ usuario: email, senha: password }),
+          body: JSON.stringify({ usuario: email, password }),
         }
       );
 
@@ -91,11 +91,14 @@ const Login = () => {
       }
 
       const data = await response.json();
+
+      console.log(data.id)
+
       const userDetails = {
-        id: data.user.data.id,
-        usuario: data.user.data.usuario,
-        idCidade: data.user.data.idCidade,
-        tipoUsuario: data.user.data.tipoUsuario,
+        id: data.id,
+        usuario: data.usuario,
+        idCidade: data.idCidade,
+        tipoUsuario: data.tipoUsuario,
       };
 
       localStorage.setItem("userEmail", email);
@@ -142,8 +145,8 @@ const Login = () => {
             zIndex: 1000,
           }}
         >
-          ⚠️ Nosso sistema será atualizado no domingo, 23 de fevereiro de 2025,
-          a partir das 20h, com previsão de retorno na segunda-feira, 24 de
+          ⚠️ Nosso sistema será atualizado na terça-feira, 25 de fevereiro de 2025,
+          a partir das 20h, com previsão de retorno na segunda-feira, 26 de
           fevereiro de 2025, às 5h. Durante esse período, o sistema estará
           indisponível. Para mais informações, entre em contato pelo e-mail
           criarte@grupogorki.com.br.
