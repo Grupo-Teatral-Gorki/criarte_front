@@ -75,7 +75,7 @@ const Login = () => {
 
     try {
       const response = await fetch(
-        "http://apiv3.grupogorki.com.br/auth/login",
+        "https://apiv3.grupogorki.com.br/auth/login",
         {
           method: "POST",
           headers: {
