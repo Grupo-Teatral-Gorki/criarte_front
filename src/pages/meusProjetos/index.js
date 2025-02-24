@@ -46,7 +46,7 @@ const MeusProjetos = () => {
       const token = localStorage.getItem("authToken");
       try {
         const response = await fetch(
-          `https://apiv3.grupogorki.com.br/projects/list`,
+          `https://api.grupogorki.com.br/api/projeto/listaProjetos`,
           {
             method: "GET",
             headers: {
@@ -58,7 +58,7 @@ const MeusProjetos = () => {
 
         if (response.ok) {
           const data = await response.json();
-          setProjetos(data || []);
+          setProjetos(data.data || []);
         } else {
           setError("Nenhum projeto foi encontrado.");
         }

@@ -126,7 +126,7 @@ const Header = () => {
           </a>
         </div>
       </div>
-      <div
+      {/* <div
         style={{
           backgroundColor: "#ffcc00",
           color: "#000",
@@ -144,7 +144,7 @@ const Header = () => {
         fevereiro de 2025, às 5h. Durante esse período, o sistema estará
         indisponível. Para mais informações, entre em contato pelo e-mail
         criarte@grupogorki.com.br.
-      </div>
+      </div> */}
     </>
   );
 };

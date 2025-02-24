@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
@@ -33,17 +33,16 @@ const Register = () => {
 
     try {
       const response = await fetch(
-        "https://apiv3.grupogorki.com.br/auth/register",
+        "https://api.grupogorki.com.br/api/usuarios/createuser",
         {
-          method: "POST",
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            email,
-            password,
-            idCidade: parseInt(city),
-            tipoUsuario: 1,
+            usuario: email,
+            senha: password,
+            idCidade: city,
           }),
         }
       );
@@ -54,7 +53,7 @@ const Register = () => {
       }
 
       const textResponse = await response.text();
-      if (response.ok == true) {
+      if (textResponse === "Usuario cadastrado com sucesso.") {
         console.log("Cadastro realizado com sucesso:", textResponse);
         alert("Cadastro realizado com sucesso");
         router.push("/login");

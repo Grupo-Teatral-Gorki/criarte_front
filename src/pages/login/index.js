@@ -9,7 +9,6 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Alert from "@mui/material/Alert";
-import Link from "next/link";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -75,13 +74,13 @@ const Login = () => {
 
     try {
       const response = await fetch(
-        "https://apiv3.grupogorki.com.br/auth/login",
+        "https://api.grupogorki.com.br/api/usuarios/authenticate",
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify({ usuario: email, password }),
+          body: JSON.stringify({ usuario: email, senha: password }),
         }
       );
 
@@ -92,13 +91,13 @@ const Login = () => {
 
       const data = await response.json();
 
-      console.log(data.id)
+      console.log(data.id);
 
       const userDetails = {
-        id: data.id,
-        usuario: data.usuario,
-        idCidade: data.idCidade,
-        tipoUsuario: data.tipoUsuario,
+        id: data.user.data.id,
+        usuario: data.user.data.usuario,
+        idCidade: data.user.data.idCidade,
+        tipoUsuario: data.user.data.tipoUsuario,
       };
 
       localStorage.setItem("userEmail", email);
@@ -131,7 +130,7 @@ const Login = () => {
         alt="Logo Criarte"
       />
       <div className="login-container">
-        <div
+        {/* <div
           style={{
             backgroundColor: "#ffcc00",
             color: "#000",
@@ -145,12 +144,12 @@ const Login = () => {
             zIndex: 1000,
           }}
         >
-          ⚠️ Nosso sistema será atualizado na terça-feira, 25 de fevereiro de 2025,
-          a partir das 20h, com previsão de retorno na segunda-feira, 26 de
-          fevereiro de 2025, às 5h. Durante esse período, o sistema estará
+          ⚠️ Nosso sistema será atualizado na terça-feira, 25 de fevereiro de
+          2025, a partir das 20h, com previsão de retorno na segunda-feira, 26
+          de fevereiro de 2025, às 5h. Durante esse período, o sistema estará
           indisponível. Para mais informações, entre em contato pelo e-mail
           criarte@grupogorki.com.br.
-        </div>
+        </div> */}
         <form onSubmit={handleSubmit}>
           <div>
             <label>Email:</label>

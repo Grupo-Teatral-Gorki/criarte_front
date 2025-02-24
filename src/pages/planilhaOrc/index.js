@@ -25,7 +25,7 @@ const DocumentUploadForm = () => {
     const fetchNumeroInscricao = async () => {
       setIsLoading(true);
 
-      const url = `https://apiv3.grupogorki.com.br/projects/list`;
+      const url = `https://api.grupogorki.com.br/api/projeto/listaProjetos`;
       const token = localStorage.getItem("authToken");
 
       try {
@@ -44,8 +44,8 @@ const DocumentUploadForm = () => {
         }
 
         const data = await response.json();
-        if (data && data.length > 0) {
-          setNumeroInscricao(data[0].numeroInscricao);
+        if (data.data && data.data.length > 0) {
+          setNumeroInscricao(data.data[0].numeroInscricao);
         } else {
           setError("Número de inscrição não encontrado.");
         }
