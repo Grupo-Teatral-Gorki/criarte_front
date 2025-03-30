@@ -13,6 +13,7 @@ import {
 import { styled } from "@mui/system";
 import Header from "../../components/header/header";
 import PrivateRoute from "../../components/PrivateRoute";
+import { json } from "react-router-dom";
 
 const RecursoForm = () => {
   const [numeroInscricao, setNumeroInscricao] = useState(null);
@@ -40,6 +41,32 @@ const RecursoForm = () => {
     }
   };
 
+  const handleStatusChange = async () => {
+    try {
+      const response = await fetch(
+        "https://status-api-xi.vercel.app/project/status",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id_projeto: localStorage.getItem("numeroInscricao"),
+            status: "recurso",
+          }),
+        }
+      );
+
+      if (response.ok) {
+        console.log("Status Atualizado");
+      } else {
+        console.log("Atualizar status falhou");
+      }
+    } catch (err) {
+      console.error("Status error:", err);
+    }
+  };
+
   const uploadFile = async () => {
     if (!file) return;
 
@@ -63,6 +90,7 @@ const RecursoForm = () => {
       if (response.ok) {
         setUploadStatus("success");
         setSuccessMessage(true);
+        handleStatusChange();
       } else {
         setUploadStatus("error");
         setSuccessMessage(false);
@@ -138,7 +166,7 @@ const RecursoForm = () => {
           >
             Recurso
           </Typography>
-
+          <button onClick={() => handleStatusChange()}>CLICK</button>
           {isLoading ? (
             <CircularProgress />
           ) : error ? (
