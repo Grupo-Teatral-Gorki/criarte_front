@@ -166,7 +166,6 @@ const RecursoForm = () => {
           >
             Recurso
           </Typography>
-          <button onClick={() => handleStatusChange()}>CLICK</button>
           {isLoading ? (
             <CircularProgress />
           ) : error ? (
