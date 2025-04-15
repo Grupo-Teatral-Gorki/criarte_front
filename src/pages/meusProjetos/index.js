@@ -311,7 +311,9 @@ const MeusProjetos = () => {
                       handleClickOpenRecurso(projeto, "habilitacao")
                     }
                     disabled={
-                      ![3823, 3398, 3478].includes(storageUserDetails.idCidade)
+                      ![3823, 3398, 3478, 3716].includes(
+                        storageUserDetails.idCidade
+                      )
                     }
                   >
                     {storageUserDetails.idCidade === 3842 ||
@@ -324,7 +326,7 @@ const MeusProjetos = () => {
                     variant="outlined"
                     sx={{ marginRight: "8px" }}
                     onClick={() => handleClickOpenRecurso(projeto, "recurso")}
-                    disabled={![3716].includes(storageUserDetails.idCidade)}
+                    disabled={![].includes(storageUserDetails.idCidade)}
                   >
                     Recurso
                   </Button>
