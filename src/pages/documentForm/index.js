@@ -1046,6 +1046,177 @@ const DocumentUploadForm = () => {
             },
           ];
         }
+      case 3391:
+        if (localStorage.getItem("tipoProponente") === "PF") {
+          return [
+            {
+              name: "doc-photo-id-1",
+              label:
+                "Cópia digitalizada de um único documento com foto do proponente, constando número do CPF e RG (carteira de identidade, CNH, outros...).",
+              required: true,
+            },
+            {
+              name: "proof-address",
+              label:
+                "Comprovante de endereço há, pelo menos, 2 (dois) anos no município de Casa Branca, retroativo a Abril de 2023.",
+              required: true,
+            },
+            {
+              name: "proof-address-current-3",
+              label:
+                "Comprovante de endereço atual, datado a partir de Fevereiro de 2025.",
+              required: true,
+            },
+            {
+              name: "self-declaration-residence-4",
+              label: "Autodeclaração de residência (Anexo II).",
+            },
+            {
+              name: "curriculum-proponente",
+              label: "Currículo do proponente",
+              required: true,
+            },
+            {
+              name: "curriculum-portfolio-collective",
+              label: "Currículo ou portfólio de Coletivo ou idealizador",
+              required: true,
+            },
+            {
+              name: "technical-sheet-participants",
+              label:
+                "Ficha técnica com a relação dos participantes, incluindo a identificação do CPF e a descrição da função no projeto.",
+              required: true,
+            },
+            {
+              name: "commitment-terms",
+              label:
+                "Termos de Compromissos assinados pelos principais integrantes do projeto (Anexo V)",
+              required: true,
+            },
+            {
+              name: "copyright-declaration",
+              label:
+                "Declaração de opção de cessão de direitos autorais e/ou Declaração negativa de opção de direitos autorais (Anexo III)",
+              required: true,
+            },
+            {
+              name: "execution-schedule",
+              label: "Cronograma de execução",
+              required: true,
+            },
+            {
+              name: "additional-information",
+              label: "Demais informações",
+              required: true,
+            },
+            {
+              name: "ethnic-declaration",
+              label:
+                "Quando for o caso inserir Declaração Étnico-racial (Anexo VII) e/ou Declaração de Pessoa com Deficiência (Anexo VIII)",
+            },
+            {
+              name: "representation-declaration",
+              label:
+                "Declaração de representação, se for um coletivo sem CNPJ (Anexo VI)",
+            },
+            {
+              name: "other-documents",
+              label:
+                "Outros documentos que o agente cultural julgar necessário para auxiliar na avaliação do mérito cultural do projeto",
+            },
+          ];
+        } else {
+          return [
+            {
+              name: "id-representative-1",
+              label:
+                "Documento de Identidade ou outro documento com força legal que contenha o número de R.G. e foto do(s) seu(s) representante(s) legal(is).",
+              required: true,
+            },
+            {
+              name: "cpf-representative-2",
+              label:
+                "CPF, caso o documento com força legal não contenha o número do CPF do(s) seu(s) representante(s) legal(is).",
+              required: true,
+            },
+            {
+              name: "cnpj-mei-card-3",
+              label:
+                "Cartão do CNPJ ou Requerimento de Microempreendedor Individual.",
+              required: true,
+            },
+            {
+              name: "address-proof-ribeirao-4",
+              label:
+                "Comprovante de endereço há, pelo menos, 2 (dois) anos no município de Casa Branca, retroativo a Abril de 2023, em nome da Instituição ou do proponente inscrito como M.E.I.",
+              required: true,
+            },
+            {
+              name: "current-address-proof-5",
+              label:
+                "Comprovante de endereço atual, datado a partir de Fevereiro de 2025.",
+              required: true,
+            },
+            {
+              name: "social-contract-6",
+              label: "Contrato Social ou do Estatuto e demais alterações.",
+              required: true,
+            },
+            {
+              name: "election-minutes-7",
+              label: "Ata de eleição e posse da diretoria, quando for o caso.",
+            },
+            {
+              name: "curriculum-proponente",
+              label: "Currículo do proponente",
+              required: true,
+            },
+            {
+              name: "curriculum-portfolio-collective",
+              label: "Currículo ou portfólio de Coletivo ou idealizador",
+              required: true,
+            },
+            {
+              name: "technical-sheet-participants",
+              label:
+                "Ficha técnica com a relação dos participantes, incluindo a identificação do CPF e a descrição da função no projeto.",
+              required: true,
+            },
+            {
+              name: "commitment-terms",
+              label:
+                "Termos de Compromissos assinados pelos principais integrantes do projeto (Anexo V)",
+              required: true,
+            },
+            {
+              name: "copyright-declaration",
+              label:
+                "Declaração de opção de cessão de direitos autorais e/ou Declaração negativa de opção de direitos autorais (Anexo III)",
+              required: true,
+            },
+            {
+              name: "execution-schedule",
+              label: "Cronograma de execução",
+              required: true,
+            },
+            {
+              name: "ethnic-declaration",
+              label:
+                "Quando for o caso inserir Declaração Étnico-racial (Anexo VII) e/ou Declaração de Pessoa com Deficiência (Anexo VIII)",
+            },
+            {
+              name: "representation-declaration",
+              label:
+                "Declaração de representação, se for um coletivo sem CNPJ (Anexo VI)",
+            },
+            {
+              name: "other-documents",
+              label:
+                "Outros documentos que o agente cultural julgar necessário para auxiliar na avaliação do mérito cultural do projeto",
+            },
+          ];
+        }
+
       default:
         return [
           {

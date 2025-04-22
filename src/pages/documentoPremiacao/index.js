@@ -318,10 +318,27 @@ const DocumentoPremiacao = () => {
                     label="Outros documentos que a proponente julgar necessário para auxiliar na avaliação do seu projeto"
                   />
                 </>
-              ) : (
-                <Alert severity="info">
-                  Nenhuma cidade específica selecionada para documentos.
-                </Alert>
+              ) : null}
+              {storageUserDetails?.idCidade === 3391 && (
+                <>
+                  <UploadField name="form-insc" label="Formulário" />
+                  <UploadField
+                    name="form-insc-plano-trabalho"
+                    label="Formulário De Inscrição e Plano de Trabalho"
+                  />
+                  <UploadField
+                    name="portf"
+                    label="Portfólio / Curriculo Artístico"
+                  />
+                  <UploadField
+                    name="dec-rep"
+                    label="Declaração De Representação (Opcional)"
+                  />
+                  <UploadField
+                    name="other"
+                    label="Outros documentos que o agente cultural julgar necessário para auxiliar na avaliação do mérito cultural do projeto. "
+                  />
+                </>
               )}
 
               <Box sx={{ mt: 4, textAlign: "center" }}>

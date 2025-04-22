@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import Header from "../../components/header/header";
 import PrivateRoute from "../../components/PrivateRoute";
 import Button from "@mui/material/Button";
-import CircularProgress from "@mui/material/CircularProgress";
-import Alert from "@mui/material/Alert";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -603,6 +601,51 @@ const MeusProjetos = () => {
                 sx={{ marginTop: "30px" }}
                 disabled={
                   storageUserDetails && storageUserDetails.idCidade != 3823
+                }
+                onClick={handleCreateProject2}
+              >
+                Selecionar
+              </Button>
+            </div>
+          ) : null}
+          {storageUserDetails && storageUserDetails.idCidade == 3391 ? (
+            <div
+              style={{ backgroundColor: "white" }}
+              className="mp-project-card"
+            >
+              <div className="mp-project-header">
+                <h3>Área Subsídio</h3>
+                <span className={`mp-status`}>
+                  {storageUserDetails ? (
+                    storageUserDetails.idCidade == 3391 ? (
+                      <p>Disponível</p>
+                    ) : (
+                      <p>Não Qualificado</p>
+                    )
+                  ) : (
+                    <p>Carregando...</p>
+                  )}
+                </span>
+              </div>
+              <div className="mp-project-body">
+                <p>
+                  <strong>TEXTO DESCRITIVO DO OBJETO DO EDITAL</strong>
+                </p>
+                <a
+                  href="https://criarte.s3.us-east-2.amazonaws.com/public/sao-jose-do-rio-pardo/cultura-viva/Edital+PNCV_Retificado+-+Cultura+Viva%5B1%5D.pdf"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  LER OBJETO DO EDITAL
+                </a>
+              </div>
+              <div className="mp-project-footer"></div>
+              <Button
+                size="small"
+                variant="outlined"
+                sx={{ marginTop: "30px" }}
+                disabled={
+                  storageUserDetails && storageUserDetails.idCidade != 3391
                 }
                 onClick={handleCreateProject2}
               >

@@ -305,6 +305,22 @@ const InformacoesGerais = () => {
       "Intercâmbio",
     ];
 
+    const moduloI_3391_Categorias = [
+      "Música",
+      "Artesanato",
+      "Fotografia",
+      "Teatro",
+      "Dança",
+      "Cultura Afro-Brasileira e Tradição",
+      "Literatura",
+      "Intercâmbio",
+    ];
+
+    const moduloII_3391_Categorias = [
+      "Propostas de Oficina",
+      "Curso de longa duração",
+    ];
+
     // Verificar se é a cidade de Santa Rita
     if (userCityId === citySantaRitaId) {
       setCategoryOptions([
@@ -354,6 +370,12 @@ const InformacoesGerais = () => {
         setCategoryOptions(moduloI_3716_Categorias);
       } else if (selectedModule === 2) {
         setCategoryOptions(moduloII_3716_Categorias);
+      }
+    } else if (userCityId === 3391) {
+      if (selectedModule === 1) {
+        setCategoryOptions(moduloI_3391_Categorias);
+      } else if (selectedModule === 2) {
+        setCategoryOptions(moduloII_3391_Categorias);
       }
     }
 
@@ -651,6 +673,26 @@ const InformacoesGerais = () => {
           },
         ];
 
+      case 3391:
+        return [
+          { label: "Resumo do projeto:", key: "resumo" },
+          { label: "Relevância e pertinência:", key: "relevancia" },
+          {
+            label: "Perfil de público e classificação indicativa:",
+            key: "perfil",
+          },
+          {
+            label:
+              "Expectativa da quantidade do público alcançado com o projeto:",
+            key: "expectativa",
+          },
+          { label: "Plano de Divulgação:", key: "divulgacao" },
+          {
+            label: "Plano de democratização de acesso e acessibilidade",
+            key: "democratizacao",
+          },
+          { label: "Outras Informações", key: "outras" },
+        ];
       default:
         return [
           { label: "Resumo do projeto:", key: "resumo" },
@@ -773,10 +815,11 @@ const InformacoesGerais = () => {
 
                 <Grid item xs={12} style={{ marginTop: "20px" }}>
                   <Grid item xs={12} style={{ marginTop: "20px" }}>
-                    {storageUserDetails &&
-                    (storageUserDetails.idCidade === 3478 ||
-                      storageUserDetails.idCidade === 3398 ||
-                      storageUserDetails.idCidade === 3716) ? (
+                    {(storageUserDetails &&
+                      (storageUserDetails.idCidade === 3478 ||
+                        storageUserDetails.idCidade === 3398 ||
+                        storageUserDetails.idCidade === 3716)) ||
+                    storageUserDetails.idCidade === 3391 ? (
                       <div style={{ marginLeft: "5px", marginBottom: "30px" }}>
                         <div style={{ display: "flex" }}>
                           <FormControl>
