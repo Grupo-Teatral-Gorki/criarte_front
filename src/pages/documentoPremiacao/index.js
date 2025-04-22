@@ -321,7 +321,6 @@ const DocumentoPremiacao = () => {
               ) : null}
               {storageUserDetails?.idCidade === 3391 && (
                 <>
-                  <UploadField name="form-insc" label="Formulário" />
                   <UploadField
                     name="form-insc-plano-trabalho"
                     label="Formulário De Inscrição e Plano de Trabalho"
