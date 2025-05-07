@@ -413,12 +413,12 @@ const Home = () => {
                 </div>
               ) : storageUserDetails.idCidade === 3391 ? (
                 <div>
-                  {/* <img
+                  <img
                     className="banner_img"
                     style={{ display: "flex", maxWidth: "150px" }}
-                    src={pontal}
+                    src="https://www.casabranca.sp.gov.br/admin/globalarq/logo/2ce92be644cc2dff1500c3bca9a3564b.png"
                     alt="Banner Município"
-                  /> */}
+                  />
                   <h1 style={{ marginTop: "20px" }} className="banner_titulo">
                     Editais Casa Branca
                   </h1>
@@ -429,7 +429,7 @@ const Home = () => {
                   <button
                     onClick={() =>
                       window.open(
-                        "https://criarte.grupogorki.com.br/projetos/selecao"
+                        "https://oficial.casabranca.sp.gov.br/prepara-pdf/305"
                       )
                     }
                     style={{ marginTop: "20px", minWidth: "100%" }}
