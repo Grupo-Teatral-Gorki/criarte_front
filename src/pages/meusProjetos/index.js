@@ -317,7 +317,8 @@ const MeusProjetos = () => {
                     }
                   >
                     {storageUserDetails.idCidade === 3842 ||
-                    storageUserDetails.idCidade === 3478
+                    storageUserDetails.idCidade === 3478 ||
+                    storageUserDetails.idCidade === 3716
                       ? "Recurso da Habilitação"
                       : "Habilitação "}
                   </Button>
