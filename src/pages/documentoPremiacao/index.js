@@ -294,24 +294,22 @@ const DocumentoPremiacao = () => {
                   <UploadField
                     name="form-insc-sjrp"
                     label="Formulário de Inscrição (conforme Anexo 03)"
-                    exampleLink="https://criarte.s3.us-east-2.amazonaws.com/public/EDITAL-05-ANEXO-2-FORMULARIO-DE-INSCRICAO.docx"
-                    exampleText="Baixar exemplo"
                   />
                   <UploadField
-                    name="plano-de-trabalho-sjrp"
-                    label="Plano de Trabalho (conforme Anexo 04)"
+                    name="comprovante-atividades-culturais-sjrp"
+                    label="Material de comprovação de atividades culturais desenvolvidas pelo coletivo/entidade cultural demonstrando no mínimo 2 anos de atividades"
                   />
                   <UploadField
-                    name="plano-aplicacao"
-                    label="Plano de Aplicação de Recursos (conforme Anexo 05)"
+                    name="dec-rep-sjrp"
+                    label="Declaração de representação do grupo/coletivo cultural (Anexo 4) "
                   />
                   <UploadField
-                    name="material"
-                    label="Material de comprovação das atividades culturais desenvolvidas"
+                    name="autodec-racial-sjrp"
+                    label="Autodeclarações de pessoas pretas ou pardas ou indígenas (Anexos 5) "
                   />
                   <UploadField
-                    name="autodec"
-                    label="Autodeclarações das pessoas negras (pretas ou pardas), pessoas indígenas ou pessoas com deficiência do quadro de dirigentes"
+                    name="autodec-def-sjrp"
+                    label="Autodeclarações de pessoas com deficiência (Anexo 6)"
                   />
                   <UploadField
                     name="outros-doc"

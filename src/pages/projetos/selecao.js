@@ -389,7 +389,7 @@ const MeusProjetos = () => {
           </h1>
         </div>
         <div className="mp-projects-grid">
-          <div style={{ backgroundColor: "white" }} className="mp-project-card">
+          {/* <div style={{ backgroundColor: "white" }} className="mp-project-card">
             <div className="mp-project-header">
               <h1>Fomento</h1>
               <span className={`mp-status`}>Disponível</span>
@@ -413,7 +413,7 @@ const MeusProjetos = () => {
             >
               Selecionar
             </Button>
-          </div>
+          </div> */}
           {storageUserDetails && storageUserDetails.idCidade == 3798 ? (
             <div
               style={{ backgroundColor: "white" }}
@@ -554,7 +554,7 @@ const MeusProjetos = () => {
               </Button>
             </div>
           ) : null}
-          {storageUserDetails && storageUserDetails.idCidade == 3823 ? (
+          {/* {storageUserDetails && storageUserDetails.idCidade == 3823 ? (
             <div
               style={{ backgroundColor: "white" }}
               className="mp-project-card"
@@ -607,7 +607,7 @@ const MeusProjetos = () => {
                 Selecionar
               </Button>
             </div>
-          ) : null}
+          ) : null} */}
           {storageUserDetails && storageUserDetails.idCidade == 3391 ? (
             <div
               style={{ backgroundColor: "white" }}
@@ -647,6 +647,47 @@ const MeusProjetos = () => {
                 disabled={
                   storageUserDetails && storageUserDetails.idCidade != 3391
                 }
+                onClick={handleCreateProject2}
+              >
+                Selecionar
+              </Button>
+            </div>
+          ) : null}
+          {storageUserDetails && storageUserDetails.idCidade == 3823 ? (
+            <div
+              style={{ backgroundColor: "white" }}
+              className="mp-project-card"
+            >
+              <div className="mp-project-header">
+                <h3>Política Nacional Cultura Viva (PNCV) – PREMIAÇÃO</h3>
+                <span className={`mp-status`}>
+                  <p>Disponível</p>
+                </span>
+              </div>
+              <div className="mp-project-body">
+                <p>
+                  <strong>
+                    O Município de São José do Rio Pardo - SP torna público o
+                    presente Edital para o desenvolvimento da “REDE MUNICIPAL DE
+                    PONTOS DE CULTURA DE SÃO JOSÉ DO RIO PARDO – SP, na
+                    modalidade de Premiação, por meio da Política Nacional de
+                    Cultura Viva (PNCV), instituída pela Lei nº 13.018, de 22
+                    de julho de 2014.
+                  </strong>
+                </p>
+                <a
+                  href="https://www.dosp.com.br/exibe_do.php?i=NjUzMDE0&v=Cultura%20viva"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  LER OBJETO DO EDITAL
+                </a>
+              </div>
+              <div className="mp-project-footer"></div>
+              <Button
+                size="small"
+                variant="outlined"
+                sx={{ marginTop: "30px" }}
                 onClick={handleCreateProject2}
               >
                 Selecionar
