@@ -216,7 +216,8 @@ const MeusProjetos = () => {
               disabled={
                 (storageUserDetails && storageUserDetails.idCidade === 3478) ||
                 (storageUserDetails && storageUserDetails.idCidade === 3398) ||
-                (storageUserDetails && storageUserDetails.idCidade === 3716)
+                (storageUserDetails && storageUserDetails.idCidade === 3716) ||
+                (storageUserDetails && storageUserDetails.idCidade === 3391)
               }
             >
               Criar Projeto

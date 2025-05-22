@@ -664,7 +664,9 @@ function PnabHomeForms() {
                       (storageUserDetails &&
                         storageUserDetails.idCidade === 3398) ||
                       (storageUserDetails &&
-                        storageUserDetails.idCidade === 3716)
+                        storageUserDetails.idCidade === 3716) ||
+                      (storageUserDetails &&
+                        storageUserDetails.idCidade === 3391)
                     }
                   >
                     Enviar projeto
