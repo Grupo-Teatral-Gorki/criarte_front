@@ -658,8 +658,6 @@ function PnabHomeForms() {
                     disabled={
                       statusProjeto === "enviado" ||
                       (storageUserDetails &&
-                        storageUserDetails.idCidade === 3823) ||
-                      (storageUserDetails &&
                         storageUserDetails.idCidade === 3478) ||
                       (storageUserDetails &&
                         storageUserDetails.idCidade === 3398) ||
