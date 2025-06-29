@@ -311,7 +311,7 @@ const MeusProjetos = () => {
                       handleClickOpenRecurso(projeto, "habilitacao")
                     }
                     disabled={
-                      ![3823, 3398, 3478, 3716].includes(
+                      ![3823, 3398, 3478, 3716, 3391].includes(
                         storageUserDetails.idCidade
                       )
                     }
